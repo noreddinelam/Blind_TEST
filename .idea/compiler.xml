@@ -9,8 +9,5 @@
         <module name="Blind_Test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Blind_Test" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
