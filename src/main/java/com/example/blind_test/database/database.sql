@@ -10,25 +10,25 @@ use blind_test;
 CREATE TABLE `Question`
 (
     `id`           integer NOT NULL ,
-    `id_partie`    integer NOT NULL ,
-    `id_ressource` varchar(45) NOT NULL ,
-    `ordre`        integer NOT NULL ,
+    `id_game`    integer NOT NULL ,
+    `id_resource` varchar(45) NOT NULL ,
+    `order`        integer NOT NULL ,
 
     PRIMARY KEY (`id`),
-    KEY `FK_28` (`id_partie`),
-    CONSTRAINT `FK_26` FOREIGN KEY `FK_28` (`id_partie`) REFERENCES `Partie` (`id`)
+    KEY `FK_28` (`id_game`),
+    CONSTRAINT `FK_26` FOREIGN KEY `FK_28` (`id_game`) REFERENCES `Game` (`id`)
 );
 
 -- ************************************** `Partie`
 
-CREATE TABLE `Partie`
+CREATE TABLE `Game`
 (
     `id`               integer NOT NULL ,
     `type`             bit NOT NULL ,
     `current_question` integer NOT NULL ,
     `rounds`           integer NOT NULL ,
     `players`          integer NOT NULL ,
-    `etat`             bit NOT NULL ,
+    `state`             bit NOT NULL ,
 
     PRIMARY KEY (`id`),
     KEY `FK_48` (`current_question`),
@@ -37,13 +37,13 @@ CREATE TABLE `Partie`
 
 -- ************************************** `Joueur`
 
-CREATE TABLE `Joueur`
+CREATE TABLE `Player`
 (
     `username`  varchar(45) NOT NULL ,
-    `id_partie` integer NOT NULL ,
+    `id_game` integer NOT NULL ,
     `score`     integer NOT NULL ,
 
     PRIMARY KEY (`username`),
-    KEY `FK_44` (`id_partie`),
-    CONSTRAINT `FK_42` FOREIGN KEY `FK_44` (`id_partie`) REFERENCES `Partie` (`id`)
+    KEY `FK_44` (`id_game`),
+    CONSTRAINT `FK_42` FOREIGN KEY `FK_44` (`id_game`) REFERENCES `Game` (`id`)
 );
