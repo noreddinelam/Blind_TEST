@@ -6,34 +6,33 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #292929;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane layoutX="-1.0" layoutY="258.0" prefHeight="142.0" prefWidth="600.0" style="-fx-background-color: #0A0A0A;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="258.0">
          <children>
-            <Button layoutX="8.0" layoutY="6.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="290.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" text="A" textFill="WHITE">
+            <Button layoutX="8.0" layoutY="6.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="290.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button layoutX="302.0" layoutY="6.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="290.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" text="B" textFill="WHITE">
+            <Button layoutX="302.0" layoutY="6.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="290.0" styleClass="button_1" stylesheets="@stylesheet.css" text="B" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button layoutX="8.0" layoutY="73.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="290.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" text="C" textFill="WHITE">
+            <Button layoutX="8.0" layoutY="73.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="290.0" styleClass="button_1" stylesheets="@stylesheet.css" text="C" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button layoutX="302.0" layoutY="73.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="290.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" text="D" textFill="WHITE">
+            <Button layoutX="302.0" layoutY="73.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="290.0" styleClass="button_1" stylesheets="@stylesheet.css" text="D" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
          </children>
       </AnchorPane>
-      <ListView layoutX="14.0" layoutY="14.0" prefHeight="231.0" prefWidth="190.0" style="-fx-background-image: #292929;" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" />
+      <ListView layoutX="14.0" layoutY="14.0" prefHeight="231.0" prefWidth="190.0" style="-fx-background-image: #292929;" styleClass="button_1" stylesheets="@stylesheet.css" />
       <ImageView fitHeight="184.0" fitWidth="270.0" layoutX="273.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

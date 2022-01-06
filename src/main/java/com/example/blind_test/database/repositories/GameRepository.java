@@ -2,10 +2,8 @@ package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
 import com.example.blind_test.front.models.Game;
-import com.example.blind_test.shared.Mapper;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
