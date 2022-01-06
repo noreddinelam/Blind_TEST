@@ -25,7 +25,7 @@ public class GameRepository extends Repository {
         List<Game> games = new ArrayList<>();
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_OF_GAME_NOT_STARTED);
-            games = Mapper.getMapper().resultSetToGame(stmt.executeQuery());
+            games = mapper.resultSetToGame(stmt.executeQuery());
             return games;
         } catch (SQLException e) {
             e.printStackTrace();
