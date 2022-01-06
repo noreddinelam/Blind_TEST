@@ -50,7 +50,7 @@ CREATE TABLE `Game`
     CONSTRAINT `FK_46` FOREIGN KEY `FK_48` (`current_question`) REFERENCES `Question` (`id`)
 );
 
--- ************************************** `Player`
+-- ************************************** `com.example.blind_test.database.Player`
 
 CREATE TABLE `Player`
 (
