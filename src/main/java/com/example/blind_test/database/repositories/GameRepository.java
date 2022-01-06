@@ -1,8 +1,12 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
+import com.example.blind_test.exception.ChangeCurrentQuestionIdException;
+import com.example.blind_test.exception.ChangeGameStateException;
 import com.example.blind_test.exception.GameAlreadyExists;
+import com.example.blind_test.exception.ListOfNotStartedGameException;
 import com.example.blind_test.front.models.Game;
+import com.example.blind_test.shared.Mapper;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -58,13 +62,13 @@ public class GameRepository extends Repository {
             return null;
         }
     }
-    public Boolean joinGameDB(int gameId,int idUser)
-    {
+//    public Boolean joinGameDB(int gameId,int idUser)
+//    {
+//
+//    }
 
-    }
 
-
-    public List<Game> listOfNotStartedGameDb() throws SQLException {
+    public List<Game> listOfNotStartedGameDb() throws ListOfNotStartedGameException {
         List<Game> games = new ArrayList<>();
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_OF_GAME_NOT_STARTED);
@@ -72,29 +76,29 @@ public class GameRepository extends Repository {
             return games;
         } catch (SQLException e) {
             e.printStackTrace();
-            return games;
+            throw new ListOfNotStartedGameException();
         }
     }
 
-    public Integer changeGameState(Integer gameState, Integer gameId) {
+    public Integer changeGameState(Integer gameId) throws ChangeGameStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_GAME_STATE)) {
-            stmt.setInt(1, gameState);
+            stmt.setBoolean(1, true);
             stmt.setInt(2, gameId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return -1;
+            throw new ChangeGameStateException();
         }
     }
 
-    public Integer changeCurrentQuestionId(Integer currentQuestion, Integer gameId) {
+    public Integer changeCurrentQuestionId(Integer currentQuestion, Integer gameId) throws ChangeCurrentQuestionIdException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_GAME_STATE)) {
             stmt.setInt(1, currentQuestion);
             stmt.setInt(2, gameId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return -1;
+            throw new ChangeCurrentQuestionIdException ();
         }
     }
 
