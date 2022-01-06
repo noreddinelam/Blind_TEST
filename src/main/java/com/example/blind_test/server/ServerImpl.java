@@ -1,9 +1,6 @@
 package com.example.blind_test.server;
 
 import com.example.blind_test.database.repositories.GameRepository;
-import com.example.blind_test.database.repositories.Repository;
-import com.example.blind_test.front.models.Game;
-import com.example.blind_test.shared.*;
 import com.example.blind_test.shared.Properties;
 import com.example.blind_test.shared.communication.Request;
 import com.example.blind_test.shared.communication.Response;
@@ -23,7 +20,6 @@ public class ServerImpl {
     private static final ConcurrentHashMap<String, AsynchronousSocketChannel> listOfClients = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, AsynchronousSocketChannel> listOfGuests = new ConcurrentHashMap<>();
     private static final GameRepository repository = GameRepository.getRepository();
-    private static final Mapper mapper = Mapper.getMapper();
     private static final Hashtable<String, Consumer<String>> listOfFunctions = new Hashtable<>();
     private static final Logger logger = LoggerFactory.getLogger(ServerImpl.class);
 

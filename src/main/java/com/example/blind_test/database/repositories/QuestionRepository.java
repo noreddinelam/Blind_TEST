@@ -1,6 +1,7 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
+import com.example.blind_test.front.models.Question;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,14 +32,14 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    public List<String> getChoicesForQuestion(int questionId){
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_CHOICES_FOR_QUESTION)) {
+    public Question getQuestion(int questionId){
+        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION)) {
             stmt.setInt(1, questionId);
             ResultSet resultSet = stmt.executeQuery();
-            return mapper.resultSetToQuestionChoicesList(resultSet);
+            return mapper.resultSetToQuestion(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return null;
         }
     }
 

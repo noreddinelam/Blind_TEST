@@ -2,14 +2,18 @@ package com.example.blind_test.shared;
 
 import com.example.blind_test.database.SQLTablesInformation;
 import com.example.blind_test.front.models.Game;
+import com.example.blind_test.front.models.Question;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Mapper {
     private static final Mapper mapper = new Mapper();
+    private static final Random random = new Random();
 
     private Mapper() {
     }
@@ -48,23 +52,24 @@ public class Mapper {
         return response;
     }
 
-    public List<String> resultSetToQuestionChoicesList(ResultSet resultSet) throws SQLException {
-        String choice1 = "";
-        String choice2 = "";
-        String choice3 = "";
-        String choice4 = "";
+    public Question resultSetToQuestion(ResultSet resultSet) throws SQLException {
+        int questionId = -1;
+        String resource = "";
+        String response = "";
         List<String> list = new ArrayList<>();
+        int randomInt = random.nextInt();
         while (resultSet.next()) {
-            choice1 = resultSet.getString(SQLTablesInformation.QUESTION_CHOICE1);
-            choice2 = resultSet.getString(SQLTablesInformation.QUESTION_CHOICE2);
-            choice3 = resultSet.getString(SQLTablesInformation.QUESTION_CHOICE3);
-            choice4 = resultSet.getString(SQLTablesInformation.QUESTION_RESPONSE);
+            questionId = resultSet.getInt(SQLTablesInformation.QUESTION_ID);
+            resource = resultSet.getString(SQLTablesInformation.QUESTION_ID_RESOURCE);
+            response = resultSet.getString(SQLTablesInformation.QUESTION_RESPONSE);
+            list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE1));
+            list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE2));
+            list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE3));
+            list.add(response);
         }
-        list.add(choice1);
-        list.add(choice2);
-        list.add(choice3);
-        list.add(choice4);
-        return list;
+        for (int i = 0; i < randomInt; i++)
+            Collections.shuffle(list);
+        return new Question.QuestionBuilder(questionId).resource(resource).response(response).choices(list).build();
     }
 
 }
