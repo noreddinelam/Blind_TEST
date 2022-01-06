@@ -34,7 +34,7 @@ public class Mapper {
             username=rs.getString(SQLTablesInformation.PLAYER_USERNAME);
             gameId=rs.getInt(SQLTablesInformation.PLAYER_ID_GAME);
             score=rs.getInt(SQLTablesInformation.PLAYER_SCORE);
-            players.add(new Player(username,gameId,score));
+            players.add(new Player(username, new Game.GameBuilder(gameId).build(),score));
         }
         return players;
     }

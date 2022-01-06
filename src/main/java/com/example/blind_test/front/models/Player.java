@@ -2,18 +2,18 @@ package com.example.blind_test.front.models;
 
 public class Player {
     private String username;
-    private int gameId;
+    private Game game;
     private int score;
 
-    public Player(String username, int gameId) {
+    public Player(String username, Game game) {
         this.username = username;
-        this.gameId = gameId;
+        this.game = game;
         this.score = 0;
     }
 
-    public Player(String username, int gameId, int score) {
+    public Player(String username, Game game, int score) {
         this.username = username;
-        this.gameId = gameId;
+        this.game = game;
         this.score = score;
     }
 
@@ -25,12 +25,12 @@ public class Player {
         this.username = username;
     }
 
-    public int getGameId() {
-        return gameId;
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public int getScore() {
@@ -40,4 +40,6 @@ public class Player {
     public void setScore(int score) {
         this.score = score;
     }
+
+
 }

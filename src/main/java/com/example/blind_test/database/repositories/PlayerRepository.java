@@ -1,14 +1,17 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
-import com.example.blind_test.exception.*;
+import com.example.blind_test.exception.AddNewPlayerDBException;
+import com.example.blind_test.exception.DeleteAllPlayerDBException;
+import com.example.blind_test.exception.GetPlayersOfGameException;
+import com.example.blind_test.exception.PlayerAlreadyExists;
+import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,47 +28,34 @@ public class PlayerRepository extends Repository {
         return repository;
     }
 
-    public Integer addNewPlayerDB(String username, String gameId) throws AddNewPlayerDBException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.ADD_NEW_PLAYER)) {
-            stmt.setString(1, username);
-            stmt.setString(2, gameId);
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new AddNewPlayerDBException();
-        }
-    }
-
-    private Boolean verifyPlayerExistenceDB(String playerId,int gameId) {
+    private Boolean verifyPlayerExistenceDB(String username, int gameId) throws PlayerAlreadyExists {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
-            stmt.setInt(1,gameId);
+            stmt.setInt(1, gameId);
             List<Player> players = mapper.resultSetToPlayers(stmt.executeQuery());
-            for(Player player:players)
-            {
-                if(player.getGameId() == gameId && player.getUsername().equalsIgnoreCase(playerId)) throw new PlayerAlreadyExists();
-            }
+            if (players.contains(new Player(username, new Game.GameBuilder(gameId).build())))
+                throw new PlayerAlreadyExists();
             return false;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return true;
         }
     }
+
     // Please verify if return value is not null when using this method
-    public Player addNewPlayerDB(String username,int gameId) throws PlayerAlreadyExists{
-        try  {
+    public Player addNewPlayerDB(String username, int gameId) throws PlayerAlreadyExists, AddNewPlayerDBException {
+        try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CREATE_PLAYER);
-            if(!verifyPlayerExistenceDB(username,gameId))
-            {
-                stmt.setString(1,username);
-                stmt.setInt(2,gameId);
-                stmt.setInt(3,0);
-                return new Player(username,gameId);
+            if (!verifyPlayerExistenceDB(username, gameId)) {
+                stmt.setString(1, username);
+                stmt.setInt(2, gameId);
+                stmt.setInt(3, 0);
+                return new Player(username, new Game.GameBuilder(gameId).build());
             }
             throw new PlayerAlreadyExists();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new AddNewPlayerDBException();
         }
     }
 

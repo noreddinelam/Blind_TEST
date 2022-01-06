@@ -5,7 +5,6 @@ import com.example.blind_test.database.SQLTablesInformation;
 import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
-import com.example.blind_test.shared.communication.PlayerGame;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -76,8 +75,8 @@ public class GameRepository extends Repository {
         }
     }
 
-    public PlayerGame joinGameDB(int gameId, String username) throws PlayerAlreadyExists, GameIsFullException,
-            JoinGameDBException, GetGameDBException, GetNbPlayersInGameException {
+    public Player joinGameDB(int gameId, String username) throws PlayerAlreadyExists, GameIsFullException,
+            JoinGameDBException, GetGameDBException, GetNbPlayersInGameException, AddNewPlayerDBException {
         Player player = null;
         try {
             Game game = getGame(gameId);
@@ -86,7 +85,8 @@ public class GameRepository extends Repository {
                 decPlayers.setInt(1, gameId);
                 decPlayers.execute();
                 player = PlayerRepository.getRepository().addNewPlayerDB(username, gameId);
-                return new PlayerGame(game, player);
+                player.setGame(game);
+                return player;
             }
             throw new GameIsFullException();
         } catch (SQLException e) {
