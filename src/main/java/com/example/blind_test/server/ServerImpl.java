@@ -6,6 +6,7 @@ import com.example.blind_test.database.repositories.QuestionRepository;
 import com.example.blind_test.exception.ChangeGameStateException;
 import com.example.blind_test.exception.CreateGameDBException;
 import com.example.blind_test.exception.ListOfNotStartedGameException;
+import com.example.blind_test.exception.ModifyPlayerScoreDBException;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.shared.CommunicationTypes;
@@ -113,26 +114,40 @@ public class ServerImpl {
         }
 
     }
-//
-//    public static void modifyPlayerScore(String data) {
-//        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-//        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAMEID));
-//        String username = requestData.get(FieldsRequestName.USERNAME);
-//        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
-//        try {
-//            Integer i = playerRepository.modifyPlayerScoreDB();
-//
-//
-//        }
-//
-//
-//    }
+
+    public static void modifyPlayerScore(String data) {
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAMEID));
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        int score = Integer.valueOf(requestData.get(FieldsRequestName.PLAYER_SCORE));
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
+        try {
+            int newScore = score + 1;
+            Map<String, String> responseData = new HashMap<>();
+            int i = playerRepository.modifyScore(newScore, gameId, username);
+            responseData.put(FieldsRequestName.GAMEID, String.valueOf(gameId));
+            responseData.put(FieldsRequestName.USERNAME, username);
+            responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(newScore));
+            Response response = new Response(NetCodes.MODIFY_SCORE_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
+            String responseJson = GsonConfiguration.gson.toJson(response);
+            ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
+            client.write(attachment, attachment, new ServerWriterCompletionHandler());
+            attachment.clear();
+            ByteBuffer newByteBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+            client.read(newByteBuffer, newByteBuffer, new ServerReaderCompletionHandler());
+        } catch (ModifyPlayerScoreDBException e) {
+            Response response = new Response(NetCodes.MODIFY_SCORE_FAILED, "modify score failure");
+            requestFailure(response, client);
+        }
+    }
+
+
 
     public static void initListOfFunctions() {
         // initialisation of methods;
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
         listOfFunctions.put(NetCodes.CHANGE_GAME_STATE, ServerImpl::modifyGameState);
-        //listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
+        listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
     }
 
 
