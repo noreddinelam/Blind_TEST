@@ -2,9 +2,10 @@ package com.example.blind_test.database;
 
 public class SQLTablesInformation {
 
-    public static final String PLAYER_TABLE = "PLAYER_TABLE";
+    public static final String PLAYER_TABLE = "PLAYER";
     public static final String PLAYER_USERNAME_COLUMN = "username";
-    public static final String PLAYER_ID_GAME = "id_game";
+    public static final String PLAYER_ID_GAME_COLUMN = "id_game";
+    public static final String PLAYER_SCORE_COLUMN = "score";
 
     public static final String QUESTION_TABLE = "QUESTION_TABLE";
     public static final String QUESTION_ID = "id";
