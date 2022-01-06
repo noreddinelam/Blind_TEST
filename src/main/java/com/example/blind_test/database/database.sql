@@ -19,7 +19,7 @@ CREATE TABLE `Question`
     CONSTRAINT `FK_26` FOREIGN KEY `FK_28` (`id_game`) REFERENCES `Game` (`id`)
 );
 
--- ************************************** `Partie`
+-- ************************************** `Game`
 
 CREATE TABLE `Game`
 (
@@ -35,7 +35,7 @@ CREATE TABLE `Game`
     CONSTRAINT `FK_46` FOREIGN KEY `FK_48` (`current_question`) REFERENCES `Question` (`id`)
 );
 
--- ************************************** `Joueur`
+-- ************************************** `Player`
 
 CREATE TABLE `Player`
 (
@@ -43,7 +43,8 @@ CREATE TABLE `Player`
     `id_game` integer NOT NULL ,
     `score`     integer NOT NULL ,
 
-    PRIMARY KEY (`username`),
     KEY `FK_44` (`id_game`),
-    CONSTRAINT `FK_42` FOREIGN KEY `FK_44` (`id_game`) REFERENCES `Game` (`id`)
+    CONSTRAINT `FK_42` FOREIGN KEY `FK_44` (`id_game`) REFERENCES `Game` (`id`) ,
+    CONSTRAINT `UNIQUE_CONSTRAINT` UNIQUE (`username`,`id_game`)
+
 );
