@@ -13,14 +13,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="797.0" prefWidth="1262.0" style="-fx-background-color: #0A0A0A;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.blind_test.front.controllers.MainMenuController">
    <children>
-      <AnchorPane layoutY="649.0" prefHeight="63.0" prefWidth="1262.0" style="-fx-background-color: #000000;">
+      <AnchorPane layoutY="649.0" prefHeight="63.0" prefWidth="1262.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="649.0">
          <children>
-            <ImageView fitHeight="142.0" fitWidth="213.0" layoutX="1035.0" layoutY="16.0" opacity="0.25" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="142.0" fitWidth="213.0" layoutX="1035.0" layoutY="16.0" opacity="0.25" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0424346923828125" AnchorPane.leftAnchor="1035.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="16.0">
                <image>
                   <Image url="@images/logodeezer.jpg" />
                </image>
             </ImageView>
-            <TextField layoutX="29.0" layoutY="52.0" prefHeight="44.0" prefWidth="270.0" promptText="Username..." styleClass="button_1" stylesheets="@stylesheet.css" />
+            <TextField layoutX="29.0" layoutY="52.0" prefHeight="44.0" prefWidth="270.0" promptText="Username..." style="-fx-text-fill: white;" styleClass="button_1" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="963.0" AnchorPane.topAnchor="52.0" />
          </children>
       </AnchorPane>
       <ImageView fitHeight="83.0" fitWidth="415.0" layoutX="403.0" layoutY="86.0" opacity="0.54" pickOnBounds="true" preserveRatio="true">
