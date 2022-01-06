@@ -1,7 +1,11 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
+import com.example.blind_test.database.SQLTablesInformation;
+import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
+import com.example.blind_test.front.models.Player;
+import com.example.blind_test.shared.communication.PlayerGame;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +26,7 @@ public class GameRepository extends Repository {
     }
 
     public Game createGameDB(boolean type, int current_question, int rounds
-            , int players, int timeQuestion, boolean state) {
+            , int players, int timeQuestion, boolean state) throws CreateGameDBException {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CREATE_GAME,
                     Statement.RETURN_GENERATED_KEYS);
@@ -42,12 +46,53 @@ public class GameRepository extends Repository {
                     .rounds(rounds).players(players).timeQuestion(timeQuestion).state(state).build();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            throw new CreateGameDBException();
         }
     }
 
-    public boolean joinGameDB(int gameId, int idUser) {
-        return false;
+    public Game getGame(int gameId) throws GetGameDBException {
+        try {
+            PreparedStatement getGame = connectionDB.prepareStatement(SQLStatements.GET_GAME_FROM_ID);
+            getGame.setInt(1, gameId);
+            return mapper.resultSetToGame(getGame.executeQuery());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new GetGameDBException();
+        }
+    }
+
+    public int getNbPlayersInGame(int gameId) {
+        int players = -1;
+        try {
+            PreparedStatement getPlayers = connectionDB.prepareStatement(SQLStatements.GET_PLAYERS_FROM_GAME);
+            getPlayers.setInt(1, gameId);
+            ResultSet rs = getPlayers.executeQuery();
+            while (rs.next()) {
+                players = rs.getInt(SQLTablesInformation.GAME_PLAYERS);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return players;
+    }
+
+    public PlayerGame joinGameDB(int gameId, String username) throws PlayerAlreadyExists, GameIsFullException,
+            JoinGameDBException, GetGameDBException {
+        Player player = null;
+        try {
+            Game game = getGame(gameId);
+            if (getNbPlayersInGame(gameId) > 0) {
+                PreparedStatement decPlayers = connectionDB.prepareStatement(SQLStatements.DEC_PLAYERS_IN_GAME);
+                decPlayers.setInt(1, gameId);
+                decPlayers.execute();
+                player = PlayerRepository.getRepository().addNewPlayerDB(username, gameId);
+                return new PlayerGame(game, player);
+            }
+            throw new GameIsFullException();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new JoinGameDBException();
+        }
     }
 
 
@@ -55,7 +100,7 @@ public class GameRepository extends Repository {
         List<Game> games = new ArrayList<>();
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_OF_GAME_NOT_STARTED);
-            games = mapper.resultSetToGame(stmt.executeQuery());
+            games = mapper.resultSetToGames(stmt.executeQuery());
             return games;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,25 +108,25 @@ public class GameRepository extends Repository {
         }
     }
 
-    public Integer changeGameState(Integer gameState, Integer gameId) {
+    public Integer changeGameState(Integer gameState, Integer gameId) throws ChangeGameStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_GAME_STATE)) {
             stmt.setInt(1, gameState);
             stmt.setInt(2, gameId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return -1;
+            throw new ChangeGameStateException();
         }
     }
 
-    public Integer changeCurrentQuestionId(Integer currentQuestion, Integer gameId) {
+    public Integer changeCurrentQuestionId(Integer currentQuestion, Integer gameId) throws ChangeCurrentQuestionIdException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_GAME_STATE)) {
             stmt.setInt(1, currentQuestion);
             stmt.setInt(2, gameId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return -1;
+            throw new ChangeCurrentQuestionIdException();
         }
     }
 

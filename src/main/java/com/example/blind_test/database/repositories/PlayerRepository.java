@@ -1,16 +1,14 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
-import com.example.blind_test.exception.AddNewPlayerDBException;
-import com.example.blind_test.exception.DeleteAllPlayerDBException;
-import com.example.blind_test.exception.GetPlayersOfGameException;
-import com.example.blind_test.exception.ModifyPlayerScoreDBException;
+import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,13 +36,36 @@ public class PlayerRepository extends Repository {
         }
     }
 
-    public Boolean modifyPlayerScoreDB(int newScore) throws ModifyPlayerScoreDBException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.MODIFY_NEW_PLAYER)) {
-            stmt.setInt(1, newScore);
-            return stmt.execute();
-        } catch (SQLException e) {
+    private Boolean verifyPlayerExistenceDB(String playerId,int gameId) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
+            stmt.setInt(1,gameId);
+            List<Player> players = mapper.resultSetToPlayers(stmt.executeQuery());
+            for(Player player:players)
+            {
+                if(player.getGameId() == gameId && player.getUsername().equalsIgnoreCase(playerId)) throw new PlayerAlreadyExists();
+            }
+            return false;
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new ModifyPlayerScoreDBException();
+            return true;
+        }
+    }
+    // Please verify if return value is not null when using this method
+    public Player addNewPlayerDB(String username,int gameId) throws PlayerAlreadyExists{
+        try  {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CREATE_PLAYER);
+            if(!verifyPlayerExistenceDB(username,gameId))
+            {
+                stmt.setString(1,username);
+                stmt.setInt(2,gameId);
+                stmt.setInt(3,0);
+                return new Player(username,gameId);
+            }
+            throw new PlayerAlreadyExists();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -62,7 +83,7 @@ public class PlayerRepository extends Repository {
     public List<Player> getPlayersOfGame(int gameId) throws GetPlayersOfGameException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.DELETE_ALL_PLAYER_FOR_GAME)) {
             stmt.setInt(1, gameId);
-            return mapper.resultSetToPlayerList(stmt.executeQuery());
+            return mapper.resultSetToPlayers(stmt.executeQuery());
         } catch (SQLException e) {
             e.printStackTrace();
             throw new GetPlayersOfGameException();
