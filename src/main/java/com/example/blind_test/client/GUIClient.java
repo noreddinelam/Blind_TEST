@@ -1,6 +1,7 @@
 package com.example.blind_test.client;
 
-import front.controllers.AuthController;
+
+import com.example.blind_test.shared.Properties;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import shared.Properties;
+;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 
 public class GUIClient extends Application {
     private final static InetSocketAddress serverIpAddress = new InetSocketAddress("localhost", Properties.PORT);
-    private final static Logger logger = LoggerFactory.getLogger(Client.class);
+    private final static Logger logger = LoggerFactory.getLogger(GUIClient.class);
     private static String clientIpAddress = "";
     private static AsynchronousSocketChannel client;
 

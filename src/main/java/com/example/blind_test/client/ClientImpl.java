@@ -1,15 +1,11 @@
 package com.example.blind_test.client;
 
 
+import com.example.blind_test.shared.Properties;
+import com.example.blind_test.shared.communication.Response;
+import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import shared.CommunicationTypes;
-import shared.FieldsRequestName;
-import shared.NetCodes;
-import shared.Properties;
-import shared.communication.Request;
-import shared.communication.Response;
-import shared.gson_configuration.GsonConfiguration;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -59,9 +55,9 @@ public abstract class ClientImpl {
         this.client = client;
     }
 
-    public void setController(Controller controller) {
-        this.controller = controller;
-    }
+   // public void setController(ModuleLayer.Controller controller) {
+//        this.controller = controller;
+//    }
 
     public AsynchronousSocketChannel getClient() {
         return client;
