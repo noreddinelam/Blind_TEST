@@ -1,7 +1,10 @@
 package com.example.blind_test.server;
 
 import com.example.blind_test.database.repositories.GameRepository;
+import com.example.blind_test.database.repositories.PlayerRepository;
+import com.example.blind_test.database.repositories.QuestionRepository;
 import com.example.blind_test.shared.Properties;
+import com.example.blind_test.shared.communication.Credentials;
 import com.example.blind_test.shared.communication.Request;
 import com.example.blind_test.shared.communication.Response;
 import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
@@ -11,15 +14,18 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.*;
+import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 public class ServerImpl {
 
-    private static final ConcurrentHashMap<String, AsynchronousSocketChannel> listOfClients = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Credentials, AsynchronousSocketChannel> listOfClients =
+            new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, AsynchronousSocketChannel> listOfGuests = new ConcurrentHashMap<>();
-    private static final GameRepository repository = GameRepository.getRepository();
+    private static final GameRepository gameRepository = GameRepository.getRepository();
+    private static final QuestionRepository questionRepository = QuestionRepository.getRepository();
+    private static final PlayerRepository playerRepository = PlayerRepository.getRepository();
     private static final Hashtable<String, Consumer<String>> listOfFunctions = new Hashtable<>();
     private static final Logger logger = LoggerFactory.getLogger(ServerImpl.class);
 
