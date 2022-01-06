@@ -9,6 +9,7 @@ public class SQLStatements {
                     + "(" + PLAYER_USERNAME+ "," + PLAYER_ID_GAME+ "," + PLAYER_SCORE
                     + ")" +
                     " VALUES (?,?,0) ;";
+
     public static final String LIST_PLAYERS_FROM_GAME = "SELECT * FROM " + PLAYER_TABLE + " where " + PLAYER_ID_GAME + " = ? ;";
 
     public static final String DEC_PLAYERS_IN_GAME = "UPDATE " + GAME_TABLE +
