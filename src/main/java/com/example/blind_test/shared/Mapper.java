@@ -2,6 +2,7 @@ package com.example.blind_test.shared;
 
 import com.example.blind_test.database.SQLTablesInformation;
 import com.example.blind_test.front.models.Game;
+import com.example.blind_test.front.models.Player;
 import com.example.blind_test.front.models.Question;
 
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ public class Mapper {
         List<Game> games = new ArrayList<>();
         int id;
         boolean type;
-        int current_qusetion;
+        int current_question;
         int rounds;
         int players;
         int timeQuestion;
@@ -34,12 +35,13 @@ public class Mapper {
         while (resultSet.next()) {
             id = resultSet.getInt(SQLTablesInformation.GAME_ID);
             type = resultSet.getBoolean(SQLTablesInformation.GAME_TYPE);
-            current_qusetion = resultSet.getInt(SQLTablesInformation.GAME_CURRENT_QUESTION);
+            current_question = resultSet.getInt(SQLTablesInformation.GAME_CURRENT_QUESTION);
             rounds = resultSet.getInt(SQLTablesInformation.GAME_ROUNDS);
             players = resultSet.getInt(SQLTablesInformation.GAME_PLAYERS);
             timeQuestion = resultSet.getInt(SQLTablesInformation.GAME_TIME_QUESTION);
             state = resultSet.getBoolean(SQLTablesInformation.GAME_STATE);
-            games.add(new Game(id, type, current_qusetion, rounds, players, timeQuestion, state));
+            games.add(new Game.GameBuilder(id).type(type).currentQuestion(current_question).rounds(rounds)
+                    .players(players).timeQuestion(timeQuestion).state(state).build());
         }
         return games;
     }

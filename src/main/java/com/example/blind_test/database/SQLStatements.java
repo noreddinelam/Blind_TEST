@@ -30,17 +30,19 @@ public class SQLStatements {
             " WHERE " + GAME_ID + "= ?; ";
 
     //PLAYER
-    public static String addNewPlayer =
+    public static final String ADD_NEW_PLAYER =
             "INSERT INTO " + PLAYER_TABLE
                     + "(" + PLAYER_USERNAME_COLUMN + "," + PLAYER_ID_GAME_COLUMN + "," + PLAYER_SCORE_COLUMN
                     + ")" +
                     " VALUES (?,?,0) ;";
-    public static String modifyPlayerScore =
+    public static final String MODIFY_NEW_PLAYER =
             "UPDATE " + PLAYER_TABLE
                     + " SET " + PLAYER_SCORE_COLUMN + "=? , WHERE " + PLAYER_USERNAME_COLUMN + "=? AND " + PLAYER_ID_GAME_COLUMN + "=? ;";
-    public static String deleteAllPlayer =
+    public static final String DELETE_ALL_PLAYER_FOR_GAME =
             "DELETE FROM " + PLAYER_TABLE
                     + " WHERE " + PLAYER_ID_GAME_COLUMN + "=? ;";
+    public static final String GET_ALL_PLAYERS_OF_GAME =
+            "SELECT * FROM " + PLAYER_TABLE + " WHERE " + PLAYER_ID_GAME_COLUMN + "=? ;";
 
     private SQLStatements() {
     }

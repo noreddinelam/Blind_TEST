@@ -38,6 +38,10 @@ public class ServerImpl {
         //listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
     }
 
+    public static void getQuestionResponse(String requestData){
+
+    }
+
     public static Consumer<String> getFunctionWithRequestCode(Request request) {
         return listOfFunctions.get(request.getNetCode());
     }
