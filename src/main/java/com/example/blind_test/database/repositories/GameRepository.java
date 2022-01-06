@@ -61,23 +61,23 @@ public class GameRepository extends Repository {
         }
     }
 
-    public int getNbPlayersInGame(int gameId) {
+    public int getNbPlayersInGame(int gameId) throws GetNbPlayersInGameException {
         int players = -1;
         try {
             PreparedStatement getPlayers = connectionDB.prepareStatement(SQLStatements.GET_PLAYERS_FROM_GAME);
             getPlayers.setInt(1, gameId);
             ResultSet rs = getPlayers.executeQuery();
-            while (rs.next()) {
+            while (rs.next())
                 players = rs.getInt(SQLTablesInformation.GAME_PLAYERS);
-            }
+            return players;
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new GetNbPlayersInGameException();
         }
-        return players;
     }
 
     public PlayerGame joinGameDB(int gameId, String username) throws PlayerAlreadyExists, GameIsFullException,
-            JoinGameDBException, GetGameDBException {
+            JoinGameDBException, GetGameDBException, GetNbPlayersInGameException {
         Player player = null;
         try {
             Game game = getGame(gameId);
