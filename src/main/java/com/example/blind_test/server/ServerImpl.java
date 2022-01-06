@@ -32,6 +32,7 @@ public class ServerImpl {
 
     public static void initListOfFunctions() {
         // initialisation of methods;
+        listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
     }
 
     public static Consumer<String> getFunctionWithRequestCode(Request request) {
