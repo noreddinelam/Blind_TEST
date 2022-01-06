@@ -1,6 +1,9 @@
 package com.example.blind_test.client;
 
 
+import com.example.blind_test.front.controllers.MainMenuController;
+import com.example.blind_test.front.models.Player;
+import com.example.blind_test.shared.NetCodes;
 import com.example.blind_test.shared.Properties;
 import com.example.blind_test.shared.communication.Response;
 import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
@@ -16,8 +19,10 @@ import java.util.function.Consumer;
 public abstract class ClientImpl {
     protected static final Hashtable<String, Consumer<String>> listOfFunctions = new Hashtable<>();
     private static final Logger logger = LoggerFactory.getLogger(ClientImpl.class);
-    protected String ipAddress;
-    protected AsynchronousSocketChannel client;
+    private String ipAddress;
+    private AsynchronousSocketChannel client;
+    private MainMenuController controller;
+    private Player player;
 
     public static Consumer<String> getFunctionWithRequestCode(Response response) {
         return listOfFunctions.get(response.getNetCode());
@@ -43,9 +48,12 @@ public abstract class ClientImpl {
     }
 
     public void initListOfFunctions() {
-        // Exemple :
-        //listOfFunctions.put(NetCodes.RESPONSE_JOIN_FAILED, this::responseRequestJoinChannelFailed);
+        listOfFunctions.put(NetCodes.CREATE_GAME_SUCCEED, this::createGameSucceeded);
+    }
 
+    public void createGameSucceeded(String responseData) {
+        Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
+        this.player = player;
 
     }
 
@@ -55,9 +63,9 @@ public abstract class ClientImpl {
         this.client = client;
     }
 
-   // public void setController(ModuleLayer.Controller controller) {
-//        this.controller = controller;
-//    }
+    public void setMainMenuController(MainMenuController controller) {
+        this.controller = controller;
+    }
 
     public AsynchronousSocketChannel getClient() {
         return client;

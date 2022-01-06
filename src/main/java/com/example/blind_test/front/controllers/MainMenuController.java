@@ -1,5 +1,6 @@
 package com.example.blind_test.front.controllers;
 
+import com.example.blind_test.front.models.Game;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 
-public class MainMenuController {
+public class MainMenuController extends Controller{
 
     ObservableList<Integer> numberOfPlayersList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
     ObservableList<Integer> numberOfQuestionsList = FXCollections.observableArrayList(5, 10, 15, 20);
@@ -24,7 +25,7 @@ public class MainMenuController {
     private Button joinGameButton;
 
     @FXML
-    private ListView<?> listOfGameToJoin;
+    private ListView<Game> listOfGameToJoin;
 
     @FXML
     private ChoiceBox<Integer> numberOfPlayers;
@@ -37,7 +38,7 @@ public class MainMenuController {
 
     @FXML
     void onCreateAudioGame(ActionEvent event) {
-
+        //this.clientImpl.createGame()
     }
 
     @FXML

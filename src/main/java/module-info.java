@@ -13,4 +13,6 @@ module com.example.blind_test {
     requires java.sql;
     opens com.example.blind_test to javafx.fxml;
     exports com.example.blind_test;
+    exports com.example.blind_test.front.controllers;
+    opens com.example.blind_test.front.controllers to javafx.fxml;
 }
