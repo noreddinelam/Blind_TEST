@@ -24,12 +24,12 @@ CREATE TABLE `Question`
 CREATE TABLE `Game`
 (
     `id`               integer NOT NULL ,
-    `type`             bit NOT NULL ,
+    `type`             binary NOT NULL ,
     `current_question` integer NOT NULL ,
     `rounds`           integer NOT NULL ,
     `players`          integer NOT NULL ,
     `timeQuestion`     timestamp NOT NULL ,
-    `state`             bit NOT NULL ,
+    `state`             binary NOT NULL ,
 
     PRIMARY KEY (`id`),
     KEY `FK_48` (`current_question`),

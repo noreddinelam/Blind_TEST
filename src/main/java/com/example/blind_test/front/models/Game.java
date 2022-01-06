@@ -2,13 +2,13 @@ package com.example.blind_test.front.models;
 
 public class Game {
     int id;
-    int type;
+    Boolean type;
     int current_qusetion;
     int rounds;
     int players;
     int timeQuestion;
-    int state;
-    public Game(int id, int type, int currentQuestion, int rounds, int players, int timeQUESTION, int state){
+    Boolean state;
+    public Game(int id, Boolean type, int currentQuestion, int rounds, int players, int timeQUESTION, Boolean state){
         this.id=id;
         this.type=type;
         this.current_qusetion=currentQuestion;
@@ -16,5 +16,9 @@ public class Game {
         this.players=players;
         this.timeQuestion= timeQUESTION;
         this.state=state;
+    }
+
+    public int getId() {
+        return id;
     }
 }
