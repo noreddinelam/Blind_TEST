@@ -63,12 +63,12 @@ public class GameRepository extends Repository {
         }
     }
 
-    public Boolean joinGameDB(int gameId, int playerId) {
-        try {
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    // when using return value please check if it's not null
+    public List<Object> joinGameDB(int gameId, String username) {
+        List<Object> list = new ArrayList<>();
+        Player player = PlayerRepository.getRepository().addNewPlayerDB(username, gameId);
+        list.add(player);
+        return list;
     }
 
 

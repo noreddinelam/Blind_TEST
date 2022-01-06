@@ -20,6 +20,9 @@ public class SQLStatements {
 
     public static final String LIST_PLAYERS_FROM_GAME = "SELECT * FROM " + PLAYER_TABLE + " where " + PLAYER_ID_GAME_COLUMN + " = ? ;";
 
+    public static final String DEC_PLAYERS_IN_GAME= "UPDATE "+ GAME_TABLE +
+            "SET players = players -1 1 " +
+            "WHERE id = ? ; ";
 
     public static final String GET_RESPONSE_FOR_QUESTION =
             "SELECT " + QUESTION_RESPONSE + " FROM " + QUESTION_TABLE + " WHERE " + QUESTION_ID + "= ? ;";

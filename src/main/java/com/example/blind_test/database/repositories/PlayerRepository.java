@@ -54,8 +54,8 @@ public class PlayerRepository {
             return true;
         }
     }
-
-    public Optional<Integer> addNewPlayerDB(String username,int gameId) {
+    // Please verify if return value is not null when using this method
+    public Player addNewPlayerDB(String username,int gameId) {
         try  {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CREATE_PLAYER);
             if(!verifyPlayerExistenceDB(username,gameId))
@@ -63,10 +63,12 @@ public class PlayerRepository {
                 stmt.setString(1,username);
                 stmt.setInt(2,gameId);
                 stmt.setInt(3,0);
+                return new Player(username,gameId);
             }
-            return Optional.of(stmt.executeUpdate());
-        } catch (SQLException e) {
-            return Optional.empty();
+            throw new PlayerAlreadyExists();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
