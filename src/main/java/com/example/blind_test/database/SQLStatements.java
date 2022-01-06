@@ -9,18 +9,20 @@ public class SQLStatements {
                     + "(" + PLAYER_USERNAME+ "," + PLAYER_ID_GAME+ "," + PLAYER_SCORE
                     + ")" +
                     " VALUES (?,?,0) ;";
+
     public static final String LIST_PLAYERS_FROM_GAME = "SELECT * FROM " + PLAYER_TABLE + " where " + PLAYER_ID_GAME + " = ? ;";
 
-    public static final String DEC_PLAYERS_IN_GAME= "UPDATE "+ GAME_TABLE +
+    public static final String DEC_PLAYERS_IN_GAME = "UPDATE " + GAME_TABLE +
             "SET players = players - 1 " +
             "WHERE id = ? ; ";
 
-    public static final String GET_PLAYERS_FROM_GAME = "SELECT "+GAME_PLAYERS + " FROM "+ GAME_TABLE + " WHERE id= ? ;";
-    public static final String GET_GAME_FROM_ID = "SELECT * FROM "+ GAME_TABLE + " WHERE id= ? ;";
-    // QUESTIONS
+    public static final String GET_PLAYERS_FROM_GAME = "SELECT " + GAME_PLAYERS + " FROM " + GAME_TABLE + " WHERE id= ? ;";
+
+    public static final String GET_GAME_FROM_ID = "SELECT * FROM " + GAME_TABLE + " WHERE id= ? ;";
 
     public static final String GET_RESPONSE_FOR_QUESTION =
             "SELECT " + QUESTION_RESPONSE + " FROM " + QUESTION_TABLE + " WHERE " + QUESTION_ID + "= ? ;";
+    // QUESTIONS
 
     public static final String GET_QUESTION =
             "SELECT * FROM " + QUESTION_TABLE + " WHERE " + QUESTION_ID + "= ? ;";
@@ -37,7 +39,7 @@ public class SQLStatements {
             + "," + GAME_TIME_QUESTION + "," + GAME_STATE + ")" +
             " VALUES (?,?,?,?,?,?) ;";
 
-    public static final String DELETE_GAME= "DELETE FROM " + GAME_TABLE + " where " + GAME_ID +" = ? ;";
+    public static final String DELETE_GAME = "DELETE FROM " + GAME_TABLE + " where " + GAME_ID + " = ? ;";
 
     public static final String LIST_OF_GAME_NOT_STARTED = "SELECT * FROM"
             + GAME_TABLE + " WHERE " + GAME_STATE + "= 0 ;";
@@ -56,15 +58,18 @@ public class SQLStatements {
                     + ")" +
                     " VALUES (?,?,0) ;";
 
-    public static final String MODIFY_NEW_PLAYER =
+
+    public static final String MODIFY_SCORE =
             "UPDATE " + PLAYER_TABLE
                     + " SET " + PLAYER_SCORE + "=? , WHERE " + PLAYER_USERNAME + "=? AND " + PLAYER_ID_GAME + "=? ;";
-    public static final String DELETE_ALL_PLAYER_FOR_GAME =
 
+    public static final String DELETE_ALL_PLAYER_FOR_GAME =
             "DELETE FROM " + PLAYER_TABLE
                     + " WHERE " + PLAYER_ID_GAME + "=? ;";
+
     public static final String GET_ALL_PLAYERS_OF_GAME =
             "SELECT * FROM " + PLAYER_TABLE + " WHERE " + PLAYER_ID_GAME + "=? ;";
+
 
     private SQLStatements() {
     }
