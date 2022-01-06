@@ -18,7 +18,7 @@ public class SQLStatements {
             "DELETE FROM " + PLAYER_TABLE
                     + " WHERE " + PLAYER_ID_GAME_COLUMN + "=? ;";
 
-    public static final String LIST_PLAYERS_FROM_GAME = "SELECT * FROM " + PLAYER_TABLE + " where " + PLAYER_ID_GAME + " = ? ;";
+    public static final String LIST_PLAYERS_FROM_GAME = "SELECT * FROM " + PLAYER_TABLE + " where " + PLAYER_ID_GAME_COLUMN + " = ? ;";
 
 
     public static final String GET_RESPONSE_FOR_QUESTION =
