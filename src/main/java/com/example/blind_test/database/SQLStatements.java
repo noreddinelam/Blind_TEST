@@ -13,6 +13,14 @@ public class SQLStatements {
     public static final String INSERT_QUESTION_IN_QUESTION_GAME = "INSERT INTO " + QUESTION_GAME_TABLE + " VALUES (?," +
             "?,?) ;";
 
+    public static final String CREATE_GAME = "INSERT INTO " + GAME_TABLE
+            + "(" + GAME_ID + "," + GAME_TYPE + ","
+            + GAME_CURRENT_QUESTION + "," + GAME_ROUNDS + "," + GAME_PLAYERS
+            + "," + GAME_TIME_QUESTION + "," + GAME_STATE + ")" +
+            " VALUES (?,?,?,?,?,?,?) ;";
+
+    public static final String LIST_ALL_GAMES = "SELECT * FROM " + GAME_TABLE + " ;";
+
     public static final String LIST_OF_GAME_NOT_STARTED = "SELECT * FROM"
             + GAME_TABLE + " WHERE " + GAME_STATE + "=0 ;";
 
