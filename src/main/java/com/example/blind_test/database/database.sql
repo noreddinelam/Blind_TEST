@@ -47,7 +47,7 @@ CREATE TABLE `Question_Game`
     KEY `FK_30` (`id_question`),
     CONSTRAINT `FK_32` FOREIGN KEY `FK_30` (`id_question`) REFERENCES `Question` (`id`),
     KEY `FK_28` (`id_game`),
-    CONSTRAINT `FK_26` FOREIGN KEY `FK_28` (`id_game`) REFERENCES `Game` (`id`)
+    CONSTRAINT `FK_26` FOREIGN KEY `FK_28` (`id_game`) REFERENCES `Game` (`id`) ON DELETE CASCADE
 );
 
 -- ************************************** `Player`
@@ -59,7 +59,7 @@ CREATE TABLE `Player`
     `score`     integer NOT NULL ,
 
     KEY `FK_44` (`id_game`),
-    CONSTRAINT `FK_42` FOREIGN KEY `FK_44` (`id_game`) REFERENCES `Game` (`id`) ,
+    CONSTRAINT `FK_42` FOREIGN KEY `FK_44` (`id_game`) REFERENCES `Game` (`id`) ON DELETE CASCADE ,
     CONSTRAINT `UNIQUE_CONSTRAINT` UNIQUE (`username`,`id_game`)
 
 );

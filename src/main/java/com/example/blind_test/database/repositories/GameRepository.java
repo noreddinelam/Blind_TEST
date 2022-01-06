@@ -95,6 +95,16 @@ public class GameRepository extends Repository {
         }
     }
 
+    public void deleteGameDB(int gameId) throws DeleteGameException {
+        try {
+            PreparedStatement delete = connectionDB.prepareStatement(SQLStatements.DELETE_GAME);
+            delete.setInt(1,gameId);
+            delete.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DeleteGameException();
+        }
+    }
 
     public List<Game> listOfNotStartedGameDb() throws SQLException {
         List<Game> games = new ArrayList<>();
