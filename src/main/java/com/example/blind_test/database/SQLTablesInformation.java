@@ -4,6 +4,7 @@ public class SQLTablesInformation {
 
     public static final String PLAYER_TABLE = "PLAYER_TABLE";
     public static final String PLAYER_USERNAME_COLUMN = "username";
+    public static final String PLAYER_ID_GAME = "id_game";
 
     public static final String QUESTION_TABLE = "QUESTION_TABLE";
     public static final String QUESTION_ID = "id";
