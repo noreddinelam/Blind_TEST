@@ -25,12 +25,12 @@ public class Mapper {
     public List<Game> resultSetToGame(ResultSet resultSet) throws SQLException {
         List<Game> games = new ArrayList<>();
         int id;
-        Boolean type;
+        boolean type;
         int current_qusetion;
         int rounds;
         int players;
         int timeQuestion;
-        Boolean state;
+        boolean state;
         while (resultSet.next()) {
             id = resultSet.getInt(SQLTablesInformation.GAME_ID);
             type = resultSet.getBoolean(SQLTablesInformation.GAME_TYPE);
