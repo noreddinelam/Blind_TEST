@@ -9,7 +9,7 @@ use blind_test;
 
 CREATE TABLE `Question`
 (
-    `id`           integer NOT NULL ,
+    `id`           integer NOT NULL auto_increment,
     `id_resource` varchar(255) NOT NULL ,
     `response`   varchar(255) NOT NULL ,
     `choice1`    varchar(255) NOT NULL ,
@@ -23,7 +23,7 @@ CREATE TABLE `Question`
 
 CREATE TABLE `Game`
 (
-    `id`               integer NOT NULL ,
+    `id`               integer NOT NULL auto_increment,
     `type`             binary NOT NULL ,
     `current_question` integer NOT NULL ,
     `rounds`           integer NOT NULL ,

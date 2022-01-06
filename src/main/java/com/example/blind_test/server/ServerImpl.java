@@ -3,6 +3,7 @@ package com.example.blind_test.server;
 import com.example.blind_test.database.repositories.GameRepository;
 import com.example.blind_test.database.repositories.PlayerRepository;
 import com.example.blind_test.database.repositories.QuestionRepository;
+import com.example.blind_test.shared.NetCodes;
 import com.example.blind_test.shared.Properties;
 import com.example.blind_test.shared.communication.Credentials;
 import com.example.blind_test.shared.communication.Request;
@@ -34,7 +35,7 @@ public class ServerImpl {
 
     public static void initListOfFunctions() {
         // initialisation of methods;
-        listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
+        //listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
     }
 
     public static Consumer<String> getFunctionWithRequestCode(Request request) {
