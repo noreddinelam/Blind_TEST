@@ -19,7 +19,6 @@ CREATE TABLE `Question`
     PRIMARY KEY (`id`)
 );
 
-
 -- ************************************** `Game`
 
 CREATE TABLE `Game`

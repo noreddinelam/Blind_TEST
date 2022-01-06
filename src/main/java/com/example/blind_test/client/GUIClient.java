@@ -1,6 +1,5 @@
 package com.example.blind_test.client;
 
-
 import com.example.blind_test.shared.Properties;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
