@@ -4,27 +4,19 @@ import com.example.blind_test.database.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 
 // The repository to use for using requests on the database.
 // executeQuery : for select statements.
 // execute : return boolean
 
-public class Repository {
-    private static final Repository repository = new Repository();
+public abstract class Repository {
+    protected static Connection connectionDB;
     private static Logger logger = LoggerFactory.getLogger(Repository.class);
-    private static Connection connectionDB;
 
-    private Repository() {
-    }
-
-    public static Repository getRepository() {
-        initConnectionToDatabase();
-        return repository;
-    }
-
-    private static void initConnectionToDatabase() {
+    protected static void initConnectionToDatabase() {
         try {
             connectionDB = Database.getDatabaseConnection();
             logger.info("Initialisation of connection to database");

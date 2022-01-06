@@ -55,7 +55,7 @@ public abstract class ClientImpl {
         this.client = client;
     }
 
-//    public void setController(Controller controller) {
+   // public void setController(ModuleLayer.Controller controller) {
 //        this.controller = controller;
 //    }
 

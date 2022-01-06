@@ -18,5 +18,15 @@ public class SQLTablesInformation {
     public static final String QUESTION_GAME_ID_GAME = "id_game";
     public static final String QUESTION_GAME_ORDER = "order";
 
-    private SQLTablesInformation(){}
+    public static final String GAME_TABLE = "Game";
+    public static final String GAME_ID = "id";
+    public static final String GAME_TYPE = "type";
+    public static final String GAME_CURRENT_QUESTION = "current_question";
+    public static final String GAME_ROUNDS = "rounds";
+    public static final String GAME_PLAYERS = "players";
+    public static final String GAME_TIME_QUESTION = "timeQuestion";
+    public static final String GAME_STATE = "state";
+
+    private SQLTablesInformation() {
+    }
 }
