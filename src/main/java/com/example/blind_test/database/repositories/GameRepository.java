@@ -50,7 +50,7 @@ public class GameRepository extends Repository {
             while (rs.next()) {
                 gameId = rs.getInt(1);
             }
-            Game game=  new Game.GameBuilder(1).currentQuestion(gameId).type(type).currentQuestion(current_question)
+            Game game=  new Game.GameBuilder(gameId).type(type).currentQuestion(current_question)
                     .rounds(rounds).players(players).timeQuestion(timeQuestion).state(state).build();
             Player player = PlayerRepository.getRepository().addNewPlayerDB(username, game.getId());
             player.setGame(game);
