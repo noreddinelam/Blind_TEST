@@ -33,8 +33,8 @@ public class GameRepository extends Repository {
         return repository;
     }
 
-    public Game createGameDB(boolean type, int current_question, int rounds
-            , int players, int timeQuestion, boolean state) throws CreateGameDBException {
+    public Player createGameDB(boolean type, int current_question, int rounds
+            , int players, int timeQuestion, boolean state,String username) throws CreateGameDBException {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CREATE_GAME,
                     Statement.RETURN_GENERATED_KEYS);
@@ -50,8 +50,11 @@ public class GameRepository extends Repository {
             while (rs.next()) {
                 gameId = rs.getInt(1);
             }
-            return new Game.GameBuilder(1).currentQuestion(gameId).type(type).currentQuestion(current_question)
+            Game game=  new Game.GameBuilder(1).currentQuestion(gameId).type(type).currentQuestion(current_question)
                     .rounds(rounds).players(players).timeQuestion(timeQuestion).state(state).build();
+            Player player = PlayerRepository.getRepository().addNewPlayerDB(username, game.getId());
+            player.setGame(game);
+            return player;
         } catch (Exception e) {
             e.printStackTrace();
             throw new CreateGameDBException();

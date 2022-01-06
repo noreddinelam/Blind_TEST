@@ -4,8 +4,10 @@ import com.example.blind_test.database.repositories.GameRepository;
 import com.example.blind_test.database.repositories.PlayerRepository;
 import com.example.blind_test.database.repositories.QuestionRepository;
 import com.example.blind_test.exception.ChangeGameStateException;
+import com.example.blind_test.exception.CreateGameDBException;
 import com.example.blind_test.exception.ListOfNotStartedGameException;
 import com.example.blind_test.front.models.Game;
+import com.example.blind_test.front.models.Player;
 import com.example.blind_test.shared.CommunicationTypes;
 import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
@@ -41,6 +43,38 @@ public class ServerImpl {
     private ServerImpl() {
     }
 
+    private static void createGame(String data) {
+        logger.info("CREATE GAME INFO {} ", data);
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        String ipAddress = requestData.get(FieldsRequestName.IP_ADDRESS);
+        AsynchronousSocketChannel client = listOfGuests.get(ipAddress);
+        boolean type = Boolean.parseBoolean(requestData.get(FieldsRequestName.GAME_TYPE));
+        int current_question = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
+        int rounds = Integer.parseInt(requestData.get(FieldsRequestName.ROUNDS));
+        int players = Integer.parseInt(requestData.get(FieldsRequestName.PLAYERS));
+        int timeQuestion = Integer.parseInt(requestData.get(FieldsRequestName.TIME_QUESTION));
+        boolean state = Boolean.parseBoolean(requestData.get(FieldsRequestName.STATE));
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        try {
+            Player player = gameRepository.createGameDB(type, current_question, rounds
+                    , players, timeQuestion, state,username);
+            Response response = new Response(NetCodes.CREATE_GAME_SUCCEED,GsonConfiguration.gson.toJson(player));
+            responseSucceed(client, response);
+        } catch (CreateGameDBException e) {
+            Response response = new Response(NetCodes.CREATE_GAME_FAILED, "Create game failure");
+            requestFailure(response,client);
+        }
+    }
+
+    private static void responseSucceed(AsynchronousSocketChannel client, Response response) {
+        String responseJson = GsonConfiguration.gson.toJson(response);
+        ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
+        client.write(attachment, attachment, new ServerWriterCompletionHandler());
+        attachment.clear();
+        ByteBuffer newByteBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+        client.read(newByteBuffer, newByteBuffer, new ServerReaderCompletionHandler());
+    }
+
     private static void listOfNotStartedGame(String data) {
         logger.info("list of started game {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
@@ -51,12 +85,7 @@ public class ServerImpl {
             Map<String, List<Game>> responseData = new HashMap<>();
             responseData.put(FieldsRequestName.LISTGAMES, resultGame);
             Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapListGameJsonTypeData));
-            String responseJson = GsonConfiguration.gson.toJson(response);
-            ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
-            client.write(attachment, attachment, new ServerWriterCompletionHandler());
-            attachment.clear();
-            ByteBuffer newByteBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
-            client.read(newByteBuffer, newByteBuffer, new ServerReaderCompletionHandler());
+            responseSucceed(client, response);
         } catch (ListOfNotStartedGameException e) {
             Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_FAILED, "list of not started game failure");
             requestFailure(response, client);
@@ -74,12 +103,7 @@ public class ServerImpl {
             responseData.put(FieldsRequestName.GAME_STATE, "true");
             responseData.put(FieldsRequestName.GAMEID, String.valueOf(gameId));
             Response response = new Response(NetCodes.CHANGE_GAME_STATE_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
-            String responseJson = GsonConfiguration.gson.toJson(response);
-            ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
-            client.write(attachment, attachment, new ServerWriterCompletionHandler());
-            attachment.clear();
-            ByteBuffer newByteBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
-            client.read(newByteBuffer, newByteBuffer, new ServerReaderCompletionHandler());
+            responseSucceed(client, response);
 
         } catch (ChangeGameStateException e) {
             Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "change state failure");
@@ -110,7 +134,7 @@ public class ServerImpl {
     }
 
 
-    public static void getQuestionResponse(String requestData){
+    public static void getQuestionResponse(String requestData) {
 
     }
 
