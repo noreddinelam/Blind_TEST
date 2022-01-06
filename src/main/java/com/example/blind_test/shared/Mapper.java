@@ -3,6 +3,7 @@ package com.example.blind_test.shared;
 import com.example.blind_test.database.SQLTablesInformation;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Question;
+import com.example.blind_test.front.models.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +21,21 @@ public class Mapper {
 
     public static Mapper getMapper() {
         return mapper;
+    }
+
+    public List<Player> resultSetToPlayers(ResultSet rs) throws SQLException {
+        List<Player> players = new ArrayList<>();
+        String username;
+        int gameId;
+        int score;
+        while(rs.next())
+        {
+            username=rs.getString(SQLTablesInformation.PLAYER_USERNAME_COLUMN);
+            gameId=rs.getInt(SQLTablesInformation.PLAYER_ID_GAME);
+            score=rs.getInt(SQLTablesInformation.PLAYER_SCORE);
+            players.add(new Player(username,gameId,score));
+        }
+        return players;
     }
 
     public List<Game> resultSetToGame(ResultSet resultSet) throws SQLException {

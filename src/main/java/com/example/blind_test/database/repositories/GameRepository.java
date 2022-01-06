@@ -2,7 +2,9 @@ package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
 import com.example.blind_test.exception.GameAlreadyExists;
+import com.example.blind_test.exception.PlayerAlreadyExists;
 import com.example.blind_test.front.models.Game;
+import com.example.blind_test.front.models.Player;
 import com.example.blind_test.shared.Mapper;
 
 import java.sql.PreparedStatement;
@@ -23,7 +25,7 @@ public class GameRepository extends Repository {
     }
 
 
-    private Boolean verifyGameExistsDB(int id) {
+    private Boolean verifyGameExistenceDB(int id) {
         List<Game> games = new ArrayList<>();
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_ALL_GAMES);
@@ -42,7 +44,7 @@ public class GameRepository extends Repository {
             , int players, int timeQuestion, Boolean state) {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_OF_GAME_NOT_STARTED);
-            if (!verifyGameExistsDB(id)) {
+            if (!verifyGameExistenceDB(id)) {
                 stmt.setInt(1, id);
                 stmt.setBoolean(2, type);
                 stmt.setInt(3, current_question);
@@ -60,9 +62,13 @@ public class GameRepository extends Repository {
             return null;
         }
     }
-    public Boolean joinGameDB(int gameId,int idUser)
-    {
 
+    public Boolean joinGameDB(int gameId, int playerId) {
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

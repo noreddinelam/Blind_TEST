@@ -4,7 +4,7 @@ import static com.example.blind_test.database.SQLTablesInformation.*;
 
 public class SQLStatements {
 
-    public static String addNewPlayer =
+    public static String CREATE_PLAYER =
             "INSERT INTO " + PLAYER_TABLE
                     + "(" + PLAYER_USERNAME_COLUMN + "," + PLAYER_ID_GAME_COLUMN + "," + PLAYER_SCORE_COLUMN
                     + ")" +
@@ -16,7 +16,10 @@ public class SQLStatements {
 
     public static String deleteAllPlayer =
             "DELETE FROM " + PLAYER_TABLE
-                    + " WHERE " + PLAYER_ID_GAME_COLUMN+ "=? ;";
+                    + " WHERE " + PLAYER_ID_GAME_COLUMN + "=? ;";
+
+    public static final String LIST_PLAYERS_FROM_GAME = "SELECT * FROM " + PLAYER_TABLE + " where " + PLAYER_ID_GAME + " = ? ;";
+
 
     public static final String GET_RESPONSE_FOR_QUESTION =
             "SELECT " + QUESTION_RESPONSE + " FROM " + QUESTION_TABLE + " WHERE " + QUESTION_ID + "= ? ;";
