@@ -1,6 +1,6 @@
 package com.example.blind_test.server;
 
-import com.example.blind_test.database.Repository;
+import com.example.blind_test.database.repositories.Repository;
 import com.example.blind_test.shared.*;
 import com.example.blind_test.shared.Properties;
 import com.example.blind_test.shared.communication.Request;

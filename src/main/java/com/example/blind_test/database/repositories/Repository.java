@@ -1,5 +1,6 @@
-package com.example.blind_test.database;
+package com.example.blind_test.database.repositories;
 
+import com.example.blind_test.database.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
