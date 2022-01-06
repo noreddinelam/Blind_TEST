@@ -21,12 +21,14 @@ public class SQLStatements {
 
     public static final String GET_RESPONSE_FOR_QUESTION =
             "SELECT " + QUESTION_RESPONSE + " FROM " + QUESTION_TABLE + " WHERE " + QUESTION_ID + "= ? ;";
+
     public static final String GET_QUESTION =
             "SELECT * FROM " + QUESTION_TABLE + " WHERE " + QUESTION_ID + "= ? ;";
+
     public static final String INSERT_QUESTION_IN_QUESTION_GAME =
             "INSERT INTO " + QUESTION_GAME_TABLE + "(" + QUESTION_GAME_ID_QUESTION + "," + QUESTION_GAME_ID_GAME + ","
                     + QUESTION_GAME_ORDER + " VALUES (?," +
-            "?,?) ;";
+                    "?,?) ;";
 
     //GAME
     public static final String CREATE_GAME = "INSERT INTO " + GAME_TABLE
@@ -34,11 +36,15 @@ public class SQLStatements {
             + GAME_CURRENT_QUESTION + "," + GAME_ROUNDS + "," + GAME_PLAYERS
             + "," + GAME_TIME_QUESTION + "," + GAME_STATE + ")" +
             " VALUES (?,?,?,?,?,?) ;";
+
     public static final String DELETE_GAME= "DELETE FROM " + GAME_TABLE + " where " + GAME_ID +" = ? ;";
+
     public static final String LIST_OF_GAME_NOT_STARTED = "SELECT * FROM"
-            + GAME_TABLE + " WHERE " + GAME_STATE + "=0 ;";
-    public static final String CHANGE_GAME_STATE = "UPDATE " + GAME_TABLE + " SET " + GAME_STATE + "= ?" +
+            + GAME_TABLE + " WHERE " + GAME_STATE + "= 0 ;";
+
+    public static final String CHANGE_GAME_STATE = "UPDATE " + GAME_TABLE + " SET " + GAME_STATE + "= 1" +
             " WHERE " + GAME_ID + "= ?; ";
+
     public static final String ID_OF_CURRENT_QUESTION = "UPDATE " + GAME_TABLE + " SET "
             + GAME_CURRENT_QUESTION + " = ? " +
             " WHERE " + GAME_ID + "= ?; ";
@@ -49,10 +55,12 @@ public class SQLStatements {
                     + "(" + PLAYER_USERNAME + "," + PLAYER_ID_GAME + "," + PLAYER_SCORE
                     + ")" +
                     " VALUES (?,?,0) ;";
+
     public static final String MODIFY_NEW_PLAYER =
             "UPDATE " + PLAYER_TABLE
                     + " SET " + PLAYER_SCORE + "=? , WHERE " + PLAYER_USERNAME + "=? AND " + PLAYER_ID_GAME + "=? ;";
     public static final String DELETE_ALL_PLAYER_FOR_GAME =
+
             "DELETE FROM " + PLAYER_TABLE
                     + " WHERE " + PLAYER_ID_GAME + "=? ;";
     public static final String GET_ALL_PLAYERS_OF_GAME =
