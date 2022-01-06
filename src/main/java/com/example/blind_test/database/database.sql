@@ -19,20 +19,6 @@ CREATE TABLE `Question`
     PRIMARY KEY (`id`)
 );
 
--- ************************************** `Question_Game`
-
-CREATE TABLE `Question_Game`
-(
-    `id_question`  integer NOT NULL ,
-    `id_game`    integer NOT NULL ,
-    `order`        integer NOT NULL ,
-
-    KEY `FK_30` (`id_question`),
-    CONSTRAINT `FK_32` FOREIGN KEY `FK_30` (`id_question`) REFERENCES `Question` (`id`),
-    KEY `FK_28` (`id_game`),
-    CONSTRAINT `FK_26` FOREIGN KEY `FK_28` (`id_game`) REFERENCES `Game` (`id`)
-);
-
 -- ************************************** `Game`
 
 CREATE TABLE `Game`
@@ -50,7 +36,21 @@ CREATE TABLE `Game`
     CONSTRAINT `FK_46` FOREIGN KEY `FK_48` (`current_question`) REFERENCES `Question` (`id`)
 );
 
--- ************************************** `com.example.blind_test.database.Player`
+-- ************************************** `Question_Game`
+
+CREATE TABLE `Question_Game`
+(
+    `id_question`  integer NOT NULL ,
+    `id_game`    integer NOT NULL ,
+    `order`        integer NOT NULL ,
+
+    KEY `FK_30` (`id_question`),
+    CONSTRAINT `FK_32` FOREIGN KEY `FK_30` (`id_question`) REFERENCES `Question` (`id`),
+    KEY `FK_28` (`id_game`),
+    CONSTRAINT `FK_26` FOREIGN KEY `FK_28` (`id_game`) REFERENCES `Game` (`id`)
+);
+
+-- ************************************** `Player`
 
 CREATE TABLE `Player`
 (

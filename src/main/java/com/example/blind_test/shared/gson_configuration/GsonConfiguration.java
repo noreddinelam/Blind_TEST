@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 
 public class GsonConfiguration {
     public final static Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
-            new shared.gson_configuration.LocalDateTimeSerializer()).registerTypeAdapter(LocalDateTime.class,new shared.gson_configuration.LocalDateTimeDeserializer()).setPrettyPrinting().create();
+            new LocalDateTimeSerializer()).registerTypeAdapter(LocalDateTime.class,new LocalDateTimeDeserializer()).setPrettyPrinting().create();
 }
