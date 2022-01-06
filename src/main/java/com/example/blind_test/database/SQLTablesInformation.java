@@ -5,5 +5,18 @@ public class SQLTablesInformation {
     public static final String PLAYER_TABLE = "PLAYER_TABLE";
     public static final String PLAYER_USERNAME_COLUMN = "username";
 
+    public static final String QUESTION_TABLE = "QUESTION_TABLE";
+    public static final String QUESTION_ID = "id";
+    public static final String QUESTION_ID_RESOURCE = "id_resource";
+    public static final String QUESTION_RESPONSE = "response";
+    public static final String QUESTION_CHOICE1 = "choice1";
+    public static final String QUESTION_CHOICE2 = "choice2";
+    public static final String QUESTION_CHOICE3 = "choice3";
+
+    public static final String QUESTION_GAME_TABLE = "QUESTION_GAME";
+    public static final String QUESTION_GAME_ID_QUESTION = "id_question";
+    public static final String QUESTION_GAME_ID_GAME = "id_game";
+    public static final String QUESTION_GAME_ORDER = "order";
+
     private SQLTablesInformation(){}
 }
