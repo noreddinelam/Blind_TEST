@@ -1,10 +1,7 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
-import com.example.blind_test.exception.AddNewPlayerDBException;
-import com.example.blind_test.exception.DeleteAllPlayerDBException;
-import com.example.blind_test.exception.GetPlayersOfGameException;
-import com.example.blind_test.exception.PlayerAlreadyExists;
+import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
 import org.slf4j.Logger;
@@ -80,5 +77,15 @@ public class PlayerRepository extends Repository {
         }
     }
 
-
+    public Integer modifyScore(int newScore, int gameID, String username) throws ModifyPlayerScoreDBException {
+        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.MODIFY_SCORE)) {
+            stmt.setInt(1,newScore);
+            stmt.setInt(2,gameID);
+            stmt.setString(3,username);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ModifyPlayerScoreDBException();
+        }
+    }
 }
