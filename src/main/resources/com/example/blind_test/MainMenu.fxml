@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="797.0" prefWidth="1262.0" style="-fx-background-color: #0A0A0A;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="resources.MainMenuController">
+   <children>
+      <AnchorPane layoutY="649.0" prefHeight="63.0" prefWidth="1262.0" style="-fx-background-color: #000000;">
+         <children>
+            <ImageView fitHeight="142.0" fitWidth="213.0" layoutX="1035.0" layoutY="16.0" opacity="0.25" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/logodeezer.jpg" />
+               </image>
+            </ImageView>
+            <TextField layoutX="29.0" layoutY="52.0" prefHeight="44.0" prefWidth="270.0" promptText="User name..." styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" />
+         </children>
+      </AnchorPane>
+      <ImageView fitHeight="83.0" fitWidth="415.0" layoutX="403.0" layoutY="86.0" opacity="0.54" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/logo.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="127.0" fitWidth="449.0" layoutX="411.0" layoutY="91.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/logo.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="joinGameButton" layoutX="803.0" layoutY="505.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" text="JOIN GAME" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="1220.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css">
+         <graphic>
+            <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
+         </graphic>
+      </Button>
+      <ListView layoutX="748.0" layoutY="208.0" prefHeight="274.0" prefWidth="225.0" style="-fx-background-radius: 5px;" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" />
+      <AnchorPane layoutX="256.0" layoutY="208.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="351.0" prefWidth="249.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;">
+         <children>
+            <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Numbers of players :" wrappingWidth="132.13671875">
+               <font>
+                  <Font name="Bookman Old Style Bold" size="12.0" />
+               </font>
+            </Text>
+            <ChoiceBox fx:id="numberOfPlayers" layoutX="181.0" layoutY="8.0" prefHeight="29.0" prefWidth="54.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Numbers of questions :" wrappingWidth="146.13671875">
+               <font>
+                  <Font name="Bookman Old Style Bold" size="12.0" />
+               </font>
+            </Text>
+            <ChoiceBox fx:id="numberOfQuestions" layoutX="181.0" layoutY="58.0" prefHeight="29.0" prefWidth="54.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time to answer : " wrappingWidth="132.13671875">
+               <font>
+                  <Font name="Bookman Old Style Bold" size="12.0" />
+               </font>
+            </Text>
+            <ChoiceBox fx:id="responseTime" layoutX="181.0" layoutY="110.0" prefHeight="29.0" prefWidth="54.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" />
+            <TextField fx:id="partyNameTextField" layoutX="22.0" layoutY="161.0" prefHeight="25.0" prefWidth="206.0" promptText="Party name..." styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" />
+            <Button fx:id="audioGameButton" layoutX="13.0" layoutY="224.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="225.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" text="Create Audio Game" textFill="#2eaae5">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="imageGameButton" layoutX="13.0" layoutY="282.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="225.0" styleClass="button_1" stylesheets="@../../../../../../../../../../Users/Nouredine Lamamra/Desktop/resources/stylesheet.css" text="Create Image Game" textFill="#e728be">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
