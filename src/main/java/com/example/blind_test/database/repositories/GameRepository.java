@@ -21,7 +21,7 @@ public class GameRepository extends Repository {
         return repository;
     }
 
-    public List<Game> listOfNotStartedGameDb(ResultSet resultSet) throws SQLException {
+    public List<Game> listOfNotStartedGameDb() throws SQLException {
         List<Game> games = new ArrayList<>();
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_OF_GAME_NOT_STARTED);

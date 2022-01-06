@@ -1,5 +1,7 @@
-package com.example.blind_test.database.Player;
+package com.example.blind_test.database.repositories;
 
+import com.example.blind_test.database.Database;
+import com.example.blind_test.database.SQLStatements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,7 @@ public class PlayerRepository {
 
     public Optional<Integer> addNewPlayerDB(String username,String gameId) {
         try  {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLPlayerStatements.addNewPlayer);
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.addNewPlayer);
             stmt.setString(1,username);
             stmt.setString(2,gameId);
             return Optional.of(stmt.executeUpdate());
@@ -44,7 +46,7 @@ public class PlayerRepository {
 
     public Optional<Boolean> modifyPlayerScoreDB(int newScore) {
         try  {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLPlayerStatements.modifyPlayerScore);
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.modifyPlayerScore);
             stmt.setInt(1, newScore);
             return Optional.of(stmt.execute());
         } catch (SQLException e) {
@@ -55,7 +57,7 @@ public class PlayerRepository {
 
     public Optional<Boolean> deleteAllPlayerDB(String gameId) {
         try  {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLPlayerStatements.deleteAllPlayer);
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.deleteAllPlayer);
             stmt.setString(1,gameId);
             return Optional.of(stmt.execute());
         } catch (SQLException e) {
