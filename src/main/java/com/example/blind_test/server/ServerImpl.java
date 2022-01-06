@@ -110,6 +110,11 @@ public class ServerImpl {
     }
 
 
+    public static void getQuestionResponse(String requestData){
+
+    }
+
+
     public static Consumer<String> getFunctionWithRequestCode(Request request) {
         return listOfFunctions.get(request.getNetCode());
     }

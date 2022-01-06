@@ -1,19 +1,24 @@
 package com.example.blind_test.database.repositories;
 
-import com.example.blind_test.database.Database;
 import com.example.blind_test.database.SQLStatements;
+import com.example.blind_test.exception.AddNewPlayerDBException;
+import com.example.blind_test.exception.DeleteAllPlayerDBException;
+import com.example.blind_test.exception.GetPlayersOfGameException;
+import com.example.blind_test.exception.PlayerAlreadyExists;
+import com.example.blind_test.front.models.Game;
+import com.example.blind_test.front.models.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
-import java.util.Optional;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
 
 
-public class PlayerRepository {
+public class PlayerRepository extends Repository {
 
     private static final PlayerRepository repository = new PlayerRepository();
     private static final Logger logger = LoggerFactory.getLogger(PlayerRepository.class);
-    private static Connection connectionDB;
 
     private PlayerRepository() {
     }
@@ -23,46 +28,55 @@ public class PlayerRepository {
         return repository;
     }
 
-    private static void initConnectionToDatabase() {
+    private Boolean verifyPlayerExistenceDB(String username, int gameId) throws PlayerAlreadyExists {
         try {
-            connectionDB = Database.getDatabaseConnection();
-            logger.info("Initialisation of connection to database");
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
+            stmt.setInt(1, gameId);
+            List<Player> players = mapper.resultSetToPlayers(stmt.executeQuery());
+            if (players.contains(new Player(username, new Game.GameBuilder(gameId).build())))
+                throw new PlayerAlreadyExists();
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
-            logger.error("Error on getting connection from DB");
+            return true;
         }
     }
 
-    public Optional<Integer> addNewPlayerDB(String username,String gameId) {
-        try  {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.addNewPlayer);
-            stmt.setString(1,username);
-            stmt.setString(2,gameId);
-            return Optional.of(stmt.executeUpdate());
+    // Please verify if return value is not null when using this method
+    public Player addNewPlayerDB(String username, int gameId) throws PlayerAlreadyExists, AddNewPlayerDBException {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CREATE_PLAYER);
+            if (!verifyPlayerExistenceDB(username, gameId)) {
+                stmt.setString(1, username);
+                stmt.setInt(2, gameId);
+                stmt.setInt(3, 0);
+                return new Player(username, new Game.GameBuilder(gameId).build());
+            }
+            throw new PlayerAlreadyExists();
         } catch (SQLException e) {
-            return Optional.empty();
+            e.printStackTrace();
+            throw new AddNewPlayerDBException();
         }
     }
 
-    public Optional<Boolean> modifyPlayerScoreDB(int newScore) {
-        try  {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.modifyPlayerScore);
-            stmt.setInt(1, newScore);
-            return Optional.of(stmt.execute());
+    public Boolean deleteAllPlayerDB(int gameId) throws DeleteAllPlayerDBException {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.DELETE_ALL_PLAYER_FOR_GAME);
+            stmt.setInt(1, gameId);
+            return stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            return Optional.empty();
+            throw new DeleteAllPlayerDBException();
         }
     }
 
-    public Optional<Boolean> deleteAllPlayerDB(String gameId) {
-        try  {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.deleteAllPlayer);
-            stmt.setString(1,gameId);
-            return Optional.of(stmt.execute());
+    public List<Player> getPlayersOfGame(int gameId) throws GetPlayersOfGameException {
+        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.DELETE_ALL_PLAYER_FOR_GAME)) {
+            stmt.setInt(1, gameId);
+            return mapper.resultSetToPlayers(stmt.executeQuery());
         } catch (SQLException e) {
             e.printStackTrace();
-            return Optional.empty();
+            throw new GetPlayersOfGameException();
         }
     }
 

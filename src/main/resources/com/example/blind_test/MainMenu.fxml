@@ -20,7 +20,7 @@
                   <Image url="@images/logodeezer.jpg" />
                </image>
             </ImageView>
-            <TextField layoutX="29.0" layoutY="52.0" prefHeight="44.0" prefWidth="270.0" promptText="User name..." styleClass="button_1" stylesheets="@stylesheet.css" />
+            <TextField layoutX="29.0" layoutY="52.0" prefHeight="44.0" prefWidth="270.0" promptText="Username..." styleClass="button_1" stylesheets="@stylesheet.css" />
          </children>
       </AnchorPane>
       <ImageView fitHeight="83.0" fitWidth="415.0" layoutX="403.0" layoutY="86.0" opacity="0.54" pickOnBounds="true" preserveRatio="true">
@@ -33,18 +33,18 @@
             <Image url="@images/logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="joinGameButton" layoutX="803.0" layoutY="505.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="116.0" styleClass="button_1" stylesheets="@stylesheet.css" text="JOIN GAME" textFill="WHITE">
+      <Button fx:id="joinGameButton" layoutX="803.0" layoutY="505.0" mnemonicParsing="false" onAction="#onJoinGame" prefHeight="25.0" prefWidth="116.0" styleClass="button_1" stylesheets="@stylesheet.css" text="JOIN GAME" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="13.0" />
          </font>
       </Button>
-      <Button layoutX="1220.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@stylesheet.css">
+      <Button layoutX="1220.0" layoutY="7.0" mnemonicParsing="false" onAction="#onQuitGame" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@stylesheet.css">
          <graphic>
             <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
          </graphic>
       </Button>
-      <ListView layoutX="748.0" layoutY="208.0" prefHeight="274.0" prefWidth="225.0" style="-fx-background-radius: 5px;" styleClass="button_1" stylesheets="@stylesheet.css" />
-      <AnchorPane layoutX="256.0" layoutY="208.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="351.0" prefWidth="249.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;">
+      <ListView fx:id="listOfGameToJoin" layoutX="748.0" layoutY="208.0" prefHeight="274.0" prefWidth="225.0" style="-fx-background-radius: 5px;" styleClass="button_1" stylesheets="@stylesheet.css" />
+      <AnchorPane layoutX="256.0" layoutY="208.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="249.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Numbers of players :" wrappingWidth="132.13671875">
                <font>
@@ -64,13 +64,12 @@
                </font>
             </Text>
             <ChoiceBox fx:id="responseTime" layoutX="181.0" layoutY="110.0" prefHeight="29.0" prefWidth="54.0" styleClass="button_1" stylesheets="@stylesheet.css" />
-            <TextField fx:id="partyNameTextField" layoutX="22.0" layoutY="161.0" prefHeight="25.0" prefWidth="206.0" promptText="Party name..." styleClass="button_1" stylesheets="@stylesheet.css" />
-            <Button fx:id="audioGameButton" layoutX="13.0" layoutY="224.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="225.0" styleClass="button_1" stylesheets="@stylesheet.css" text="Create Audio Game" textFill="#2eaae5">
+            <Button fx:id="createAudioGameButton" layoutX="13.0" layoutY="176.0" mnemonicParsing="false" onAction="#onCreateAudioGame" prefHeight="44.0" prefWidth="225.0" styleClass="button_1" stylesheets="@stylesheet.css" text="Create Audio Game" textFill="#2eaae5">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="imageGameButton" layoutX="13.0" layoutY="282.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="225.0" styleClass="button_1" stylesheets="@stylesheet.css" text="Create Image Game" textFill="#e728be">
+            <Button fx:id="createImageGameButton" layoutX="13.0" layoutY="233.0" mnemonicParsing="false" onAction="#onCreateImageGame" prefHeight="44.0" prefWidth="225.0" styleClass="button_1" stylesheets="@stylesheet.css" text="Create Image Game" textFill="#e728be">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
