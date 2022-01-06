@@ -10,7 +10,13 @@ public class SQLPlayerStatements {
                     + ")" +
                     " VALUES (?,?,0) ;";
 
-    
+    public static String modifyPlayerScore =
+            "UPDATE " + PLAYER_TABLE
+                    + " SET " + PLAYER_SCORE_COLUMN + "=? , WHERE " + PLAYER_USERNAME_COLUMN + "=? AND " + PLAYER_ID_GAME_COLUMN + "=? ;";
+
+    public static String deleteAllPlayer =
+            "DELETE FROM " + PLAYER_TABLE
+                    + " WHERE " + PLAYER_ID_GAME_COLUMN+ "=? ;";
 
     private SQLPlayerStatements() {
     }
