@@ -93,6 +93,26 @@ public class ServerImpl {
     private static void responseFailure(AsynchronousSocketChannel client, Response response) {
     }
 
+    private static void joinGame(String data)
+    {
+        logger.info("JOIN GAME INFO {} ", data);
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        String ipAddress = requestData.get(FieldsRequestName.IP_ADDRESS);
+        AsynchronousSocketChannel client = listOfGuests.get(ipAddress);
+        int gameId= Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        try {
+            Player player = gameRepository.joinGameDB(gameId,username);
+            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED,GsonConfiguration.gson.toJson(player));
+            listOfPlayers.put(new Credentials(username,player.getGame().getId()),client);
+            listOfGuests.remove(ipAddress);
+            responseSucceed(client, response);
+        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException e) {
+            Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
+            requestFailure(response,client);
+        }
+    }
+
     private static void responseSucceed(AsynchronousSocketChannel client, Response response) {
         String responseJson = GsonConfiguration.gson.toJson(response);
         ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
