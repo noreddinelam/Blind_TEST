@@ -40,6 +40,7 @@ public class ServerImpl {
     private ServerImpl() {
     }
 
+    //TODO : broadcast for other unJoined users
     private static void createGame(String data) {
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
@@ -58,6 +59,9 @@ public class ServerImpl {
             listOfGuests.remove(ipAddress);
             Response response = new Response(NetCodes.CREATE_GAME_SUCCEED, GsonConfiguration.gson.toJson(player));
             response(response, client);
+            Response broadcastResponse = new Response(NetCodes.CREATE_GAME_BROADCAST_SUCCEED,
+                    GsonConfiguration.gson.toJson(player.getGame()));
+            listOfGuests.entrySet().stream().forEach((entry) -> response(broadcastResponse, entry.getValue()));
         } catch (CreateGameDBException e) {
             Response response = new Response(NetCodes.CREATE_GAME_FAILED, "Create game failure");
             response(response, client);
@@ -183,8 +187,9 @@ public class ServerImpl {
             List<Player> list = playerRepository.getPlayersOfGame(gameId);
             Question nextQuestion = questionRepository.getQuestionByOrder(gameId, questionOrder);
             NextRoundInformation nextRoundInformation = new NextRoundInformation(list, nextQuestion);
-            Response response = new Response(NetCodes.NEXT_ROUND_SUCCEEDED,GsonConfiguration.gson.toJson(nextRoundInformation));
-            for (Player player : list){
+            Response response = new Response(NetCodes.NEXT_ROUND_SUCCEEDED,
+                    GsonConfiguration.gson.toJson(nextRoundInformation));
+            for (Player player : list) {
                 response(response, listOfPlayers.get(new Credentials(player.getUsername(), gameId)));
             }
         } catch (GetPlayersOfGameException e) {
