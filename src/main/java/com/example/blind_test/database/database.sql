@@ -27,7 +27,7 @@ CREATE TABLE `Game`
     `type`             binary NOT NULL ,
     `rounds`           integer NOT NULL ,
     `players`          integer NOT NULL ,
-    `timeQuestion`     timestamp NOT NULL ,
+    `timeQuestion`     integer NOT NULL ,
     `state`             binary NOT NULL ,
 
     PRIMARY KEY (`id`)

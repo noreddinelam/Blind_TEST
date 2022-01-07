@@ -12,6 +12,7 @@ import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
 import com.example.blind_test.shared.Properties;
 import com.example.blind_test.shared.communication.Credentials;
+import com.example.blind_test.shared.communication.NextRoundInformation;
 import com.example.blind_test.shared.communication.Request;
 import com.example.blind_test.shared.communication.Response;
 import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
@@ -68,49 +69,50 @@ public class ServerImpl {
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameID = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
-        List <Player> list = playerRepository.getPlayersOfGame(gameID);
-        List <AsynchronousSocketChannel> clients=new ArrayList<>();
-        for(Player player: list)
-        {
-            clients.add(listOfPlayers.get(new Credentials(player.getUsername(),gameID)));
+        List<Player> list = playerRepository.getPlayersOfGame(gameID);
+        List<AsynchronousSocketChannel> clients = new ArrayList<>();
+        for (Player player : list) {
+            clients.add(listOfPlayers.get(new Credentials(player.getUsername(), gameID)));
         }
-       
         try {
             gameRepository.deleteGameDB(gameID);
-            Response response = new Response(NetCodes.DELETE_GAME_SUCCEED,"Game deleted!");
-            for(AsynchronousSocketChannel client : clients)
-            {
-                responseSucceed(client,response);
+            Response response = new Response(NetCodes.DELETE_GAME_SUCCEED, "Game deleted!");
+            for (AsynchronousSocketChannel client : clients) {
+                response(response, client);
             }
         } catch (Exception e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
-            for(AsynchronousSocketChannel client : clients)
-            {
-                responseFailure(client,response);
+            for (AsynchronousSocketChannel client : clients) {
+                response(response, client);
             }
         }
     }
 
-    private static void joinGame(String data)
-    {
+    private static void joinGame(String data) {
         logger.info("JOIN GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         String ipAddress = requestData.get(FieldsRequestName.IP_ADDRESS);
-        AsynchronousSocketChannel client = listOfGuests.get(ipAddress);
-        int gameId= Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        AsynchronousSocketChannel clientJoin = listOfGuests.get(ipAddress);
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
         String username = requestData.get(FieldsRequestName.USERNAME);
         try {
-            Player player = gameRepository.joinGameDB(gameId,username);
-            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED,GsonConfiguration.gson.toJson(player));
-            listOfPlayers.put(new Credentials(username,player.getGame().getId()),client);
+            List<Player> list = playerRepository.getPlayersOfGame(gameId);
+            Player player = gameRepository.joinGameDB(gameId, username);
+            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED, GsonConfiguration.gson.toJson(player));
             listOfGuests.remove(ipAddress);
-            responseSucceed(client, response);
-        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException e) {
+            listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
+            response(response, clientJoin);
+            Response aPlayerHasJoined = new Response(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,
+                    GsonConfiguration.gson.toJson(player));
+            for (Player playerOther : list) {
+                if (!playerOther.getUsername().equalsIgnoreCase(username))
+                    response(aPlayerHasJoined, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+            }
+        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
-            requestFailure(response,client);
+            response(response, clientJoin);
         }
     }
-
 
 
     private static void listOfNotStartedGame(String data) {
@@ -121,11 +123,13 @@ public class ServerImpl {
         try {
             List<Game> resultGame = gameRepository.listOfNotStartedGameDb();
             Map<String, List<Game>> responseData = new HashMap<>();
-            responseData.put(FieldsRequestName.LIST_GAMES, resultGame);
-            Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapListGameJsonTypeData));
+            responseData.put(FieldsRequestName.LISTGAMES, resultGame);
+            Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED,
+                    GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapListGameJsonTypeData));
             response(response, client);
         } catch (ListOfNotStartedGameException e) {
-            Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_FAILED, "list of not started game failure");
+            Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_FAILED, "list of not started game " +
+                    "failure");
             response(response, client);
         }
     }
@@ -139,8 +143,9 @@ public class ServerImpl {
             Integer i = gameRepository.changeGameState(gameId);
             Map<String, String> responseData = new HashMap<>();
             responseData.put(FieldsRequestName.GAME_STATE, "true");
-            responseData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-            Response response = new Response(NetCodes.CHANGE_GAME_STATE_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
+            responseData.put(FieldsRequestName.GAMEID, String.valueOf(gameId));
+            Response response = new Response(NetCodes.CHANGE_GAME_STATE_SUCCEED,
+                    GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
             response(response, client);
         } catch (ChangeGameStateException e) {
             Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "change state failure");
@@ -161,7 +166,8 @@ public class ServerImpl {
             responseData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
             responseData.put(FieldsRequestName.USERNAME, username);
             responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(newScore));
-            Response response = new Response(NetCodes.MODIFY_SCORE_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
+            Response response = new Response(NetCodes.MODIFY_SCORE_SUCCEED,
+                    GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
             response(response, client);
         } catch (ModifyPlayerScoreDBException e) {
             Response response = new Response(NetCodes.MODIFY_SCORE_FAILED, "modify score failure");
@@ -209,6 +215,22 @@ public class ServerImpl {
         }
     }
 
+    public static void nextRoundInformation(String data) {
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
+        try {
+            List<Player> list = playerRepository.getPlayersOfGame(gameId);
+            Question nextQuestion = questionRepository.getQuestionByOrder(gameId, questionOrder);
+            NextRoundInformation nextRoundInformation = new NextRoundInformation(list, nextQuestion);
+            Response response = new Response(NetCodes.NEXT_ROUND_SUCCEEDED,GsonConfiguration.gson.toJson(nextRoundInformation));
+            for (Player player : list){
+                response(response, listOfPlayers.get(new Credentials(player.getUsername(), gameId)));
+            }
+        } catch (GetPlayersOfGameException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void initListOfFunctions() {
         // initialisation of methods;

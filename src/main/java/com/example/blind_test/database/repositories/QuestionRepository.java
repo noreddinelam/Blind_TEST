@@ -45,7 +45,20 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    public Integer insertQuestionInQuestionGame(int questionId, int gameId, int order) {
+
+    public Question getQuestionByOrder(int gameId, int questionOrder) {
+        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION_BY_ORDER)) {
+            stmt.setInt(1, gameId);
+            stmt.setInt(2, questionOrder);
+            ResultSet resultSet = stmt.executeQuery();
+            return mapper.resultSetToQuestion(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Integer insertQuestionInQuestionGame(int questionId,int gameId,int order){
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME)) {
             stmt.setInt(1, questionId);
             stmt.setInt(2, gameId);
@@ -56,6 +69,7 @@ public class QuestionRepository extends Repository {
             return -1;
         }
     }
+
 
     public Integer chnageQuestionState(int questionId) throws ChangeQuestionStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE)) {
@@ -77,4 +91,5 @@ public class QuestionRepository extends Repository {
             throw new VerifyQuestionStateException();
         }
     }
+
 }

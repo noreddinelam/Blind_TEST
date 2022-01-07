@@ -62,4 +62,8 @@ public class Game {
             return new Game(this);
         }
     }
+
+    public int getPlayers() {
+        return players;
+    }
 }
