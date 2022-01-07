@@ -105,11 +105,7 @@ public class ServerImpl {
             //send to all players in the same game the joined player info
             Response aPlayerHasJoined = new Response(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,GsonConfiguration.gson.toJson(player));
             for (Player playerOther : list) {
-                clients.add(listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
-            }
-            for(AsynchronousSocketChannel otherplayer : clients)
-            {
-                    response(aPlayerHasJoined,otherplayer);
+                response(aPlayerHasJoined,listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
             listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
         } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException e) {
