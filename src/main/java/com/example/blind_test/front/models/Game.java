@@ -1,5 +1,7 @@
 package com.example.blind_test.front.models;
 
+import java.util.List;
+
 public class Game {
     private int id;
     private boolean type;
@@ -7,6 +9,7 @@ public class Game {
     private int players;
     private int timeQuestion;
     private boolean state;
+    private List<Question> questions;
 
     private Game(GameBuilder gb) {
         this.id = gb.id;
@@ -19,6 +22,22 @@ public class Game {
 
     public int getId() {
         return id;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public Question getQuestion(Question question) {
+        return this.questions.stream().filter(question::equals).findFirst().get();
+    }
+
+    public int getPlayers() {
+        return players;
     }
 
     public static class GameBuilder {
@@ -61,9 +80,5 @@ public class Game {
         public Game build() {
             return new Game(this);
         }
-    }
-
-    public int getPlayers() {
-        return players;
     }
 }

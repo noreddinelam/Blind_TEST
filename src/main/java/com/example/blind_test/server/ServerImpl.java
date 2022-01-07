@@ -250,8 +250,8 @@ public class ServerImpl {
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
         listOfFunctions.put(NetCodes.CHANGE_GAME_STATE, ServerImpl::modifyGameState);
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
-        listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::createGame);
-        listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::getQuestionResponse);
+        listOfFunctions.put(NetCodes.CREATE_GAME, ServerImpl::createGame);
+        listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION, ServerImpl::getQuestionResponse);
         listOfFunctions.put(NetCodes.NEXT_ROUND, ServerImpl::nextRoundInformation);
     }
 
