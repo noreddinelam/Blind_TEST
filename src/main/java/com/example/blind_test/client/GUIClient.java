@@ -39,6 +39,7 @@ public class GUIClient extends Application {
         MainMenuController controller = fxmlLoader.getController();
         Scene scene = new Scene(parent);
         controller.setNecessaryInformation(client,clientIpAddress,scene);
+        controller.initializeListOfUnStartedGames();
         stage.setTitle("Blind Test!");
         stage.setScene(scene);
         stage.show();

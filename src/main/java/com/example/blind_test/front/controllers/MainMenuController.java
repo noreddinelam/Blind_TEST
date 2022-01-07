@@ -1,14 +1,30 @@
 package com.example.blind_test.front.controllers;
 
+import com.example.blind_test.HelloApplication;
+import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Game;
+import com.example.blind_test.front.other.FailureMessages;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainMenuController extends Controller {
 
@@ -40,17 +56,28 @@ public class MainMenuController extends Controller {
     @FXML
     private TextField usernameText;
 
-
     @FXML
     void onCreateAudioGame(ActionEvent event) {
-        this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),responseTime.getValue(),
-                usernameText.getText());
+        if (!this.usernameText.getText().trim().isEmpty())
+            this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
+                    responseTime.getValue(),
+                    usernameText.getText().trim());
+        else{
+            this.usernameText.setText("");
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE,FailureMessages.USERNAME_EMPTY_MESSAGE);
+        }
     }
 
     @FXML
     void onCreateImageGame(ActionEvent event) {
-        this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),responseTime.getValue(),
-                usernameText.getText());
+        if (!this.usernameText.getText().trim().isEmpty())
+            this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
+                    responseTime.getValue(),
+                    usernameText.getText().trim());
+        else{
+            this.usernameText.setText("");
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE,FailureMessages.USERNAME_EMPTY_MESSAGE);
+        }
     }
 
     @FXML
@@ -68,6 +95,65 @@ public class MainMenuController extends Controller {
         numberOfPlayers.setItems(numberOfPlayersList);
         numberOfQuestions.setItems(numberOfQuestionsList);
         responseTime.setItems(responseTimeList);
+        numberOfPlayers.getSelectionModel().select(2);
+        numberOfQuestions.getSelectionModel().selectFirst();
+        responseTime.getSelectionModel().selectFirst();
+        this.clientImpl = ClientImpl.getUniqueInstanceClientImpl();
+        this.listOfGameToJoin.setCellFactory((param) -> new ListCell<>() {
+            @Override
+            protected void updateItem(Game game, boolean b) {
+                super.updateItem(game, b);
+                if (b || game == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    HBox hbox = new HBox(30);
+                    VBox vbox1 = new VBox();
+                    try {
+                        String path;
+                        if (game.isImageGame())
+                            path = "src/main/resources/com/example/blind_test/images/image.png";
+                        else
+                            path = "src/main/resources/com/example/blind_test/images/audio.png";
+                        FileInputStream input = new FileInputStream(path);
+                        Image image = new Image(input, 30, 30, true, true);
+                        ImageView imageView = new ImageView(image);
+                        List<Node> itemsInVbox = new ArrayList<>();
+                        itemsInVbox.add(new Text("Questions  : " + game.getRounds()));
+                        itemsInVbox.add(new Text("Players : " + game.getPlayers()));
+                        itemsInVbox.add(new Text("Time per question : " + game.getTimeQuestion()));
+                        vbox1.getChildren().setAll(itemsInVbox);
+                        hbox.getChildren().addAll(vbox1, imageView);
+                        hbox.setAlignment(Pos.CENTER);
+                        setGraphic(hbox);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void initializeListOfUnStartedGames() {
+        this.clientImpl.listOfNotStartedGame();
+    }
+
+    public void setUnStartedGames(List<Game> list) {
+        Platform.runLater(() -> {
+            this.listOfGameToJoin.getItems().setAll(list);
+        });
+    }
+
+    public void createGameSucceeded() {
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Lobby.fxml"));
+            Parent root = loader.load();
+            LobbyController controller = loader.getController();
+            controller.scene = this.scene;
+            this.scene.setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
