@@ -7,8 +7,8 @@ public class SQLStatements {
     public static final String LIST_PLAYERS_FROM_GAME =
             "SELECT * FROM " + PLAYER_TABLE + " where " + PLAYER_ID_GAME + " = ? ;";
     public static final String DEC_PLAYERS_IN_GAME = "UPDATE " + GAME_TABLE +
-            "SET players = players - 1 " +
-            "WHERE id = ? ; ";
+            " SET " + GAME_PLAYERS + " = " + GAME_PLAYERS + " - 1 " +
+            "WHERE " + GAME_ID + " = ? ; ";
     public static final String GET_PLAYERS_FROM_GAME = "SELECT " + GAME_PLAYERS + " FROM " + GAME_TABLE + " WHERE id=" +
             " ? ;";
     public static final String GET_GAME_FROM_ID = "SELECT * FROM " + GAME_TABLE + " WHERE id= ? ;";
@@ -54,7 +54,7 @@ public class SQLStatements {
                     + " WHERE " + PLAYER_ID_GAME + "=? ;";
     public static String CREATE_PLAYER =
             "INSERT INTO " + PLAYER_TABLE
-                    + "(" + PLAYER_USERNAME + "," + PLAYER_ID_GAME + "," + PLAYER_SCORE
+                    + " (" + PLAYER_USERNAME + "," + PLAYER_ID_GAME + "," + PLAYER_SCORE
                     + ")" +
                     " VALUES (?,?,0) ;";
 
@@ -63,7 +63,6 @@ public class SQLStatements {
 
     public static final String VERIFY_QUESTION_STATE = "SELECT "+  QUESTION_GAME_STATE + " FROM "+ QUESTION_GAME_TABLE +
             "  WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
-
     private SQLStatements() {
     }
 

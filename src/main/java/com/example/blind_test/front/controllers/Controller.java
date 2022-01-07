@@ -12,7 +12,7 @@ public abstract class Controller {
     protected Scene scene;
 
     public void setNecessaryInformation(AsynchronousSocketChannel client, String ipAddress ,Scene scene){
-        this.clientImpl.setMainMenuController(this);
+        this.clientImpl.setController(this);
         this.clientImpl.setClient(client);
         this.clientImpl.setIpAddress(ipAddress);
         this.clientImpl.initThreadReader();

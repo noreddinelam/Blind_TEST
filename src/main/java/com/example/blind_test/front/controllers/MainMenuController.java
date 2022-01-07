@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -57,14 +58,17 @@ public class MainMenuController extends Controller {
     private TextField usernameText;
 
     @FXML
+    private Button quitGame;
+
+    @FXML
     void onCreateAudioGame(ActionEvent event) {
         if (!this.usernameText.getText().trim().isEmpty())
             this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
                     responseTime.getValue(),
                     usernameText.getText().trim());
-        else{
+        else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE,FailureMessages.USERNAME_EMPTY_MESSAGE);
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
         }
     }
 
@@ -74,20 +78,28 @@ public class MainMenuController extends Controller {
             this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
                     responseTime.getValue(),
                     usernameText.getText().trim());
-        else{
+        else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE,FailureMessages.USERNAME_EMPTY_MESSAGE);
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
         }
     }
 
     @FXML
     void onJoinGame(ActionEvent event) {
-
+        if (!this.usernameText.getText().trim().isEmpty())
+            this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(),
+                    this.usernameText.getText().trim());
+        else {
+            this.usernameText.setText("");
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+        }
     }
 
     @FXML
     void onQuitGame(ActionEvent event) {
-
+        //TODO : delete game when closing
+        Stage stage = (Stage) quitGame.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
