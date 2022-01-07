@@ -110,14 +110,15 @@ public class ServerImpl {
             Player player = gameRepository.joinGameDB(gameId, username);
             Response response = new Response(NetCodes.JOIN_GAME_SUCCEED, GsonConfiguration.gson.toJson(player));
             listOfGuests.remove(ipAddress);
-            listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
             response(response, clientJoin);
             Response aPlayerHasJoined = new Response(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,
                     GsonConfiguration.gson.toJson(player));
             for (Player playerOther : list) {
-                if (!playerOther.getUsername().equalsIgnoreCase(username))
-                    response(aPlayerHasJoined, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+                AsynchronousSocketChannel p = listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId));
+                if(p!=null)
+                    response(aPlayerHasJoined, p);
             }
+            listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
         } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
             response(response, clientJoin);
