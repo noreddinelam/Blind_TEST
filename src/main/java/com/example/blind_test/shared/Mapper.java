@@ -43,7 +43,6 @@ public class Mapper {
         Game game=null;
         int id;
         Boolean type;
-        int current_question;
         int rounds;
         int players;
         int timeQuestion;
@@ -51,12 +50,11 @@ public class Mapper {
         while (resultSet.next()) {
             id = resultSet.getInt(SQLTablesInformation.GAME_ID);
             type = resultSet.getBoolean(SQLTablesInformation.GAME_TYPE);
-            current_question = resultSet.getInt(SQLTablesInformation.GAME_CURRENT_QUESTION);
             rounds = resultSet.getInt(SQLTablesInformation.GAME_ROUNDS);
             players = resultSet.getInt(SQLTablesInformation.GAME_PLAYERS);
             timeQuestion = resultSet.getInt(SQLTablesInformation.GAME_TIME_QUESTION);
             state = resultSet.getBoolean(SQLTablesInformation.GAME_STATE);
-            game=new Game.GameBuilder(id).type(type).currentQuestion(current_question).rounds(rounds)
+            game=new Game.GameBuilder(id).type(type).rounds(rounds)
                     .players(players).timeQuestion(timeQuestion).state(state).build();
         }
         return game;
@@ -66,7 +64,6 @@ public class Mapper {
         List<Game> games = new ArrayList<>();
         int id;
         boolean type;
-        int current_question;
         int rounds;
         int players;
         int timeQuestion;
@@ -74,12 +71,11 @@ public class Mapper {
         while (resultSet.next()) {
             id = resultSet.getInt(SQLTablesInformation.GAME_ID);
             type = resultSet.getBoolean(SQLTablesInformation.GAME_TYPE);
-            current_question = resultSet.getInt(SQLTablesInformation.GAME_CURRENT_QUESTION);
             rounds = resultSet.getInt(SQLTablesInformation.GAME_ROUNDS);
             players = resultSet.getInt(SQLTablesInformation.GAME_PLAYERS);
             timeQuestion = resultSet.getInt(SQLTablesInformation.GAME_TIME_QUESTION);
             state = resultSet.getBoolean(SQLTablesInformation.GAME_STATE);
-            games.add(new Game.GameBuilder(id).type(type).currentQuestion(current_question).rounds(rounds)
+            games.add(new Game.GameBuilder(id).type(type).rounds(rounds)
                     .players(players).timeQuestion(timeQuestion).state(state).build());
         }
         return games;

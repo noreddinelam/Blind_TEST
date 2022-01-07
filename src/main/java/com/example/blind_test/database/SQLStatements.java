@@ -34,10 +34,9 @@ public class SQLStatements {
 
     //GAME
     public static final String CREATE_GAME = "INSERT INTO " + GAME_TABLE
-            + "(" + GAME_TYPE + ","
-            + GAME_CURRENT_QUESTION + "," + GAME_ROUNDS + "," + GAME_PLAYERS
+            + "(" + GAME_TYPE +  "," + GAME_ROUNDS + "," + GAME_PLAYERS
             + "," + GAME_TIME_QUESTION + "," + GAME_STATE + ")" +
-            " VALUES (?,?,?,?,?,?) ;";
+            " VALUES (?,?,?,?,?) ;";
 
     public static final String DELETE_GAME = "DELETE FROM " + GAME_TABLE + " where " + GAME_ID + " = ? ;";
 

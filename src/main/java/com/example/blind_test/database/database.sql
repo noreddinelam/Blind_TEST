@@ -25,15 +25,12 @@ CREATE TABLE `Game`
 (
     `id`               integer NOT NULL auto_increment,
     `type`             binary NOT NULL ,
-    `current_question` integer NOT NULL ,
     `rounds`           integer NOT NULL ,
     `players`          integer NOT NULL ,
     `timeQuestion`     timestamp NOT NULL ,
     `state`             binary NOT NULL ,
 
-    PRIMARY KEY (`id`),
-    KEY `FK_48` (`current_question`),
-    CONSTRAINT `FK_46` FOREIGN KEY `FK_48` (`current_question`) REFERENCES `Question` (`id`)
+    PRIMARY KEY (`id`)
 );
 
 -- ************************************** `Question_Game`
