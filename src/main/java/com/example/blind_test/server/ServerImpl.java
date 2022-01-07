@@ -136,7 +136,7 @@ public class ServerImpl {
 
     private static void modifyGameState(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAMEID));
+        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
@@ -155,7 +155,7 @@ public class ServerImpl {
 
     public static void modifyPlayerScore(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAMEID));
+        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
         int score = Integer.valueOf(requestData.get(FieldsRequestName.PLAYER_SCORE));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
@@ -163,7 +163,7 @@ public class ServerImpl {
             int newScore = score + 1;
             Map<String, String> responseData = new HashMap<>();
             int i = playerRepository.modifyScore(newScore, gameId, username);
-            responseData.put(FieldsRequestName.GAMEID, String.valueOf(gameId));
+            responseData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
             responseData.put(FieldsRequestName.USERNAME, username);
             responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(newScore));
             Response response = new Response(NetCodes.MODIFY_SCORE_SUCCEED,
@@ -171,6 +171,46 @@ public class ServerImpl {
             response(response, client);
         } catch (ModifyPlayerScoreDBException e) {
             Response response = new Response(NetCodes.MODIFY_SCORE_FAILED, "modify score failure");
+            response(response, client);
+        }
+    }
+
+    public static void getQuestionResponse(String data) {
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        int idCurrentQuestion = Integer.valueOf(requestData.get(FieldsRequestName.CURRENT_QUESTION));
+        String playerResponse = requestData.get(FieldsRequestName.PLAYER_RESPONSE);
+        int score = Integer.valueOf(requestData.get(FieldsRequestName.PLAYER_SCORE));
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
+        try {
+
+            if (questionRepository.verifyQuestionState(idCurrentQuestion)==0) {
+                Question question = QuestionRepository.getRepository().getQuestion(idCurrentQuestion);
+                String questionResponse = question.getResponse();
+                Map<String, String> responseData = new HashMap<>();
+                responseData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+                responseData.put(FieldsRequestName.USERNAME, username);
+                responseData.put(FieldsRequestName.CURRENT_QUESTION, questionResponse);
+
+                if (questionResponse.equalsIgnoreCase(playerResponse)) {
+                    score = score + 1;
+                    int i = playerRepository.modifyScore(score, gameId, username);
+                    questionRepository.chnageQuestionState(idCurrentQuestion);
+                    responseData.put(FieldsRequestName.STATE, "true");
+                } else {
+                    responseData.put(FieldsRequestName.STATE, "false");
+                }
+                Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
+                response(response, client);
+            }
+            else {
+                Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "the question responded");
+                response(response, client);
+            }
+
+        } catch (Exception e) {
+            Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_FAILED, "get response for question failure");
             response(response, client);
         }
     }
@@ -190,9 +230,6 @@ public class ServerImpl {
         } catch (GetPlayersOfGameException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void getQuestionResponse(String data) {
     }
 
     public static void initListOfFunctions() {
