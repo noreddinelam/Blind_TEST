@@ -3,10 +3,7 @@ package com.example.blind_test.server;
 import com.example.blind_test.database.repositories.GameRepository;
 import com.example.blind_test.database.repositories.PlayerRepository;
 import com.example.blind_test.database.repositories.QuestionRepository;
-import com.example.blind_test.exception.ChangeGameStateException;
-import com.example.blind_test.exception.CreateGameDBException;
-import com.example.blind_test.exception.ListOfNotStartedGameException;
-import com.example.blind_test.exception.ModifyPlayerScoreDBException;
+import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.shared.CommunicationTypes;
@@ -65,6 +62,22 @@ public class ServerImpl {
             responseSucceed(client, response);
         } catch (CreateGameDBException e) {
             Response response = new Response(NetCodes.CREATE_GAME_FAILED, "Create game failure");
+            requestFailure(response,client);
+        }
+    }
+
+    private static void deleteGame(String data)
+    {
+        logger.info("CREATE GAME INFO {} ", data);
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        int gameID = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(requestData.get(FieldsRequestName.USERNAME),
+                Integer.parseInt(requestData.get(FieldsRequestName.GAMEID))));
+        try {
+            gameRepository.deleteGameDB(gameID);
+            Response response = new Response(NetCodes.DELETE_GAME_SUCCEED,"Game deleted!");
+        } catch (DeleteGameException e) {
+            Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
             requestFailure(response,client);
         }
     }
