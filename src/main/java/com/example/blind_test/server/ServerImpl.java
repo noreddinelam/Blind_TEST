@@ -72,7 +72,7 @@ public class ServerImpl {
     private static void deleteGame(String data) throws GetPlayersOfGameException {
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameID = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        int gameID = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         List<Player> list = playerRepository.getPlayersOfGame(gameID);
         List<AsynchronousSocketChannel> clients = new ArrayList<>();
         for (Player player : list) {
@@ -97,7 +97,7 @@ public class ServerImpl {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         String ipAddress = requestData.get(FieldsRequestName.IP_ADDRESS);
         AsynchronousSocketChannel clientJoin = listOfGuests.get(ipAddress);
-        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
         try {
             List<Player> list = playerRepository.getPlayersOfGame(gameId);
@@ -127,7 +127,7 @@ public class ServerImpl {
         try {
             List<Game> resultGame = gameRepository.listOfNotStartedGameDb();
             Map<String, List<Game>> responseData = new HashMap<>();
-            responseData.put(FieldsRequestName.LISTGAMES, resultGame);
+            responseData.put(FieldsRequestName.LIST_GAMES, resultGame);
             Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED,
                     GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapListGameJsonTypeData));
             response(response, client);
@@ -147,7 +147,7 @@ public class ServerImpl {
             Integer i = gameRepository.changeGameState(gameId);
             Map<String, String> responseData = new HashMap<>();
             responseData.put(FieldsRequestName.GAME_STATE, "true");
-            responseData.put(FieldsRequestName.GAMEID, String.valueOf(gameId));
+            responseData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
             Response response = new Response(NetCodes.CHANGE_GAME_STATE_SUCCEED,
                     GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
             response(response, client);
@@ -221,7 +221,7 @@ public class ServerImpl {
 
     public static void nextRoundInformation(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
         try {
             List<Player> list = playerRepository.getPlayersOfGame(gameId);
