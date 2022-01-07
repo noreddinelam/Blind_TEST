@@ -168,5 +168,12 @@ public class MainMenuController extends Controller {
         }
     }
 
+    public void addGameToListGameToJoin(Game game) {
+            Platform.runLater(() -> {
+                this.listOfGameToJoin.getItems().add(game);
+            });
+    }
+
+
 
 }
