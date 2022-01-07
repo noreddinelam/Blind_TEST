@@ -57,7 +57,6 @@ public class SQLStatements {
                     + ")" +
                     " VALUES (?,?,0) ;";
 
-
     public static final String MODIFY_SCORE =
             "UPDATE " + PLAYER_TABLE
                     + " SET " + PLAYER_SCORE + "=? , WHERE " + PLAYER_USERNAME + "=? AND " + PLAYER_ID_GAME + "=? ;";
