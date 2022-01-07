@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -57,6 +58,9 @@ public class MainMenuController extends Controller {
     private TextField usernameText;
 
     @FXML
+    private Button quitGame;
+
+    @FXML
     void onCreateAudioGame(ActionEvent event) {
         if (!this.usernameText.getText().trim().isEmpty())
             this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
@@ -87,7 +91,9 @@ public class MainMenuController extends Controller {
 
     @FXML
     void onQuitGame(ActionEvent event) {
-
+        //TODO : delete game when closing
+        Stage stage = (Stage) quitGame.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
