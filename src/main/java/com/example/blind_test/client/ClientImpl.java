@@ -167,7 +167,7 @@ public class ClientImpl {
         request(createGame);
     }
 
-    public void JoinGame(int gameId,String username)
+    public void joinGame(int gameId,String username)
     {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);

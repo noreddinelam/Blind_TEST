@@ -46,6 +46,7 @@ public class PlayerRepository extends Repository {
             if (!verifyPlayerExistenceDB(username, gameId)) {
                 stmt.setString(1, username);
                 stmt.setInt(2, gameId);
+                stmt.execute();
                 return new Player(username, new Game.GameBuilder(gameId).build());
             }
             throw new PlayerAlreadyExists();
@@ -68,7 +69,7 @@ public class PlayerRepository extends Repository {
 
     public List<Player> getPlayersOfGame(int gameId) throws GetPlayersOfGameException {
         try {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.DELETE_ALL_PLAYER_FOR_GAME);
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_PLAYERS_FROM_GAME);
             stmt.setInt(1, gameId);
             return mapper.resultSetToPlayers(stmt.executeQuery());
         } catch (SQLException e) {

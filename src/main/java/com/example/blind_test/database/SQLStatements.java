@@ -56,7 +56,7 @@ public class SQLStatements {
             "SELECT * FROM " + PLAYER_TABLE + " WHERE " + PLAYER_ID_GAME + "=? ;";
     public static String CREATE_PLAYER =
             "INSERT INTO " + PLAYER_TABLE
-                    + "(" + PLAYER_USERNAME + "," + PLAYER_ID_GAME + "," + PLAYER_SCORE
+                    + " (" + PLAYER_USERNAME + "," + PLAYER_ID_GAME + "," + PLAYER_SCORE
                     + ")" +
                     " VALUES (?,?,0) ;";
 

@@ -74,7 +74,8 @@ public class MainMenuController extends Controller {
 
     @FXML
     void onJoinGame(ActionEvent event) {
-
+        String username=usernameText.getText();
+        this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(), u.);
     }
 
     @FXML
@@ -103,19 +104,19 @@ public class MainMenuController extends Controller {
                     VBox vbox1 = new VBox();
                     try {
                         String path;
-                        if(game.isImageGame())
+                        if (game.isImageGame())
                             path = "src/main/resources/com/example/blind_test/images/image.png";
                         else
                             path = "src/main/resources/com/example/blind_test/images/audio.png";
                         FileInputStream input = new FileInputStream(path);
-                        Image image = new Image(input,30,30,true,true);
+                        Image image = new Image(input, 30, 30, true, true);
                         ImageView imageView = new ImageView(image);
                         List<Node> itemsInVbox = new ArrayList<>();
                         itemsInVbox.add(new Text("Questions  : " + game.getRounds()));
                         itemsInVbox.add(new Text("Players : " + game.getPlayers()));
                         itemsInVbox.add(new Text("Time per question : " + game.getTimeQuestion()));
                         vbox1.getChildren().setAll(itemsInVbox);
-                        hbox.getChildren().addAll(vbox1,imageView);
+                        hbox.getChildren().addAll(vbox1, imageView);
                         hbox.setAlignment(Pos.CENTER);
                         setGraphic(hbox);
                     } catch (FileNotFoundException e) {
@@ -135,14 +136,15 @@ public class MainMenuController extends Controller {
             this.listOfGameToJoin.getItems().setAll(list);
         });
     }
+
     public void createGameSucceeded() {
 
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Lobby.fxml"));
             Parent root = null;
             root = loader.load();
-            LobbyController controller=loader.getController();
-            controller.scene=this.scene;
+            LobbyController controller = loader.getController();
+            controller.scene = this.scene;
             this.scene.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
