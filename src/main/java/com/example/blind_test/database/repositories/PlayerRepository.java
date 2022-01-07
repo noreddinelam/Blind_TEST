@@ -25,7 +25,7 @@ public class PlayerRepository extends Repository {
         return repository;
     }
 
-    private Boolean verifyPlayerExistenceDB(String username, int gameId) throws PlayerAlreadyExists {
+    public Boolean verifyPlayerExistenceDB(String username, int gameId) throws PlayerAlreadyExists {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
             stmt.setInt(1, gameId);
@@ -68,8 +68,8 @@ public class PlayerRepository extends Repository {
     }
 
     public List<Player> getPlayersOfGame(int gameId) throws GetPlayersOfGameException {
-        try {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_PLAYERS_FROM_GAME);
+        try  {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
             stmt.setInt(1, gameId);
             return mapper.resultSetToPlayers(stmt.executeQuery());
         } catch (SQLException e) {
@@ -79,7 +79,8 @@ public class PlayerRepository extends Repository {
     }
 
     public Integer modifyScore(int newScore, int gameID, String username) throws ModifyPlayerScoreDBException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.MODIFY_SCORE)) {
+        try  {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.MODIFY_SCORE);
             stmt.setInt(1,newScore);
             stmt.setString(2,username);
             stmt.setInt(3,gameID);

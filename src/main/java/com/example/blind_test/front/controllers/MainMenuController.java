@@ -3,14 +3,14 @@ package com.example.blind_test.front.controllers;
 import com.example.blind_test.HelloApplication;
 import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Game;
-
+import com.example.blind_test.front.other.FailureMessages;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -19,11 +19,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,30 +57,49 @@ public class MainMenuController extends Controller {
     @FXML
     private TextField usernameText;
 
-    //TODO : make test of textField empty.
+    @FXML
+    private Button quitGame;
+
     @FXML
     void onCreateAudioGame(ActionEvent event) {
-        this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
-                responseTime.getValue(),
-                usernameText.getText());
+        if (!this.usernameText.getText().trim().isEmpty())
+            this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
+                    responseTime.getValue(),
+                    usernameText.getText().trim());
+        else {
+            this.usernameText.setText("");
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+        }
     }
 
     @FXML
     void onCreateImageGame(ActionEvent event) {
-        this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
-                responseTime.getValue(),
-                usernameText.getText());
+        if (!this.usernameText.getText().trim().isEmpty())
+            this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
+                    responseTime.getValue(),
+                    usernameText.getText().trim());
+        else {
+            this.usernameText.setText("");
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+        }
     }
 
     @FXML
     void onJoinGame(ActionEvent event) {
-        String username=usernameText.getText();
-        this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(), u.);
+        if (!this.usernameText.getText().trim().isEmpty())
+            this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(),
+                    this.usernameText.getText().trim());
+        else {
+            this.usernameText.setText("");
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+        }
     }
 
     @FXML
     void onQuitGame(ActionEvent event) {
-
+        //TODO : delete game when closing
+        Stage stage = (Stage) quitGame.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -138,11 +157,9 @@ public class MainMenuController extends Controller {
     }
 
     public void createGameSucceeded() {
-
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Lobby.fxml"));
-            Parent root = null;
-            root = loader.load();
+            Parent root = loader.load();
             LobbyController controller = loader.getController();
             controller.scene = this.scene;
             this.scene.setRoot(root);
