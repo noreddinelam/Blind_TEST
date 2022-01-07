@@ -68,49 +68,55 @@ public class ServerImpl {
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameID = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
-        List <Player> list = playerRepository.getPlayersOfGame(gameID);
-        List <AsynchronousSocketChannel> clients=new ArrayList<>();
-        for(Player player: list)
-        {
-            clients.add(listOfPlayers.get(new Credentials(player.getUsername(),gameID)));
+        List<Player> list = playerRepository.getPlayersOfGame(gameID);
+        List<AsynchronousSocketChannel> clients = new ArrayList<>();
+        for (Player player : list) {
+            clients.add(listOfPlayers.get(new Credentials(player.getUsername(), gameID)));
         }
-       
         try {
             gameRepository.deleteGameDB(gameID);
-            Response response = new Response(NetCodes.DELETE_GAME_SUCCEED,"Game deleted!");
-            for(AsynchronousSocketChannel client : clients)
-            {
-                response(response,client);
+            Response response = new Response(NetCodes.DELETE_GAME_SUCCEED, "Game deleted!");
+            for (AsynchronousSocketChannel client : clients) {
+                response(response, client);
             }
         } catch (Exception e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
-            for(AsynchronousSocketChannel client : clients)
-            {
-                response(response,client);
+            for (AsynchronousSocketChannel client : clients) {
+                response(response, client);
             }
         }
     }
 
-    private static void joinGame(String data)
-    {
+    private static void joinGame(String data) throws GetPlayersOfGameException {
         logger.info("JOIN GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         String ipAddress = requestData.get(FieldsRequestName.IP_ADDRESS);
-        AsynchronousSocketChannel client = listOfGuests.get(ipAddress);
-        int gameId= Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        AsynchronousSocketChannel clientJoin = listOfGuests.get(ipAddress);
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
         String username = requestData.get(FieldsRequestName.USERNAME);
+        //boradcast
+        List<Player> list = playerRepository.getPlayersOfGame(gameId);
+        List<AsynchronousSocketChannel> clients = new ArrayList<>();
         try {
-            Player player = gameRepository.joinGameDB(gameId,username);
-            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED,GsonConfiguration.gson.toJson(player));
-            listOfPlayers.put(new Credentials(username,player.getGame().getId()),client);
+            Player player = gameRepository.joinGameDB(gameId, username);
+            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED, GsonConfiguration.gson.toJson(player));
             listOfGuests.remove(ipAddress);
-            response(response,client);
+            response(response, clientJoin);
+            //send to all players in the same game the joined player info
+            Response aPlayerHasJoined = new Response(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,GsonConfiguration.gson.toJson(player));
+            for (Player playerOther : list) {
+                clients.add(listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+            }
+            for(AsynchronousSocketChannel otherplayer : clients)
+            {
+                    response(aPlayerHasJoined,otherplayer);
+            }
+            listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
         } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
-            response(response,client);
+            response(response, clientJoin);
         }
     }
-
 
 
     private static void listOfNotStartedGame(String data) {
@@ -169,8 +175,8 @@ public class ServerImpl {
         }
     }
 
-    public static void nextRoundInformation(String data){
-        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data,CommunicationTypes.mapJsonTypeData);
+    public static void nextRoundInformation(String data) {
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
         int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
         try {
@@ -180,7 +186,8 @@ public class ServerImpl {
         }
     }
 
-    public static void getQuestionResponse(String data){}
+    public static void getQuestionResponse(String data) {
+    }
 
     public static void initListOfFunctions() {
         // initialisation of methods;
