@@ -25,7 +25,7 @@ public class PlayerRepository extends Repository {
         return repository;
     }
 
-    private Boolean verifyPlayerExistenceDB(String username, int gameId) throws PlayerAlreadyExists {
+    public Boolean verifyPlayerExistenceDB(String username, int gameId) throws PlayerAlreadyExists {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
             stmt.setInt(1, gameId);
