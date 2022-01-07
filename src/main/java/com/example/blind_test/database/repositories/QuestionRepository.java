@@ -9,8 +9,6 @@ import com.example.blind_test.front.models.Question;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class QuestionRepository extends Repository {
 
@@ -36,8 +34,9 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    public Question getQuestion(int questionId) throws QuestionNotFoundException{
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION)) {
+    public Question getQuestion(int questionId) throws QuestionNotFoundException {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION);
             stmt.setInt(1, questionId);
             ResultSet resultSet = stmt.executeQuery();
             return mapper.resultSetToQuestion(resultSet);
@@ -49,7 +48,8 @@ public class QuestionRepository extends Repository {
 
 
     public Question getQuestionByOrder(int gameId, int questionOrder) {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION_BY_ORDER)) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION_BY_ORDER);
             stmt.setInt(1, gameId);
             stmt.setInt(2, questionOrder);
             ResultSet resultSet = stmt.executeQuery();
@@ -61,11 +61,12 @@ public class QuestionRepository extends Repository {
     }
 
     //TODO : use this function to generate questions
-    public Integer insertQuestionInQuestionGame(int questionId,int gameId,int order){
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME)) {
+    public Integer insertQuestionInQuestionGame(int questionId,int gameId,int orderQuestion){
+        try  {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME);
             stmt.setInt(1, questionId);
             stmt.setInt(2, gameId);
-            stmt.setInt(3, order);
+            stmt.setInt(3, orderQuestion);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,7 +76,8 @@ public class QuestionRepository extends Repository {
 
 
     public Integer changeQuestionState(int questionId) throws ChangeQuestionStateException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE)) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE);
             stmt.setInt(1, questionId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
@@ -85,10 +87,14 @@ public class QuestionRepository extends Repository {
 
     }
 
-    public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException{
+    public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE)) {
-            stmt.setInt(1,questionId);
-            return (stmt.executeQuery().getInt(1));
+            stmt.setInt(1, questionId);
+            ResultSet resultSet = stmt.executeQuery();
+            int qs = -1;
+            while (resultSet.next())
+                qs = resultSet.getInt(1);
+            return qs;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new VerifyQuestionStateException();

@@ -7,7 +7,7 @@ public class SQLTablesInformation {
     public static final String PLAYER_ID_GAME = "id_game";
     public static final String PLAYER_SCORE = "score";
 
-    public static final String QUESTION_TABLE = "QUESTION_TABLE";
+    public static final String QUESTION_TABLE = "QUESTION";
     public static final String QUESTION_ID = "id";
     public static final String QUESTION_ID_RESOURCE = "id_resource";
     public static final String QUESTION_RESPONSE = "response";
@@ -18,7 +18,7 @@ public class SQLTablesInformation {
     public static final String QUESTION_GAME_TABLE = "QUESTION_GAME";
     public static final String QUESTION_GAME_ID_QUESTION = "id_question";
     public static final String QUESTION_GAME_ID_GAME = "id_game";
-    public static final String QUESTION_GAME_ORDER = "order";
+    public static final String QUESTION_GAME_ORDER = "orderQuestion";
     public static final String QUESTION_GAME_STATE = "state";
 
     public static final String GAME_TABLE = "Game";

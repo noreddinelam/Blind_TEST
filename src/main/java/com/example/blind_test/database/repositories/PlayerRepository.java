@@ -25,7 +25,7 @@ public class PlayerRepository extends Repository {
         return repository;
     }
 
-    private Boolean verifyPlayerExistenceDB(String username, int gameId) throws PlayerAlreadyExists {
+    public Boolean verifyPlayerExistenceDB(String username, int gameId) throws PlayerAlreadyExists {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
             stmt.setInt(1, gameId);
@@ -46,7 +46,7 @@ public class PlayerRepository extends Repository {
             if (!verifyPlayerExistenceDB(username, gameId)) {
                 stmt.setString(1, username);
                 stmt.setInt(2, gameId);
-                stmt.setInt(3, 0);
+                stmt.executeUpdate();
                 return new Player(username, new Game.GameBuilder(gameId).build());
             }
             throw new PlayerAlreadyExists();
@@ -68,7 +68,8 @@ public class PlayerRepository extends Repository {
     }
 
     public List<Player> getPlayersOfGame(int gameId) throws GetPlayersOfGameException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.DELETE_ALL_PLAYER_FOR_GAME)) {
+        try  {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
             stmt.setInt(1, gameId);
             return mapper.resultSetToPlayers(stmt.executeQuery());
         } catch (SQLException e) {
@@ -78,10 +79,11 @@ public class PlayerRepository extends Repository {
     }
 
     public Integer modifyScore(int newScore, int gameID, String username) throws ModifyPlayerScoreDBException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.MODIFY_SCORE)) {
+        try  {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.MODIFY_SCORE);
             stmt.setInt(1,newScore);
-            stmt.setInt(2,gameID);
-            stmt.setString(3,username);
+            stmt.setString(2,username);
+            stmt.setInt(3,gameID);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

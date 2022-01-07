@@ -6,6 +6,7 @@ import com.example.blind_test.front.controllers.MainMenuController;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.front.models.Question;
+import com.example.blind_test.front.other.FailureMessages;
 import com.example.blind_test.shared.CommunicationTypes;
 import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
@@ -16,7 +17,6 @@ import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.StringBufferInputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.HashMap;
@@ -34,11 +34,11 @@ public class ClientImpl {
     private AsynchronousSocketChannel client;
     private Controller controller;
     private Player player;
-    private Question question;
 
-    private ClientImpl(){}
+    private ClientImpl() {
+    }
 
-    public static ClientImpl getUniqueInstanceClientImpl(){
+    public static ClientImpl getUniqueInstanceClientImpl() {
         return clientImpl;
     }
 
@@ -67,44 +67,47 @@ public class ClientImpl {
 
     public void initListOfFunctions() {
         listOfFunctions.put(NetCodes.CREATE_GAME_SUCCEED, this::createGameSucceeded);
-        listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceded);
-        listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceded);
-        listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceded);
-        listOfFunctions.put(NetCodes.CHANGE_GAME_STATE_SUCCEED, this::modifyGameStateSucceded);
+        listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceeded);
+        listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceeded);
+        listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceeded);
+        listOfFunctions.put(NetCodes.CHANGE_GAME_STATE_SUCCEED, this::modifyGameStateSucceeded);
         listOfFunctions.put(NetCodes.CHANGE_GAME_STATE_FAILED, this::modifyGameStateFailed);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_FAILED, this::getQuestionResponseFailed);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_FAILED, this::modifyPlayerScoreFailed);
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_FAILED, this::listOfNotStartedGameFailed);
+        listOfFunctions.put(NetCodes.CREATE_GAME_FAILED, this::createGameFailed);
+        listOfFunctions.put(NetCodes.JOIN_GAME_FAILED, this::joinGameFailed);
+        listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
+        listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
     }
-
-
 
     public void createGameSucceeded(String responseData) {
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
+        ((MainMenuController) this.controller).createGameSucceeded();
     }
 
-    public void listOfNotStartedGameSucceded(String responseData){
-        List<Game> game = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
-
+    public void listOfNotStartedGameSucceeded(String responseData){
+        Map<String,List<Game>> games = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
+        ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
-    public void modifyGameStateSucceded(String responseData){
-    Map<String,String>  data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
-    int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
-    String username = data.get(FieldsRequestName.USERNAME);
-    this.player.getGame().setState(true);
+    public void modifyGameStateSucceeded(String responseData) {
+        Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
+        int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
+        String username = data.get(FieldsRequestName.USERNAME);
+        this.player.getGame().setState(true);
     }
 
-    public void modifyPlayerScoreSucceded(String responseData){
-        Map<String,String>  data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
+    public void modifyPlayerScoreSucceeded(String responseData) {
+        Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
         int score = Integer.parseInt(data.get(FieldsRequestName.PLAYER_SCORE));
         this.player.setScore(score);
     }
 
-    public void getQuestionResponseSucceded(String responseData){
+    public void getQuestionResponseSucceeded(String responseData) {
         Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
@@ -114,24 +117,39 @@ public class ClientImpl {
         this.player.getGame().getQuestion(new Question.QuestionBuilder(idCurrentQuestion).build()).setState(true);
     }
 
-    public void listOfNotStartedGameFailed(String responseData){
+    public void createGameFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.CREATE_GAME, responseData);
+    }
+
+    public void joinGameFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.JOIN_GAME, responseData);
+    }
+
+    public void deleteGameFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.DELETE_GAME, responseData);
+    }
+
+    public void listOfNotStartedGameFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.LIST_OF_NOT_STARTED_GAME, responseData);
+    }
+
+    public void modifyGameStateFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.MODIFY_GAME_STATE, responseData);
+    }
+
+    public void modifyPlayerScoreFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.MODIFY_PLAYER_SCORE, responseData);
 
     }
 
-    public void modifyGameStateFailed(String responseData){
+    public void getQuestionResponseFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.GET_QUESTION_RESPONSE, responseData);
 
     }
 
-    public void modifyPlayerScoreFailed(String responseData){
-
+    public void nextRoundInformationFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.NEXT_ROUND_INFORMATION, responseData);
     }
-
-    public void getQuestionResponseFailed(String responseData){
-
-    }
-
-
-
 
 
     // Functions that send the requests :
@@ -149,6 +167,17 @@ public class ClientImpl {
         request(createGame);
     }
 
+    public void joinGame(int gameId,String username)
+    {
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+        requestData.put(FieldsRequestName.USERNAME,username);
+        Request joinGame = new Request(NetCodes.JOIN_GAME,
+                GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        request(joinGame);
+    }
+
     public void listOfNotStartedGame() {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
@@ -156,46 +185,45 @@ public class ClientImpl {
         request(lisOfNotStartedGame);
     }
 
-    public void modifyGameState(String username, int gameId) {
+    public void modifyGameState() {
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.USERNAME, username);
-        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
         Request modifyGameState = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(modifyGameState);
     }
 
-    public void modifyPlayerScore(String username, int gameId, int playerScore) {
+    public void modifyPlayerScore() {
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.USERNAME, username);
-        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(playerScore));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(this.player.getScore()));
         Request modifyPlayerScore = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(modifyPlayerScore);
     }
 
-    public void getQuestionResponse(String username, int gameId, int playerScore, int idCurrentQuestion, String playerResponse){
+    public void getQuestionResponse(int idCurrentQuestion, String playerResponse) {
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.USERNAME, username);
-        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(playerScore));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(this.player.getScore()));
         requestData.put(FieldsRequestName.CURRENT_QUESTION, String.valueOf(idCurrentQuestion));
         requestData.put(FieldsRequestName.PLAYER_RESPONSE, playerResponse);
         Request getQuestionResponse = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(getQuestionResponse);
     }
 
-
-
-
+    public void nextRound(int idCurrentQuestion) {
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.CURRENT_QUESTION, String.valueOf(idCurrentQuestion));
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        Request nextRound = new Request(NetCodes.NEXT_ROUND, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        request(nextRound);
+    }
 
     // Functions that don't do sql requests :
 
-
-    public void setClient(AsynchronousSocketChannel client) {
-        this.client = client;
-    }
-
-    public void setMainMenuController(Controller controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
     }
 
@@ -205,6 +233,14 @@ public class ClientImpl {
 
     public AsynchronousSocketChannel getClient() {
         return client;
+    }
+
+    public void setClient(AsynchronousSocketChannel client) {
+        this.client = client;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public void request(Request request) {
