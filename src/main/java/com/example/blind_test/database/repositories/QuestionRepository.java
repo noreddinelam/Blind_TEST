@@ -9,8 +9,6 @@ import com.example.blind_test.front.models.Question;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class QuestionRepository extends Repository {
 
@@ -36,7 +34,7 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    public Question getQuestion(int questionId) throws QuestionNotFoundException{
+    public Question getQuestion(int questionId) throws QuestionNotFoundException {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION);
             stmt.setInt(1, questionId);
@@ -63,7 +61,7 @@ public class QuestionRepository extends Repository {
     }
 
     //TODO : use this function to generate questions
-    public Integer insertQuestionInQuestionGame(int questionId,int gameId,int orderQuestion){
+    public Integer insertQuestionInQuestionGame(int questionId, int gameId, int orderQuestion) {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME)) {
             stmt.setInt(1, questionId);
             stmt.setInt(2, gameId);
@@ -87,10 +85,14 @@ public class QuestionRepository extends Repository {
 
     }
 
-    public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException{
+    public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE)) {
-            stmt.setInt(1,questionId);
-            return (stmt.executeQuery().getInt(1));
+            stmt.setInt(1, questionId);
+            ResultSet resultSet = stmt.executeQuery();
+            int qs = -1;
+            while (resultSet.next())
+                qs = resultSet.getInt(1);
+            return qs;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new VerifyQuestionStateException();
