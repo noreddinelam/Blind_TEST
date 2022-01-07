@@ -57,6 +57,12 @@ public class NetCodes {
     public static String DELETE_PLAYER_SUCCEED = "1101";
     public static String DELETE_PLAYER_FAILED = "1102";
 
+    public static String CHANGE_QUESTION_STATE = "1200";
+    public static String CHANGE_QUESTION_STATE_SUCCEED = "1201";
+    public static String CHANGE_QUESTION_STATE_FAILED = "1202";
+    public static String CHANGE_QUESTION_STATE_BROADCAST_SUCCEED = "1203";
+    public static String CHANGE_QUESTION_STATE_BROADCAST_FAILED = "1204";
+
 
 
 

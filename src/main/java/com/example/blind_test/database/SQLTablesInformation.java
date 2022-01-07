@@ -19,6 +19,7 @@ public class SQLTablesInformation {
     public static final String QUESTION_GAME_ID_QUESTION = "id_question";
     public static final String QUESTION_GAME_ID_GAME = "id_game";
     public static final String QUESTION_GAME_ORDER = "order";
+    public static final String QUESTION_GAME_STATE = "state";
 
     public static final String GAME_TABLE = "Game";
     public static final String GAME_ID = "id";

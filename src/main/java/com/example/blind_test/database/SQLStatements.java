@@ -69,6 +69,11 @@ public class SQLStatements {
     public static final String GET_ALL_PLAYERS_OF_GAME =
             "SELECT * FROM " + PLAYER_TABLE + " WHERE " + PLAYER_ID_GAME + "=? ;";
 
+    public static final String CHANGE_QUESTION_STATE = "UPDATE "+ QUESTION_GAME_TABLE + " SET "+QUESTION_GAME_STATE +
+            " =1 WHERE " + QUESTION_ID + " = ? ;";
+
+    public static final String VERIFY_QUESTION_STATE = "SELECT "+  QUESTION_GAME_STATE + " FROM "+ QUESTION_TABLE +
+            "  WHERE " + QUESTION_ID + " = ? ;";
 
     private SQLStatements() {
     }

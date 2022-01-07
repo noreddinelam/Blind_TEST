@@ -39,4 +39,8 @@ public class Question {
             return new Question(this);
         }
     }
+
+    public String getResponse() {
+        return response;
+    }
 }

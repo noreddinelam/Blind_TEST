@@ -40,6 +40,7 @@ CREATE TABLE `Question_Game`
     `id_question`  integer NOT NULL ,
     `id_game`    integer NOT NULL ,
     `order`        integer NOT NULL ,
+    `state`         bit,
 
     KEY `FK_30` (`id_question`),
     CONSTRAINT `FK_32` FOREIGN KEY `FK_30` (`id_question`) REFERENCES `Question` (`id`),

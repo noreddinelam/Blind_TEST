@@ -1,6 +1,8 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
+import com.example.blind_test.exception.ChangeQuestionStateException;
+import com.example.blind_test.exception.VerifyQuestionStateException;
 import com.example.blind_test.front.models.Question;
 
 import java.sql.PreparedStatement;
@@ -32,7 +34,7 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    public Question getQuestion(int questionId){
+    public Question getQuestion(int questionId) {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION)) {
             stmt.setInt(1, questionId);
             ResultSet resultSet = stmt.executeQuery();
@@ -43,7 +45,7 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    public Integer insertQuestionInQuestionGame(int questionId,int gameId,int order){
+    public Integer insertQuestionInQuestionGame(int questionId, int gameId, int order) {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME)) {
             stmt.setInt(1, questionId);
             stmt.setInt(2, gameId);
@@ -52,6 +54,27 @@ public class QuestionRepository extends Repository {
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    public Integer chnageQuestionState(int questionId) throws ChangeQuestionStateException {
+        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE)) {
+            stmt.setInt(1, questionId);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ChangeQuestionStateException();
+        }
+
+    }
+
+    public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException{
+        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE)) {
+            stmt.setInt(1,questionId);
+            return (stmt.executeQuery().getInt(1));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new VerifyQuestionStateException();
         }
     }
 }
