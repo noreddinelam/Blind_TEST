@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.example.blind_test.database.repositories.GameRepository;
 import com.example.blind_test.exception.GetGameDBException;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 class GameRepositoryTest {
 

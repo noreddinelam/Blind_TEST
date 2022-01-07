@@ -1,6 +1,7 @@
 package com.example.blind_test.client;
 
 
+import com.example.blind_test.front.controllers.Controller;
 import com.example.blind_test.front.controllers.MainMenuController;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.shared.CommunicationTypes;
@@ -21,13 +22,20 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
-public abstract class ClientImpl {
+public class ClientImpl {
     protected static final Hashtable<String, Consumer<String>> listOfFunctions = new Hashtable<>();
     private static final Logger logger = LoggerFactory.getLogger(ClientImpl.class);
+    private static final ClientImpl clientImpl = new ClientImpl();
     private String ipAddress;
     private AsynchronousSocketChannel client;
-    private MainMenuController controller;
+    private Controller controller;
     private Player player;
+
+    private ClientImpl(){}
+
+    public static ClientImpl getUniqueInstanceClientImpl(){
+        return clientImpl;
+    }
 
     public static Consumer<String> getFunctionWithRequestCode(Response response) {
         return listOfFunctions.get(response.getNetCode());
@@ -85,7 +93,7 @@ public abstract class ClientImpl {
         this.client = client;
     }
 
-    public void setMainMenuController(MainMenuController controller) {
+    public void setMainMenuController(Controller controller) {
         this.controller = controller;
     }
 
