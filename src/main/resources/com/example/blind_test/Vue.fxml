@@ -34,8 +34,8 @@
             </Button>
          </children>
       </AnchorPane>
-      <ListView fx:id="scoreBoard" layoutX="14.0" layoutY="78.0" prefHeight="153.0" prefWidth="237.0" style="-fx-background-image: #292929;" styleClass="button_1" stylesheets="@stylesheet.css" />
-      <ImageView fx:id="currentQuestion" fitHeight="194.0" fitWidth="262.0" layoutX="300.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" />
+      <ListView fx:id="scoreBoard" layoutX="14.0" layoutY="29.0" prefHeight="202.0" prefWidth="237.0" style="-fx-background-image: #292929;" styleClass="button_1" stylesheets="@stylesheet.css" />
+      <ImageView fx:id="currentQuestion" fitHeight="194.0" fitWidth="262.0" layoutX="306.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="round" fill="WHITE" layoutX="455.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="14.13671875">
          <font>
             <Font size="16.0" />

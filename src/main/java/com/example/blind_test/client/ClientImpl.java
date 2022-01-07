@@ -78,6 +78,7 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.CREATE_GAME_FAILED, this::createGameFailed);
         listOfFunctions.put(NetCodes.JOIN_GAME_FAILED, this::joinGameFailed);
         listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
+        listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
     }
 
     public void createGameSucceeded(String responseData) {
