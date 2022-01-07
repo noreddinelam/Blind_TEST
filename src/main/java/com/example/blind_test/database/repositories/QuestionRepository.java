@@ -61,8 +61,9 @@ public class QuestionRepository extends Repository {
     }
 
     //TODO : use this function to generate questions
-    public Integer insertQuestionInQuestionGame(int questionId, int gameId, int orderQuestion) {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME)) {
+    public Integer insertQuestionInQuestionGame(int questionId,int gameId,int orderQuestion){
+        try  {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME);
             stmt.setInt(1, questionId);
             stmt.setInt(2, gameId);
             stmt.setInt(3, orderQuestion);
@@ -75,7 +76,8 @@ public class QuestionRepository extends Repository {
 
 
     public Integer changeQuestionState(int questionId) throws ChangeQuestionStateException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE)) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE);
             stmt.setInt(1, questionId);
             return stmt.executeUpdate();
         } catch (SQLException e) {

@@ -20,8 +20,8 @@ public class SQLStatements {
     // QUESTIONS
     public static final String INSERT_QUESTION_IN_QUESTION_GAME =
             "INSERT INTO " + QUESTION_GAME_TABLE + "(" + QUESTION_GAME_ID_QUESTION + "," + QUESTION_GAME_ID_GAME + ","
-                    + QUESTION_GAME_ORDER + " VALUES (?," +
-                    "?,?) ;";
+                    + QUESTION_GAME_ORDER + ") VALUES (?,?,?) ;";
+
     public static final String GET_QUESTION_BY_ORDER =
             "SELECT * FROM " + QUESTION_GAME_TABLE + " INNER JOIN " + QUESTION_TABLE + " ON " + QUESTION_GAME_TABLE
                     + "." + QUESTION_GAME_ID_QUESTION + " = " + QUESTION_TABLE + "." + QUESTION_ID
@@ -62,8 +62,7 @@ public class SQLStatements {
             " = 1 WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
 
     public static final String VERIFY_QUESTION_STATE = "SELECT "+  QUESTION_GAME_STATE + " FROM "+ QUESTION_GAME_TABLE +
-            "  WHERE " + QUESTION_ID + " = ? ;";
-
+            "  WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
     private SQLStatements() {
     }
 
