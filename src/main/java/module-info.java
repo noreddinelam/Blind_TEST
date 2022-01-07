@@ -15,4 +15,6 @@ module com.example.blind_test {
     exports com.example.blind_test.front.controllers;
     opens com.example.blind_test.front.controllers to javafx.fxml;
     exports com.example.blind_test.tests.repositories_tests;
+    exports com.example.blind_test.client;
+    opens com.example.blind_test.client to javafx.fxml;
 }

@@ -1,5 +1,7 @@
 package com.example.blind_test.client;
 
+import com.example.blind_test.HelloApplication;
+import com.example.blind_test.front.controllers.MainMenuController;
 import com.example.blind_test.shared.Properties;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -31,15 +33,14 @@ public class GUIClient extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/front/ressources/loginregisterpage.fxml"));
-        Parent root = (Parent) loader.load();
-        //AuthController authController = loader.getController();
-        primaryStage.setTitle("Slock");
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        //authController.setData(client, clientIpAddress,scene);
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.show();
+    public void start(Stage stage) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("MainMenu.fxml"));
+        Parent parent = fxmlLoader.load();
+        MainMenuController controller = fxmlLoader.getController();
+        Scene scene = new Scene(parent);
+        controller.setNecessaryInformation(client,clientIpAddress,scene);
+        stage.setTitle("Blind Test!");
+        stage.setScene(scene);
+        stage.show();
     }
 }

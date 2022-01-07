@@ -89,12 +89,17 @@ public class ClientImpl {
 
     // Functions that don't do sql requests :
 
-    public void setAsynchronousSocketChannel(AsynchronousSocketChannel client) {
+
+    public void setClient(AsynchronousSocketChannel client) {
         this.client = client;
     }
 
     public void setMainMenuController(Controller controller) {
         this.controller = controller;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public AsynchronousSocketChannel getClient() {

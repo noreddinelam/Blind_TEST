@@ -17,7 +17,7 @@ public class HelloApplication extends Application {
         Parent parent = fxmlLoader.load();
         MainMenuController controller = fxmlLoader.getController();
         Scene scene = new Scene(parent);
-        controller.setNecessaryInformation(ClientImpl.getUniqueInstanceClientImpl(),scene);
+        //controller.setNecessaryInformation(ClientImpl.getUniqueInstanceClientImpl(),scene);
         stage.setTitle("Blind Test!");
         stage.setScene(scene);
         stage.show();
