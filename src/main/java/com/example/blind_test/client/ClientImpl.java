@@ -57,6 +57,11 @@ public abstract class ClientImpl {
 
     }
 
+    // Functions that send the requests :
+    public void createGame(int numberOfPlayers,int numberOfQuestions,int responseTime ){
+
+    }
+
     // Functions that don't do sql requests :
 
     public void setAsynchronousSocketChannel(AsynchronousSocketChannel client) {
