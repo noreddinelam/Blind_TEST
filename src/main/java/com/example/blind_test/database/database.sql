@@ -39,7 +39,7 @@ CREATE TABLE `Question_Game`
 (
     `id_question`  integer NOT NULL ,
     `id_game`    integer NOT NULL ,
-    `order`        integer NOT NULL ,
+    `orderQuestion`        integer NOT NULL ,
     `state`         bit,
 
     KEY `FK_30` (`id_question`),

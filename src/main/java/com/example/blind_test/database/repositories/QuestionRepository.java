@@ -63,11 +63,11 @@ public class QuestionRepository extends Repository {
     }
 
     //TODO : use this function to generate questions
-    public Integer insertQuestionInQuestionGame(int questionId,int gameId,int order){
+    public Integer insertQuestionInQuestionGame(int questionId,int gameId,int orderQuestion){
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME)) {
             stmt.setInt(1, questionId);
             stmt.setInt(2, gameId);
-            stmt.setInt(3, order);
+            stmt.setInt(3, orderQuestion);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
