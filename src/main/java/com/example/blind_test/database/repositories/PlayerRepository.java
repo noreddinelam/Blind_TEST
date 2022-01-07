@@ -46,7 +46,6 @@ public class PlayerRepository extends Repository {
             if (!verifyPlayerExistenceDB(username, gameId)) {
                 stmt.setString(1, username);
                 stmt.setInt(2, gameId);
-                stmt.setInt(3, 0);
                 return new Player(username, new Game.GameBuilder(gameId).build());
             }
             throw new PlayerAlreadyExists();

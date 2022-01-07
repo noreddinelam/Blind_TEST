@@ -1,5 +1,6 @@
 package com.example.blind_test.front.controllers;
 
+import com.example.blind_test.HelloApplication;
 import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Game;
 import javafx.application.Platform;
@@ -7,12 +8,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.kordamp.ikonli.javafx.Icon;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +109,19 @@ public class MainMenuController extends Controller {
         Platform.runLater(() -> {
             this.listOfGameToJoin.getItems().setAll(list);
         });
+    }
+    public void createGameSucceeded() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Lobby.fxml"));
+            Parent root = null;
+            root = loader.load();
+            LobbyController controller=loader.getController();
+            controller.scene=this.scene;
+            this.scene.setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
