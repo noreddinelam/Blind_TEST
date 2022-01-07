@@ -143,5 +143,4 @@ public class GameRepository extends Repository {
             throw new ChangeCurrentQuestionIdException();
         }
     }
-
 }
