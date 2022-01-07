@@ -3,10 +3,7 @@ package com.example.blind_test.server;
 import com.example.blind_test.database.repositories.GameRepository;
 import com.example.blind_test.database.repositories.PlayerRepository;
 import com.example.blind_test.database.repositories.QuestionRepository;
-import com.example.blind_test.exception.ChangeGameStateException;
-import com.example.blind_test.exception.CreateGameDBException;
-import com.example.blind_test.exception.ListOfNotStartedGameException;
-import com.example.blind_test.exception.ModifyPlayerScoreDBException;
+import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.shared.CommunicationTypes;
@@ -65,6 +62,26 @@ public class ServerImpl {
             responseSucceed(client, response);
         } catch (CreateGameDBException e) {
             Response response = new Response(NetCodes.CREATE_GAME_FAILED, "Create game failure");
+            requestFailure(response,client);
+        }
+    }
+
+    private static void joinGame(String data)
+    {
+        logger.info("JOIN GAME INFO {} ", data);
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        String ipAddress = requestData.get(FieldsRequestName.IP_ADDRESS);
+        AsynchronousSocketChannel client = listOfGuests.get(ipAddress);
+        int gameId= Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        try {
+            Player player = gameRepository.joinGameDB(gameId,username);
+            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED,GsonConfiguration.gson.toJson(player));
+            listOfPlayers.put(new Credentials(username,player.getGame().getId()),client);
+            listOfGuests.remove(ipAddress);
+            responseSucceed(client, response);
+        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException e) {
+            Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
             requestFailure(response,client);
         }
     }
