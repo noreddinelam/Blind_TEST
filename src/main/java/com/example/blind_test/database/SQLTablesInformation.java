@@ -7,7 +7,7 @@ public class SQLTablesInformation {
     public static final String PLAYER_ID_GAME = "id_game";
     public static final String PLAYER_SCORE = "score";
 
-    public static final String QUESTION_TABLE = "QUESTION_TABLE";
+    public static final String QUESTION_TABLE = "QUESTION";
     public static final String QUESTION_ID = "id";
     public static final String QUESTION_ID_RESOURCE = "id_resource";
     public static final String QUESTION_RESPONSE = "response";
