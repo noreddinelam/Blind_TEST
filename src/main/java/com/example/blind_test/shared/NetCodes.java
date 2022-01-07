@@ -2,32 +2,32 @@ package com.example.blind_test.shared;
 
 public class NetCodes {
 
-    public static String CREATE_GAME = "0";
-    public static String CREATE_GAME_SUCCEED = "1";
-    public static String CREATE_GAME_FAILED = "2";
-    public static String CREATE_GAME_BROADCAST_SUCCEED = "3";
-    public static String CREATE_GAME_BROADCAST_FAILED = "4";
+    public static final String CREATE_GAME = "0";
+    public static final String CREATE_GAME_SUCCEED = "1";
+    public static final String CREATE_GAME_FAILED = "2";
+    public static final String CREATE_GAME_BROADCAST_SUCCEED = "3";
+    public static final String CREATE_GAME_BROADCAST_FAILED = "4";
 
-    public static String JOIN_GAME = "100";
-    public static String JOIN_GAME_SUCCEED = "101";
-    public static String JOIN_GAME_FAILED = "102";
-    public static String JOIN_GAME_BROADCAST_SUCCEED = "103";
-    public static String JOIN_GAME_BROADCAST_FAILED = "104";
+    public static final String JOIN_GAME = "100";
+    public static final String JOIN_GAME_SUCCEED = "101";
+    public static final String JOIN_GAME_FAILED = "102";
+    public static final String JOIN_GAME_BROADCAST_SUCCEED = "103";
+    public static final String JOIN_GAME_BROADCAST_FAILED = "104";
 
-    public static String DELETE_GAME = "200";
-    public static String DELETE_GAME_SUCCEED = "201";
-    public static String DELETE_GAME_FAILED = "202";
+    public static final String DELETE_GAME = "200";
+    public static final String DELETE_GAME_SUCCEED = "201";
+    public static final String DELETE_GAME_FAILED = "202";
 
 
-    public static String LIST_OF_GAME_NOT_STARTED = "300";
-    public static String LIST_OF_GAME_NOT_STARTED_SUCCEED = "301";
-    public static String LIST_OF_GAME_NOT_STARTED_FAILED = "302";
+    public static final String LIST_OF_GAME_NOT_STARTED = "300";
+    public static final String LIST_OF_GAME_NOT_STARTED_SUCCEED = "301";
+    public static final String LIST_OF_GAME_NOT_STARTED_FAILED = "302";
 
-    public static String CHANGE_GAME_STATE = "400";
-    public static String CHANGE_GAME_STATE_SUCCEED = "401";
-    public static String CHANGE_GAME_STATE_FAILED = "402";
-    public static String CHANGE_GAME_STATE_BROADCAST_SUCCEED = "303";
-    public static String CHANGE_GAME_STATE_BROADCAST_FAILED = "304";
+    public static final String CHANGE_GAME_STATE = "400";
+    public static final String CHANGE_GAME_STATE_SUCCEED = "401";
+    public static final String CHANGE_GAME_STATE_FAILED = "402";
+    public static final String CHANGE_GAME_STATE_BROADCAST_SUCCEED = "303";
+    public static final String CHANGE_GAME_STATE_BROADCAST_FAILED = "304";
 
     public static String ID_OF_CURRENT_QUESTION = "500";
     public static String ID_OF_CURRENT_QUESTION_SUCCEED = "501";
@@ -57,9 +57,9 @@ public class NetCodes {
     public static String DELETE_PLAYER_SUCCEED = "1101";
     public static String DELETE_PLAYER_FAILED = "1102";
 
-
-
-
+    public static final String NEXT_ROUND = "1200";
+    public static final String NEXT_ROUND_SUCCEEDED = "1201";
+    public static final String NEXT_ROUND_FAILED = "1202";
 
 
     private NetCodes() {

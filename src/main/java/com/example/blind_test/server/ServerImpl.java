@@ -158,6 +158,17 @@ public class ServerImpl {
         }
     }
 
+    public static void nextRoundInformation(String data){
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data,CommunicationTypes.mapJsonTypeData);
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
+        int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
+        try {
+            List<Player> listOfPlayers = playerRepository.getPlayersOfGame(gameId);
+        } catch (GetPlayersOfGameException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public static void initListOfFunctions() {
