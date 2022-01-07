@@ -6,6 +6,7 @@ import com.example.blind_test.database.repositories.QuestionRepository;
 import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
+import com.example.blind_test.front.models.Question;
 import com.example.blind_test.shared.CommunicationTypes;
 import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
@@ -44,24 +45,24 @@ public class ServerImpl {
         String ipAddress = requestData.get(FieldsRequestName.IP_ADDRESS);
         AsynchronousSocketChannel client = listOfGuests.get(ipAddress);
         boolean type = Boolean.parseBoolean(requestData.get(FieldsRequestName.GAME_TYPE));
-        int current_question = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
         int rounds = Integer.parseInt(requestData.get(FieldsRequestName.ROUNDS));
         int players = Integer.parseInt(requestData.get(FieldsRequestName.PLAYERS));
         int timeQuestion = Integer.parseInt(requestData.get(FieldsRequestName.TIME_QUESTION));
         boolean state = Boolean.parseBoolean(requestData.get(FieldsRequestName.STATE));
         String username = requestData.get(FieldsRequestName.USERNAME);
         try {
-            Player player = gameRepository.createGameDB(type, current_question, rounds
-                    , players, timeQuestion, state,username);
-            listOfPlayers.put(new Credentials(username,player.getGame().getId()),client);
+            Player player = gameRepository.createGameDB(type, rounds
+                    , players, timeQuestion, state, username);
+            listOfPlayers.put(new Credentials(username, player.getGame().getId()), client);
             listOfGuests.remove(ipAddress);
-            Response response = new Response(NetCodes.CREATE_GAME_SUCCEED,GsonConfiguration.gson.toJson(player));
-            responseSucceed(client, response);
+            Response response = new Response(NetCodes.CREATE_GAME_SUCCEED, GsonConfiguration.gson.toJson(player));
+            response(response, client);
         } catch (CreateGameDBException e) {
             Response response = new Response(NetCodes.CREATE_GAME_FAILED, "Create game failure");
-            requestFailure(response,client);
+            response(response, client);
         }
     }
+
 
     private static void deleteGame(String data) throws GetPlayersOfGameException {
         logger.info("CREATE GAME INFO {} ", data);
@@ -79,18 +80,15 @@ public class ServerImpl {
             Response response = new Response(NetCodes.DELETE_GAME_SUCCEED,"Game deleted!");
             for(AsynchronousSocketChannel client : clients)
             {
-                responseSucceed(client,response);
+                response(response,client);
             }
         } catch (Exception e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
             for(AsynchronousSocketChannel client : clients)
             {
-                responseFailure(client,response);
+                response(response,client);
             }
         }
-    }
-
-    private static void responseFailure(AsynchronousSocketChannel client, Response response) {
     }
 
     private static void joinGame(String data)
@@ -106,21 +104,14 @@ public class ServerImpl {
             Response response = new Response(NetCodes.JOIN_GAME_SUCCEED,GsonConfiguration.gson.toJson(player));
             listOfPlayers.put(new Credentials(username,player.getGame().getId()),client);
             listOfGuests.remove(ipAddress);
-            responseSucceed(client, response);
+            response(response,client);
         } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
-            requestFailure(response,client);
+            response(response,client);
         }
     }
 
-    private static void responseSucceed(AsynchronousSocketChannel client, Response response) {
-        String responseJson = GsonConfiguration.gson.toJson(response);
-        ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
-        client.write(attachment, attachment, new ServerWriterCompletionHandler());
-        attachment.clear();
-        ByteBuffer newByteBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
-        client.read(newByteBuffer, newByteBuffer, new ServerReaderCompletionHandler());
-    }
+
 
     private static void listOfNotStartedGame(String data) {
         logger.info("list of started game {} ", data);
@@ -132,10 +123,10 @@ public class ServerImpl {
             Map<String, List<Game>> responseData = new HashMap<>();
             responseData.put(FieldsRequestName.LISTGAMES, resultGame);
             Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapListGameJsonTypeData));
-            responseSucceed(client, response);
+            response(response, client);
         } catch (ListOfNotStartedGameException e) {
             Response response = new Response(NetCodes.LIST_OF_GAME_NOT_STARTED_FAILED, "list of not started game failure");
-            requestFailure(response, client);
+            response(response, client);
         }
     }
 
@@ -150,12 +141,11 @@ public class ServerImpl {
             responseData.put(FieldsRequestName.GAME_STATE, "true");
             responseData.put(FieldsRequestName.GAMEID, String.valueOf(gameId));
             Response response = new Response(NetCodes.CHANGE_GAME_STATE_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
-            responseSucceed(client, response);
+            response(response, client);
         } catch (ChangeGameStateException e) {
             Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "change state failure");
-            requestFailure(response, client);
+            response(response, client);
         }
-
     }
 
     public static void modifyPlayerScore(String data) {
@@ -172,15 +162,10 @@ public class ServerImpl {
             responseData.put(FieldsRequestName.USERNAME, username);
             responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(newScore));
             Response response = new Response(NetCodes.MODIFY_SCORE_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
-            String responseJson = GsonConfiguration.gson.toJson(response);
-            ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
-            client.write(attachment, attachment, new ServerWriterCompletionHandler());
-            attachment.clear();
-            ByteBuffer newByteBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
-            client.read(newByteBuffer, newByteBuffer, new ServerReaderCompletionHandler());
+            response(response, client);
         } catch (ModifyPlayerScoreDBException e) {
             Response response = new Response(NetCodes.MODIFY_SCORE_FAILED, "modify score failure");
-            requestFailure(response, client);
+            response(response, client);
         }
     }
 
@@ -195,20 +180,16 @@ public class ServerImpl {
         }
     }
 
-
+    public static void getQuestionResponse(String data){}
 
     public static void initListOfFunctions() {
         // initialisation of methods;
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
         listOfFunctions.put(NetCodes.CHANGE_GAME_STATE, ServerImpl::modifyGameState);
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
+        listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::createGame);
+        listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::getQuestionResponse);
     }
-
-
-    public static void getQuestionResponse(String requestData) {
-
-    }
-
 
     public static Consumer<String> getFunctionWithRequestCode(Request request) {
         return listOfFunctions.get(request.getNetCode());
@@ -218,12 +199,13 @@ public class ServerImpl {
         listOfGuests.put(client.getRemoteAddress().toString().split(":")[1], client);
     }
 
-    private static void requestFailure(Response response, AsynchronousSocketChannel client) {
+    private static void response(Response response, AsynchronousSocketChannel client) {
         String responseJson = GsonConfiguration.gson.toJson(response);
-        ByteBuffer buffer = ByteBuffer.wrap(responseJson.getBytes());
-        client.write(buffer, buffer, new ServerWriterCompletionHandler());
-        ByteBuffer bufferReader = ByteBuffer.allocate(Properties.BUFFER_SIZE);
-        client.read(bufferReader, bufferReader, new ServerReaderCompletionHandler());
+        ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
+        client.write(attachment, attachment, new ServerWriterCompletionHandler());
+        attachment.clear();
+        ByteBuffer newByteBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+        client.read(newByteBuffer, newByteBuffer, new ServerReaderCompletionHandler());
     }
 
     private static void broadcastResponseClient(AsynchronousSocketChannel broadcastClient, Response broadcastResponse) {
