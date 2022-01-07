@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -63,15 +64,19 @@ public abstract class ClientImpl {
     }
 
     // Functions that send the requests :
-    public void createGame(boolean type,boolean state,int rounds,int players, int time_question, int responseTime,String username) {
-        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+    public void createGame(boolean type, boolean state, int rounds, int players, int time_question, int responseTime, String username) {
+        Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
         requestData.put(FieldsRequestName.GAME_TYPE, String.valueOf(type));
         requestData.put(FieldsRequestName.ROUNDS, String.valueOf(rounds));
         requestData.put(FieldsRequestName.PLAYERS, String.valueOf(players));
         requestData.put(FieldsRequestName.TIME_QUESTION, String.valueOf(time_question));
         requestData.put(FieldsRequestName.STATE, String.valueOf(state));
-        requestData.put(FieldsRequestName.USERNAME,username);
+        requestData.put(FieldsRequestName.USERNAME, username);
+        Request createGame = new Request(NetCodes.CREATE_GAME,
+                GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        ByteBuffer buffer = ByteBuffer.wrap(GsonConfiguration.gson.toJson(createGame).getBytes());
+        this.client.write(buffer, buffer, new ClientWriterCompletionHandler());
     }
 
     // Functions that don't do sql requests :
