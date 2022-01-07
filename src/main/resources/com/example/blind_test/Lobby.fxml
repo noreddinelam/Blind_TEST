@@ -25,7 +25,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <ListView fx:id="joinedPlayerList" layoutX="201.0" layoutY="243.0" prefHeight="217.0" prefWidth="199.0" styleClass="button_1" stylesheets="@stylesheet.css" />
+      <ListView fx:id="joinedPlayerList" layoutX="201.0" layoutY="243.0" prefHeight="217.0" prefWidth="199.0" styleClass="list_view1" stylesheets="@stylesheet.css" />
       <AnchorPane layoutX="425.0" layoutY="247.0" prefHeight="254.0" prefWidth="275.0" style="-fx-background-color: #302F2F; -fx-background-radius: 5px;">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of questions :" wrappingWidth="153.0">

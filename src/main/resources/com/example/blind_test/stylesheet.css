@@ -6,3 +6,11 @@
 	-fx-text-fill: white;
 }
 
+.list_view1{
+    	-fx-background-color: #343a40;
+	-fx-border-color: #495057;
+	-fx-border-width: 2px;
+	-fx-border-radius: 5px;
+}
+
+

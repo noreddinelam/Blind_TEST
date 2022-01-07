@@ -43,7 +43,7 @@
             <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
          </graphic>
       </Button>
-      <ListView fx:id="listOfGameToJoin" layoutX="561.0" layoutY="208.0" prefHeight="274.0" prefWidth="225.0" style="-fx-background-radius: 5px;" styleClass="button_1" stylesheets="@stylesheet.css" />
+      <ListView fx:id="listOfGameToJoin" layoutX="561.0" layoutY="208.0" prefHeight="274.0" prefWidth="225.0" style="-fx-background-radius: 5px;" styleClass="list_view1" stylesheets="@stylesheet.css" />
       <AnchorPane layoutX="108.0" layoutY="208.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="249.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Numbers of players :" wrappingWidth="132.13671875">
