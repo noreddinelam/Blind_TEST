@@ -63,7 +63,7 @@ public class ServerImpl {
             response(response, client);
             Response broadcastResponse = new Response(NetCodes.CREATE_GAME_BROADCAST_SUCCEED,
                     GsonConfiguration.gson.toJson(player.getGame()));
-            listOfGuests.entrySet().stream().forEach((entry) -> response(broadcastResponse, entry.getValue()));
+            listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse, entry.getValue()));
         } catch (CreateGameDBException e) {
             Response response = new Response(NetCodes.CREATE_GAME_FAILED, "Create game failure");
             response(response, client);
@@ -79,7 +79,7 @@ public class ServerImpl {
             gameRepository.deleteGameDB(gameId);
             Response response = new Response(NetCodes.DELETE_GAME_SUCCEED, "Game deleted!");
             for (Player playerOther : list) {
-                response(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+                responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
             for (Map.Entry<Credentials, AsynchronousSocketChannel> entryCredential : listOfPlayers.entrySet()) {
                 if (entryCredential.getKey().getGameId() == gameId) {
@@ -91,7 +91,7 @@ public class ServerImpl {
         } catch (DeleteGameException e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
             for (Player playerOther : list) {
-                response(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+                responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,9 +114,7 @@ public class ServerImpl {
             Response aPlayerHasJoined = new Response(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,
                     GsonConfiguration.gson.toJson(player));
             for (Player playerOther : list) {
-                AsynchronousSocketChannel p = listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId));
-                if(p!=null)
-                    response(aPlayerHasJoined, p);
+                responseBroadcast(aPlayerHasJoined, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
             listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
         } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
@@ -238,7 +236,7 @@ public class ServerImpl {
             Response response = new Response(NetCodes.NEXT_ROUND_SUCCEEDED,
                     GsonConfiguration.gson.toJson(nextRoundInformation));
             for (Player player : list) {
-                response(response, listOfPlayers.get(new Credentials(player.getUsername(), gameId)));
+                responseBroadcast(response, listOfPlayers.get(new Credentials(player.getUsername(), gameId)));
             }
         } catch (GetPlayersOfGameException e) {
             e.printStackTrace();
@@ -252,7 +250,7 @@ public class ServerImpl {
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
         listOfFunctions.put(NetCodes.CREATE_GAME, ServerImpl::createGame);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION, ServerImpl::getQuestionResponse);
-        listOfFunctions.put(NetCodes.JOIN_GAME,ServerImpl::joinGame);
+        listOfFunctions.put(NetCodes.JOIN_GAME, ServerImpl::joinGame);
         listOfFunctions.put(NetCodes.NEXT_ROUND, ServerImpl::nextRoundInformation);
     }
 
@@ -262,6 +260,13 @@ public class ServerImpl {
 
     public static void addGuestClients(AsynchronousSocketChannel client) throws IOException {
         listOfGuests.put(client.getRemoteAddress().toString().split(":")[1], client);
+    }
+
+    private static void responseBroadcast(Response response, AsynchronousSocketChannel client) {
+        String responseJson = GsonConfiguration.gson.toJson(response);
+        ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
+        client.write(attachment, attachment, new ServerWriterCompletionHandler());
+        attachment.clear();
     }
 
     private static void response(Response response, AsynchronousSocketChannel client) {
