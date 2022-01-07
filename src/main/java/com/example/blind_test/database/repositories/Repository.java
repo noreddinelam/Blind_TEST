@@ -27,4 +27,5 @@ public abstract class Repository {
             logger.error("Error on getting connection from DB");
         }
     }
+
 }
