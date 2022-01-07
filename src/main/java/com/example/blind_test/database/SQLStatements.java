@@ -52,8 +52,6 @@ public class SQLStatements {
     public static final String DELETE_ALL_PLAYER_FOR_GAME =
             "DELETE FROM " + PLAYER_TABLE
                     + " WHERE " + PLAYER_ID_GAME + "=? ;";
-    public static final String GET_ALL_PLAYERS_OF_GAME =
-            "SELECT * FROM " + PLAYER_TABLE + " WHERE " + PLAYER_ID_GAME + "=? ;";
     public static String CREATE_PLAYER =
             "INSERT INTO " + PLAYER_TABLE
                     + "(" + PLAYER_USERNAME + "," + PLAYER_ID_GAME + "," + PLAYER_SCORE
