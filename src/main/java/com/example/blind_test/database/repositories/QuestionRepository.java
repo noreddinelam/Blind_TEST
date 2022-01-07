@@ -37,7 +37,8 @@ public class QuestionRepository extends Repository {
     }
 
     public Question getQuestion(int questionId) throws QuestionNotFoundException{
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION)) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION);
             stmt.setInt(1, questionId);
             ResultSet resultSet = stmt.executeQuery();
             return mapper.resultSetToQuestion(resultSet);
