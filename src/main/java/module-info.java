@@ -12,6 +12,7 @@ module com.example.blind_test {
     requires java.sql;
     opens com.example.blind_test to javafx.fxml;
     opens com.example.blind_test.shared.communication to com.google.gson ;
+    opens com.example.blind_test.front.models to com.google.gson;
     exports com.example.blind_test;
     exports com.example.blind_test.front.controllers;
     opens com.example.blind_test.front.controllers to javafx.fxml;

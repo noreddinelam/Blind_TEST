@@ -68,7 +68,8 @@ public class PlayerRepository extends Repository {
     }
 
     public List<Player> getPlayersOfGame(int gameId) throws GetPlayersOfGameException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.DELETE_ALL_PLAYER_FOR_GAME)) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.DELETE_ALL_PLAYER_FOR_GAME);
             stmt.setInt(1, gameId);
             return mapper.resultSetToPlayers(stmt.executeQuery());
         } catch (SQLException e) {

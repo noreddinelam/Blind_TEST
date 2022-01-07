@@ -17,7 +17,7 @@ public class GameRepositoryTest {
     public void getGame() {
         int gameId = 1;
         try {
-            assertThat(repository.getGame(gameId).getPlayers()).isEqualTo(4);
+            assertThat(repository.getGame(gameId).getPlayers()).isEqualTo(3);
         } catch (GetGameDBException e) {
             e.printStackTrace();
         }

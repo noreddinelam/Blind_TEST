@@ -34,7 +34,6 @@ public class ClientImpl {
     private AsynchronousSocketChannel client;
     private Controller controller;
     private Player player;
-    private Question question;
 
     private ClientImpl(){}
 
@@ -67,36 +66,34 @@ public class ClientImpl {
 
     public void initListOfFunctions() {
         listOfFunctions.put(NetCodes.CREATE_GAME_SUCCEED, this::createGameSucceeded);
-        listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceded);
-        listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceded);
-        listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceded);
-        listOfFunctions.put(NetCodes.CHANGE_GAME_STATE_SUCCEED, this::modifyGameStateSucceded);
+        listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceeded);
+        listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceeded);
+        listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceeded);
+        listOfFunctions.put(NetCodes.CHANGE_GAME_STATE_SUCCEED, this::modifyGameStateSucceeded);
         listOfFunctions.put(NetCodes.CHANGE_GAME_STATE_FAILED, this::modifyGameStateFailed);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_FAILED, this::getQuestionResponseFailed);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_FAILED, this::modifyPlayerScoreFailed);
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_FAILED, this::listOfNotStartedGameFailed);
     }
 
-
-
     public void createGameSucceeded(String responseData) {
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
     }
 
-    public void listOfNotStartedGameSucceded(String responseData){
-        List<Game> game = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
-
+    public void listOfNotStartedGameSucceeded(String responseData){
+        Map<String,List<Game>> games = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
+        ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
-    public void modifyGameStateSucceded(String responseData){
+    public void modifyGameStateSucceeded(String responseData){
     Map<String,String>  data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
     int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
     String username = data.get(FieldsRequestName.USERNAME);
     this.player.getGame().setState(true);
     }
 
-    public void modifyPlayerScoreSucceded(String responseData){
+    public void modifyPlayerScoreSucceeded(String responseData){
         Map<String,String>  data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
@@ -104,7 +101,7 @@ public class ClientImpl {
         this.player.setScore(score);
     }
 
-    public void getQuestionResponseSucceded(String responseData){
+    public void getQuestionResponseSucceeded(String responseData){
         Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
@@ -183,10 +180,6 @@ public class ClientImpl {
         Request getQuestionResponse = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(getQuestionResponse);
     }
-
-
-
-
 
     // Functions that don't do sql requests :
 

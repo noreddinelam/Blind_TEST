@@ -33,7 +33,7 @@ public class SQLStatements {
             + "," + GAME_TIME_QUESTION + "," + GAME_STATE + ")" +
             " VALUES (?,?,?,?,?) ;";
     public static final String DELETE_GAME = "DELETE FROM " + GAME_TABLE + " where " + GAME_ID + " = ? ;";
-    public static final String LIST_OF_GAME_NOT_STARTED = "SELECT * FROM"
+    public static final String LIST_OF_GAME_NOT_STARTED = "SELECT * FROM "
             + GAME_TABLE + " WHERE " + GAME_STATE + "= 0 ;";
     public static final String CHANGE_GAME_STATE = "UPDATE " + GAME_TABLE + " SET " + GAME_STATE + "= 1" +
             " WHERE " + GAME_ID + "= ?; ";

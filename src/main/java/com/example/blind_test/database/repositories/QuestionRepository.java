@@ -37,7 +37,8 @@ public class QuestionRepository extends Repository {
     }
 
     public Question getQuestion(int questionId) throws QuestionNotFoundException{
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION)) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION);
             stmt.setInt(1, questionId);
             ResultSet resultSet = stmt.executeQuery();
             return mapper.resultSetToQuestion(resultSet);
@@ -49,7 +50,8 @@ public class QuestionRepository extends Repository {
 
 
     public Question getQuestionByOrder(int gameId, int questionOrder) {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION_BY_ORDER)) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION_BY_ORDER);
             stmt.setInt(1, gameId);
             stmt.setInt(2, questionOrder);
             ResultSet resultSet = stmt.executeQuery();

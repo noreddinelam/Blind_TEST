@@ -40,6 +40,14 @@ public class Game {
         return players;
     }
 
+    public int getRounds() {
+        return rounds;
+    }
+
+    public int getTimeQuestion() {
+        return timeQuestion;
+    }
+
     public static class GameBuilder {
         private int id;
         private boolean type;

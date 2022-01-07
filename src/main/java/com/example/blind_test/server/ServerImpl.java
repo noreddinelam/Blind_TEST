@@ -70,7 +70,6 @@ public class ServerImpl {
         }
     }
 
-
     private static void deleteGame(String data) throws GetPlayersOfGameException {
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
@@ -145,6 +144,7 @@ public class ServerImpl {
         }
     }
 
+    //TODO : broadcast
     private static void modifyGameState(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
@@ -195,7 +195,6 @@ public class ServerImpl {
         int score = Integer.parseInt(requestData.get(FieldsRequestName.PLAYER_SCORE));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
-
             if (questionRepository.verifyQuestionState(idCurrentQuestion) == 0) {
                 Question question = QuestionRepository.getRepository().getQuestion(idCurrentQuestion);
                 String questionResponse = question.getResponse();
