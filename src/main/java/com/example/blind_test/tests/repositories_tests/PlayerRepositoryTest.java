@@ -63,11 +63,12 @@ public class PlayerRepositoryTest {
 
     @Test
     public void modifyScore(){
+        int newScore = 6;
         int gameId = 3;
         String username = "Batman";
         try {
-            assertThat(repository.verifyPlayerExistenceDB(username, gameId)).isEqualTo(false);
-        } catch (PlayerAlreadyExists e) {
+            assertThat(repository.modifyScore(newScore,gameId, username));
+        } catch (ModifyPlayerScoreDBException e) {
             e.printStackTrace();
         }
 
