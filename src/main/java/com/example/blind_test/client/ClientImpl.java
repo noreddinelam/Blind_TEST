@@ -6,6 +6,7 @@ import com.example.blind_test.front.controllers.MainMenuController;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.front.models.Question;
+import com.example.blind_test.front.other.FailureMessages;
 import com.example.blind_test.shared.CommunicationTypes;
 import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
@@ -35,9 +36,10 @@ public class ClientImpl {
     private Controller controller;
     private Player player;
 
-    private ClientImpl(){}
+    private ClientImpl() {
+    }
 
-    public static ClientImpl getUniqueInstanceClientImpl(){
+    public static ClientImpl getUniqueInstanceClientImpl() {
         return clientImpl;
     }
 
@@ -74,6 +76,9 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_FAILED, this::getQuestionResponseFailed);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_FAILED, this::modifyPlayerScoreFailed);
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_FAILED, this::listOfNotStartedGameFailed);
+        listOfFunctions.put(NetCodes.CREATE_GAME_FAILED, this::createGameFailed);
+        listOfFunctions.put(NetCodes.JOIN_GAME_FAILED, this::joinGameFailed);
+        listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
     }
 
     public void createGameSucceeded(String responseData) {
@@ -111,24 +116,39 @@ public class ClientImpl {
         this.player.getGame().getQuestion(new Question.QuestionBuilder(idCurrentQuestion).build()).setState(true);
     }
 
-    public void listOfNotStartedGameFailed(String responseData){
+    public void createGameFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.CREATE_GAME, responseData);
+    }
+
+    public void joinGameFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.JOIN_GAME, responseData);
+    }
+
+    public void deleteGameFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.DELETE_GAME, responseData);
+    }
+
+    public void listOfNotStartedGameFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.LIST_OF_NOT_STARTED_GAME, responseData);
+    }
+
+    public void modifyGameStateFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.MODIFY_GAME_STATE, responseData);
+    }
+
+    public void modifyPlayerScoreFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.MODIFY_PLAYER_SCORE, responseData);
 
     }
 
-    public void modifyGameStateFailed(String responseData){
+    public void getQuestionResponseFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.GET_QUESTION_RESPONSE, responseData);
 
     }
 
-    public void modifyPlayerScoreFailed(String responseData){
-
+    public void nextRoundInformationFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.Next_ROUND_INFORMATION, responseData);
     }
-
-    public void getQuestionResponseFailed(String responseData){
-
-    }
-
-
-
 
 
     // Functions that send the requests :
@@ -170,7 +190,7 @@ public class ClientImpl {
         request(modifyPlayerScore);
     }
 
-    public void getQuestionResponse(String username, int gameId, int playerScore, int idCurrentQuestion, String playerResponse){
+    public void getQuestionResponse(String username, int gameId, int playerScore, int idCurrentQuestion, String playerResponse) {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.USERNAME, username);
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
@@ -183,11 +203,6 @@ public class ClientImpl {
 
     // Functions that don't do sql requests :
 
-
-    public void setClient(AsynchronousSocketChannel client) {
-        this.client = client;
-    }
-
     public void setMainMenuController(Controller controller) {
         this.controller = controller;
     }
@@ -198,6 +213,10 @@ public class ClientImpl {
 
     public AsynchronousSocketChannel getClient() {
         return client;
+    }
+
+    public void setClient(AsynchronousSocketChannel client) {
+        this.client = client;
     }
 
     public void request(Request request) {
