@@ -20,10 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -66,20 +63,34 @@ public class ServerImpl {
         }
     }
 
-    private static void deleteGame(String data)
-    {
+    private static void deleteGame(String data) throws GetPlayersOfGameException {
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameID = Integer.parseInt(requestData.get(FieldsRequestName.GAMEID));
-        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(requestData.get(FieldsRequestName.USERNAME),
-                Integer.parseInt(requestData.get(FieldsRequestName.GAMEID))));
+        List <Player> list = playerRepository.getPlayersOfGame(gameID);
+        List <AsynchronousSocketChannel> clients=new ArrayList<>();
+        for(Player player: list)
+        {
+            clients.add(listOfPlayers.get(new Credentials(player.getUsername(),gameID)));
+        }
+       
         try {
             gameRepository.deleteGameDB(gameID);
             Response response = new Response(NetCodes.DELETE_GAME_SUCCEED,"Game deleted!");
-        } catch (DeleteGameException e) {
+            for(AsynchronousSocketChannel client : clients)
+            {
+                responseSucceed(client,response);
+            }
+        } catch (Exception e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
-            requestFailure(response,client);
+            for(AsynchronousSocketChannel client : clients)
+            {
+                responseFailure(client,response);
+            }
         }
+    }
+
+    private static void responseFailure(AsynchronousSocketChannel client, Response response) {
     }
 
     private static void responseSucceed(AsynchronousSocketChannel client, Response response) {
