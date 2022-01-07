@@ -38,7 +38,7 @@ public class MainMenuController extends Controller{
 
     @FXML
     void onCreateAudioGame(ActionEvent event) {
-        //this.clientImpl.createGame()
+        this.clientImpl.createGame(numberOfPlayers.getValue(),numberOfQuestions.getValue(),responseTime.getValue());
     }
 
     @FXML
