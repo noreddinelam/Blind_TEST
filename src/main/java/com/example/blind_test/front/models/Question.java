@@ -1,12 +1,14 @@
 package com.example.blind_test.front.models;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Question {
     private int questionId;
     private String resource;
     private String response;
     private List<String> choices;
+    private boolean state;
 
     private Question(QuestionBuilder qb){
         this.questionId = qb.questionId;
@@ -42,5 +44,22 @@ public class Question {
 
     public String getResponse() {
         return response;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return questionId == question.questionId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(questionId);
     }
 }
