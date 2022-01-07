@@ -84,6 +84,7 @@ public class ClientImpl {
     public void createGameSucceeded(String responseData) {
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
+        ((MainMenuController) this.controller).createGameSucceeded();
     }
 
     public void listOfNotStartedGameSucceeded(String responseData){
