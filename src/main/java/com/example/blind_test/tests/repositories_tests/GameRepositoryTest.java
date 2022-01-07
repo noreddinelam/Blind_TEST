@@ -1,34 +1,49 @@
 package com.example.blind_test.tests.repositories_tests;
 
-import static org.assertj.core.api.Assertions.*;
-
 import com.example.blind_test.database.repositories.GameRepository;
 import com.example.blind_test.exception.GetGameDBException;
 import org.junit.Test;
 
-class GameRepositoryTest {
+import static org.assertj.core.api.Assertions.*;
 
+public class GameRepositoryTest {
     private GameRepository repository = GameRepository.getRepository();
 
     @Test
-    void listOfNotStartedGameDb() {
+    public void createGameDB() {
     }
 
     @Test
-    void changeGameState() {
-    }
-
-    @Test
-    void changeCurrentQuestionId() {
-    }
-
-    @Test
-    void getGame(){
+    public void getGame() {
         int gameId = 1;
         try {
-            assertThat(repository.getGame(gameId).getPlayers()).isEqualTo(3);
+            assertThat(repository.getGame(gameId).getPlayers()).isEqualTo(4);
         } catch (GetGameDBException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void getNbPlayersInGame() {
+    }
+
+    @Test
+    public void joinGameDB() {
+    }
+
+    @Test
+    public void deleteGameDB() {
+    }
+
+    @Test
+    public void listOfNotStartedGameDb() {
+    }
+
+    @Test
+    public void changeGameState() {
+    }
+
+    @Test
+    public void changeCurrentQuestionId() {
     }
 }
