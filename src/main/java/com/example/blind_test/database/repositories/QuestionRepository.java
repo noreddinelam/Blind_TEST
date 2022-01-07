@@ -78,7 +78,8 @@ public class QuestionRepository extends Repository {
 
 
     public Integer changeQuestionState(int questionId) throws ChangeQuestionStateException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE)) {
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE);
             stmt.setInt(1, questionId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
@@ -89,7 +90,8 @@ public class QuestionRepository extends Repository {
     }
 
     public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException{
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE)) {
+        try  {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE);
             stmt.setInt(1,questionId);
             return (stmt.executeQuery().getInt(1));
         } catch (SQLException e) {
