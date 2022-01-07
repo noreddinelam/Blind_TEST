@@ -8,8 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
-public class MainMenuController extends Controller{
+public class MainMenuController extends Controller {
 
     ObservableList<Integer> numberOfPlayersList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
     ObservableList<Integer> numberOfQuestionsList = FXCollections.observableArrayList(5, 10, 15, 20);
@@ -37,13 +38,19 @@ public class MainMenuController extends Controller{
     private ChoiceBox<Integer> responseTime;
 
     @FXML
+    private TextField usernameText;
+
+
+    @FXML
     void onCreateAudioGame(ActionEvent event) {
-        this.clientImpl.createGame();
+        this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),responseTime.getValue(),
+                usernameText.getText());
     }
 
     @FXML
     void onCreateImageGame(ActionEvent event) {
-
+        this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),responseTime.getValue(),
+                usernameText.getText());
     }
 
     @FXML

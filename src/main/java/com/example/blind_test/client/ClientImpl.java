@@ -64,7 +64,7 @@ public abstract class ClientImpl {
     }
 
     // Functions that send the requests :
-    public void createGame(boolean type, boolean state, int rounds, int players, int time_question, int responseTime, String username) {
+    public void createGame(boolean type, boolean state, int rounds, int players, int time_question, String username) {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
         requestData.put(FieldsRequestName.GAME_TYPE, String.valueOf(type));
