@@ -91,22 +91,22 @@ public class ClientImpl {
         ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
-    public void modifyGameStateSucceeded(String responseData){
-    Map<String,String>  data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
-    int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
-    String username = data.get(FieldsRequestName.USERNAME);
-    this.player.getGame().setState(true);
+    public void modifyGameStateSucceeded(String responseData) {
+        Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
+        int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
+        String username = data.get(FieldsRequestName.USERNAME);
+        this.player.getGame().setState(true);
     }
 
-    public void modifyPlayerScoreSucceeded(String responseData){
-        Map<String,String>  data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
+    public void modifyPlayerScoreSucceeded(String responseData) {
+        Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
         int score = Integer.parseInt(data.get(FieldsRequestName.PLAYER_SCORE));
         this.player.setScore(score);
     }
 
-    public void getQuestionResponseSucceeded(String responseData){
+    public void getQuestionResponseSucceeded(String responseData) {
         Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
@@ -173,37 +173,45 @@ public class ClientImpl {
         request(lisOfNotStartedGame);
     }
 
-    public void modifyGameState(String username, int gameId) {
+    public void modifyGameState() {
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.USERNAME, username);
-        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
         Request modifyGameState = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(modifyGameState);
     }
 
-    public void modifyPlayerScore(String username, int gameId, int playerScore) {
+    public void modifyPlayerScore() {
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.USERNAME, username);
-        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(playerScore));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(this.player.getScore()));
         Request modifyPlayerScore = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(modifyPlayerScore);
     }
 
-    public void getQuestionResponse(String username, int gameId, int playerScore, int idCurrentQuestion, String playerResponse) {
+    public void getQuestionResponse(int idCurrentQuestion, String playerResponse) {
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.USERNAME, username);
-        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(playerScore));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(this.player.getScore()));
         requestData.put(FieldsRequestName.CURRENT_QUESTION, String.valueOf(idCurrentQuestion));
         requestData.put(FieldsRequestName.PLAYER_RESPONSE, playerResponse);
         Request getQuestionResponse = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(getQuestionResponse);
     }
 
+    public void nextRound(int idCurrentQuestion) {
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.CURRENT_QUESTION, String.valueOf(idCurrentQuestion));
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        Request nextRound = new Request(NetCodes.NEXT_ROUND, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        request(nextRound);
+    }
+
     // Functions that don't do sql requests :
 
-    public void setMainMenuController(Controller controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
     }
 
@@ -217,6 +225,10 @@ public class ClientImpl {
 
     public void setClient(AsynchronousSocketChannel client) {
         this.client = client;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public void request(Request request) {
