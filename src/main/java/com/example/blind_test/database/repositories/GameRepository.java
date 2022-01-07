@@ -1,19 +1,10 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
-
-import com.example.blind_test.exception.ChangeCurrentQuestionIdException;
-import com.example.blind_test.exception.ChangeGameStateException;
-import com.example.blind_test.exception.GameAlreadyExists;
-import com.example.blind_test.exception.ListOfNotStartedGameException;
-import com.example.blind_test.front.models.Game;
-import com.example.blind_test.shared.Mapper;
-
 import com.example.blind_test.database.SQLTablesInformation;
 import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
-
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,8 +24,8 @@ public class GameRepository extends Repository {
         return repository;
     }
 
-    public Player createGameDB(boolean type,  int rounds
-            , int players, int timeQuestion, boolean state,String username) throws CreateGameDBException {
+    public Player createGameDB(boolean type, int rounds
+            , int players, int timeQuestion, boolean state, String username) throws CreateGameDBException {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CREATE_GAME,
                     Statement.RETURN_GENERATED_KEYS);
@@ -49,7 +40,7 @@ public class GameRepository extends Repository {
             while (rs.next()) {
                 gameId = rs.getInt(1);
             }
-            Game game=  new Game.GameBuilder(gameId).type(type)
+            Game game = new Game.GameBuilder(gameId).type(type)
                     .rounds(rounds).players(players).timeQuestion(timeQuestion).state(state).build();
             Player player = PlayerRepository.getRepository().addNewPlayerDB(username, game.getId());
             player.setGame(game);
@@ -110,7 +101,7 @@ public class GameRepository extends Repository {
     public void deleteGameDB(int gameId) throws DeleteGameException {
         try {
             PreparedStatement delete = connectionDB.prepareStatement(SQLStatements.DELETE_GAME);
-            delete.setInt(1,gameId);
+            delete.setInt(1, gameId);
             delete.execute();
         } catch (SQLException e) {
             e.printStackTrace();

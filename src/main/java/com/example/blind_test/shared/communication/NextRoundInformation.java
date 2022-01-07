@@ -8,4 +8,9 @@ import java.util.List;
 public class NextRoundInformation {
     private Question question;
     private List<Player> players;
+
+    public NextRoundInformation(List<Player> players,Question question){
+        this.players = players;
+        this.question = question;
+    }
 }
