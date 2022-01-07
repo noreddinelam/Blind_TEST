@@ -52,7 +52,7 @@ public class PlayerRepositoryTest {
     @Test
     public void getPlayersOfGame(){
         int gameId = 4;
-        String username = "Batmannn";
+        String username = "Batmann";
         try {
             assertThat(repository.getPlayersOfGame(gameId).get(0).getUsername()).isEqualTo(username);
         } catch (GetPlayersOfGameException e) {
