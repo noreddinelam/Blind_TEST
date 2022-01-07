@@ -59,10 +59,10 @@ public class SQLStatements {
                     " VALUES (?,?,0) ;";
 
     public static final String CHANGE_QUESTION_STATE = "UPDATE "+ QUESTION_GAME_TABLE + " SET "+QUESTION_GAME_STATE +
-            " = 1 WHERE " + QUESTION_ID + " =? ;";
+            " = 1 WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
 
-    public static final String VERIFY_QUESTION_STATE = "SELECT "+  QUESTION_GAME_STATE + " FROM "+ QUESTION_TABLE +
-            "  WHERE " + QUESTION_ID + " =? ;";
+    public static final String VERIFY_QUESTION_STATE = "SELECT "+  QUESTION_GAME_STATE + " FROM "+ QUESTION_GAME_TABLE +
+            "  WHERE " + QUESTION_ID + " = ? ;";
 
     private SQLStatements() {
     }
