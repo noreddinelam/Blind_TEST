@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
@@ -99,5 +100,10 @@
             </ImageView>
          </children>
       </AnchorPane>
+      <Button fx:id="quitGame" layoutX="857.0" layoutY="7.0" mnemonicParsing="false" onAction="#onQuitGame" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@stylesheet.css">
+         <graphic>
+            <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>
