@@ -20,7 +20,7 @@
                   <Image url="@images/logodeezer.jpg" />
                </image>
             </ImageView>
-            <TextField layoutX="29.0" layoutY="52.0" prefHeight="44.0" prefWidth="270.0" promptText="Username..." style="-fx-text-fill: white;" styleClass="button_1" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="963.0" AnchorPane.topAnchor="52.0" />
+            <TextField fx:id="usernameText" layoutX="29.0" layoutY="52.0" prefHeight="44.0" prefWidth="270.0" promptText="Username..." style="-fx-text-fill: white;" styleClass="button_1" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="963.0" AnchorPane.topAnchor="52.0" />
          </children>
       </AnchorPane>
       <ImageView fitHeight="83.0" fitWidth="415.0" layoutX="403.0" layoutY="86.0" opacity="0.54" pickOnBounds="true" preserveRatio="true">
