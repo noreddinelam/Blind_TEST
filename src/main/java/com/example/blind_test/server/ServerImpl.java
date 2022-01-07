@@ -175,6 +175,8 @@ public class ServerImpl {
         int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
         try {
             List<Player> listOfPlayers = playerRepository.getPlayersOfGame(gameId);
+            Question nextQuestion = questionRepository.getQuestionByOrder(gameId,questionOrder);
+
         } catch (GetPlayersOfGameException e) {
             e.printStackTrace();
         }
