@@ -36,6 +36,10 @@ public class Game {
         return this.questions.stream().filter(question::equals).findFirst().get();
     }
 
+    public boolean isImageGame(){
+        return this.type;
+    }
+
     public int getPlayers() {
         return players;
     }

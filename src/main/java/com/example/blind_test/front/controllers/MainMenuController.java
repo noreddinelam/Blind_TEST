@@ -7,12 +7,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.kordamp.ikonli.javafx.Icon;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +51,7 @@ public class MainMenuController extends Controller {
     @FXML
     private TextField usernameText;
 
-
+    //TODO : make test of textField empty.
     @FXML
     void onCreateAudioGame(ActionEvent event) {
         this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
@@ -76,6 +81,9 @@ public class MainMenuController extends Controller {
         numberOfPlayers.setItems(numberOfPlayersList);
         numberOfQuestions.setItems(numberOfQuestionsList);
         responseTime.setItems(responseTimeList);
+        numberOfPlayers.getSelectionModel().select(2);
+        numberOfQuestions.getSelectionModel().selectFirst();
+        responseTime.getSelectionModel().selectFirst();
         this.clientImpl = ClientImpl.getUniqueInstanceClientImpl();
         this.listOfGameToJoin.setCellFactory((param) -> new ListCell<>() {
             @Override
@@ -85,13 +93,28 @@ public class MainMenuController extends Controller {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    VBox vbox = new VBox();
-                    List<Node> itemsInVbox = new ArrayList<>();
-                    itemsInVbox.add(new Text(String.valueOf(game.getRounds())));
-                    itemsInVbox.add(new Text(String.valueOf(game.getPlayers())));
-                    itemsInVbox.add(new Text(String.valueOf(game.getTimeQuestion())));
-                    vbox.getChildren().setAll(itemsInVbox);
-                    setGraphic(vbox);
+                    HBox hbox = new HBox(30);
+                    VBox vbox1 = new VBox();
+                    try {
+                        String path;
+                        if(game.isImageGame())
+                            path = "src/main/resources/com/example/blind_test/images/image.png";
+                        else
+                            path = "src/main/resources/com/example/blind_test/images/audio.png";
+                        FileInputStream input = new FileInputStream(path);
+                        Image image = new Image(input,30,30,true,true);
+                        ImageView imageView = new ImageView(image);
+                        List<Node> itemsInVbox = new ArrayList<>();
+                        itemsInVbox.add(new Text("Questions  : " + game.getRounds()));
+                        itemsInVbox.add(new Text("Players : " + game.getPlayers()));
+                        itemsInVbox.add(new Text("Time per question : " + game.getTimeQuestion()));
+                        vbox1.getChildren().setAll(itemsInVbox);
+                        hbox.getChildren().addAll(vbox1,imageView);
+                        hbox.setAlignment(Pos.CENTER);
+                        setGraphic(hbox);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
