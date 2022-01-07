@@ -151,7 +151,6 @@ public class ServerImpl {
             responseData.put(FieldsRequestName.GAMEID, String.valueOf(gameId));
             Response response = new Response(NetCodes.CHANGE_GAME_STATE_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
             responseSucceed(client, response);
-
         } catch (ChangeGameStateException e) {
             Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "change state failure");
             requestFailure(response, client);
