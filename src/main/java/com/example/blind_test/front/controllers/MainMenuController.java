@@ -66,9 +66,9 @@ public class MainMenuController extends Controller {
             this.clientImpl.createGame(false, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
                     responseTime.getValue(),
                     usernameText.getText().trim());
-        else{
+        else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE,FailureMessages.USERNAME_EMPTY_MESSAGE);
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
         }
     }
 
@@ -78,15 +78,21 @@ public class MainMenuController extends Controller {
             this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
                     responseTime.getValue(),
                     usernameText.getText().trim());
-        else{
+        else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE,FailureMessages.USERNAME_EMPTY_MESSAGE);
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
         }
     }
 
     @FXML
     void onJoinGame(ActionEvent event) {
-
+        if (!this.usernameText.getText().trim().isEmpty())
+            this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(),
+                    this.usernameText.getText().trim());
+        else {
+            this.usernameText.setText("");
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+        }
     }
 
     @FXML

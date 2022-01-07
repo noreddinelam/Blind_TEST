@@ -166,6 +166,17 @@ public class ClientImpl {
         request(createGame);
     }
 
+    public void joinGame(int gameId,String username)
+    {
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+        requestData.put(FieldsRequestName.USERNAME,username);
+        Request joinGame = new Request(NetCodes.JOIN_GAME,
+                GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        request(joinGame);
+    }
+
     public void listOfNotStartedGame() {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
