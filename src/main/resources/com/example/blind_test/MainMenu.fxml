@@ -20,7 +20,7 @@
                   <Image url="@images/logodeezer.jpg" />
                </image>
             </ImageView>
-            <TextField fx:id="usernameText" layoutX="111.0" layoutY="52.0" prefHeight="44.0" prefWidth="249.0" promptText="Username..." styleClass="button_1" stylesheets="@stylesheet.css" />
+            <TextField fx:id="usernameText" layoutX="111.0" layoutY="52.0" prefHeight="44.0" prefWidth="249.0" promptText="Username..." style="-fx-text-fill: white;" styleClass="button_1" stylesheets="@stylesheet.css" />
          </children>
       </AnchorPane>
       <ImageView fitHeight="83.0" fitWidth="415.0" layoutX="233.0" layoutY="93.0" opacity="0.54" pickOnBounds="true" preserveRatio="true">
@@ -38,7 +38,7 @@
             <Font name="System Bold Italic" size="13.0" />
          </font>
       </Button>
-      <Button fx:id="quitGame" layoutX="842.0" layoutY="14.0" mnemonicParsing="false" onAction="#onQuitGame" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@stylesheet.css">
+      <Button fx:id="quitGame" layoutX="856.0" layoutY="8.0" mnemonicParsing="false" onAction="#onQuitGame" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@stylesheet.css">
          <graphic>
             <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
          </graphic>
