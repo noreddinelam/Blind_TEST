@@ -70,9 +70,14 @@ public class MainMenuController extends Controller {
 
     @FXML
     void onCreateImageGame(ActionEvent event) {
-        this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
-                responseTime.getValue(),
-                usernameText.getText());
+        if (!this.usernameText.getText().trim().isEmpty())
+            this.clientImpl.createGame(true, false, numberOfQuestions.getValue(), numberOfPlayers.getValue(),
+                    responseTime.getValue(),
+                    usernameText.getText().trim());
+        else{
+            this.usernameText.setText("");
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE,FailureMessages.USERNAME_EMPTY_MESSAGE);
+        }
     }
 
     @FXML
