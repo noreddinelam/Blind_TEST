@@ -48,10 +48,10 @@ public class QuestionRepositoryTest {
     @Test
     public void changeQuestionState(){
         int questionId = 3;
-        String username = "Batman";
+
         try {
-            assertThat(repository.getQuestion(questionId).getResponse()).isEqualTo("");
-        } catch (QuestionNotFoundException e) {
+            assertThat(repository.changeQuestionState(questionId));
+        } catch (ChangeQuestionStateException e) {
             e.printStackTrace();
         }
 
