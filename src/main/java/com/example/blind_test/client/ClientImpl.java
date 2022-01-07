@@ -67,6 +67,8 @@ public class ClientImpl {
 
     public void initListOfFunctions() {
         listOfFunctions.put(NetCodes.CREATE_GAME_SUCCEED, this::createGameSucceeded);
+        listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_SUCCEED, this::createGameBroadcastSucceeded);
+        listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_FAILED, this::createGameBroadcastFailed);
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceeded);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceeded);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceeded);
@@ -85,6 +87,15 @@ public class ClientImpl {
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
         ((MainMenuController) this.controller).createGameSucceeded();
+    }
+
+    public void createGameBroadcastSucceeded(String responseData) {
+        Game game = GsonConfiguration.gson.fromJson(responseData, Game.class);
+        ((MainMenuController) this.controller).addGameToListGameToJoin(game);
+    }
+
+    public void createGameBroadcastFailed(String responseData) {
+        this.controller.commandFailed(FailureMessages.CREATE_GAME_BROADCAST, responseData);
     }
 
     public void listOfNotStartedGameSucceeded(String responseData){
