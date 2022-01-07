@@ -11,40 +11,40 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="797.0" prefWidth="1262.0" style="-fx-background-color: #0A0A0A;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.blind_test.front.controllers.MainMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="797.0" prefWidth="900.0" style="-fx-background-color: #0A0A0A;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.blind_test.front.controllers.MainMenuController">
    <children>
-      <AnchorPane layoutY="649.0" prefHeight="63.0" prefWidth="1262.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="649.0">
+      <AnchorPane layoutX="251.0" layoutY="649.0" prefHeight="148.0" prefWidth="649.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="649.0">
          <children>
-            <ImageView fitHeight="142.0" fitWidth="213.0" layoutX="1035.0" layoutY="16.0" opacity="0.25" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0424346923828125" AnchorPane.leftAnchor="1035.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="16.0">
+            <ImageView fitHeight="142.0" fitWidth="213.0" layoutX="687.0" layoutY="8.0" opacity="0.25" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="8.042434692382812" AnchorPane.leftAnchor="687.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="8.0">
                <image>
                   <Image url="@images/logodeezer.jpg" />
                </image>
             </ImageView>
-            <TextField fx:id="usernameText" layoutX="29.0" layoutY="52.0" prefHeight="44.0" prefWidth="270.0" promptText="Username..." style="-fx-text-fill: white;" styleClass="button_1" stylesheets="@stylesheet.css" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="963.0" AnchorPane.topAnchor="52.0" />
+            <TextField fx:id="usernameText" layoutX="111.0" layoutY="52.0" prefHeight="44.0" prefWidth="249.0" promptText="Username..." styleClass="button_1" stylesheets="@stylesheet.css" />
          </children>
       </AnchorPane>
-      <ImageView fitHeight="83.0" fitWidth="415.0" layoutX="403.0" layoutY="86.0" opacity="0.54" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="83.0" fitWidth="415.0" layoutX="233.0" layoutY="93.0" opacity="0.54" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/logo.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="127.0" fitWidth="449.0" layoutX="411.0" layoutY="91.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="127.0" fitWidth="449.0" layoutX="241.0" layoutY="98.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="joinGameButton" layoutX="803.0" layoutY="505.0" mnemonicParsing="false" onAction="#onJoinGame" prefHeight="25.0" prefWidth="116.0" styleClass="button_1" stylesheets="@stylesheet.css" text="JOIN GAME" textFill="WHITE">
+      <Button fx:id="joinGameButton" layoutX="616.0" layoutY="501.0" mnemonicParsing="false" onAction="#onJoinGame" prefHeight="25.0" prefWidth="116.0" styleClass="button_1" stylesheets="@stylesheet.css" text="JOIN GAME" textFill="WHITE">
          <font>
             <Font name="System Bold Italic" size="13.0" />
          </font>
       </Button>
-      <Button layoutX="1220.0" layoutY="7.0" mnemonicParsing="false" onAction="#onQuitGame" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@stylesheet.css">
+      <Button layoutX="842.0" layoutY="14.0" mnemonicParsing="false" onAction="#onQuitGame" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@stylesheet.css">
          <graphic>
             <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
          </graphic>
       </Button>
-      <ListView fx:id="listOfGameToJoin" layoutX="748.0" layoutY="208.0" prefHeight="274.0" prefWidth="225.0" style="-fx-background-radius: 5px;" styleClass="button_1" stylesheets="@stylesheet.css" />
-      <AnchorPane layoutX="256.0" layoutY="208.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="249.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;">
+      <ListView fx:id="listOfGameToJoin" layoutX="561.0" layoutY="208.0" prefHeight="274.0" prefWidth="225.0" style="-fx-background-radius: 5px;" styleClass="button_1" stylesheets="@stylesheet.css" />
+      <AnchorPane layoutX="108.0" layoutY="208.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="249.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Numbers of players :" wrappingWidth="132.13671875">
                <font>

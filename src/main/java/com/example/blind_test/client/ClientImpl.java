@@ -148,7 +148,7 @@ public class ClientImpl {
     }
 
     public void nextRoundInformationFailed(String responseData) {
-        this.controller.commandFailed(FailureMessages.Next_ROUND_INFORMATION, responseData);
+        this.controller.commandFailed(FailureMessages.NEXT_ROUND_INFORMATION, responseData);
     }
 
 

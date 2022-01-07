@@ -16,6 +16,9 @@ public class FailureMessages {
 
     public static final String GET_QUESTION_RESPONSE = "Failed to get response";
 
-    public static final String Next_ROUND_INFORMATION = " failed to get next round information";
+    public static final String NEXT_ROUND_INFORMATION = " failed to get next round information";
+
+    public static final String USERNAME_EMPTY_TITLE = "Username Empty";
+    public static final String USERNAME_EMPTY_MESSAGE = "Please provide a valid username !";
 
 }
