@@ -62,7 +62,7 @@ public class SQLStatements {
             " = 1 WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
 
     public static final String VERIFY_QUESTION_STATE = "SELECT "+  QUESTION_GAME_STATE + " FROM "+ QUESTION_GAME_TABLE +
-            "  WHERE " + QUESTION_ID + " = ? ;";
+            "  WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
 
     private SQLStatements() {
     }

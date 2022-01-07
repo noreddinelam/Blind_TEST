@@ -90,10 +90,13 @@ public class QuestionRepository extends Repository {
     }
 
     public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException{
-        try  {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE);
+        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE)) {
             stmt.setInt(1,questionId);
-            return (stmt.executeQuery().getInt(1));
+            ResultSet resultSet = stmt.executeQuery();
+            int qs = -1;
+            while(resultSet.next())
+                qs = resultSet.getInt(1);
+            return qs;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new VerifyQuestionStateException();
