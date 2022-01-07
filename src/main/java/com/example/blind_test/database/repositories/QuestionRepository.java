@@ -2,6 +2,7 @@ package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
 import com.example.blind_test.exception.ChangeQuestionStateException;
+import com.example.blind_test.exception.QuestionNotFoundException;
 import com.example.blind_test.exception.VerifyQuestionStateException;
 import com.example.blind_test.front.models.Question;
 
@@ -23,6 +24,7 @@ public class QuestionRepository extends Repository {
         return repository;
     }
 
+    //TODO : delete this if not used
     public String getResponseForQuestion(int questionId) {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_RESPONSE_FOR_QUESTION)) {
             stmt.setInt(1, questionId);
@@ -34,14 +36,14 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    public Question getQuestion(int questionId) {
+    public Question getQuestion(int questionId) throws QuestionNotFoundException{
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_QUESTION)) {
             stmt.setInt(1, questionId);
             ResultSet resultSet = stmt.executeQuery();
             return mapper.resultSetToQuestion(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new QuestionNotFoundException();
         }
     }
 
@@ -58,6 +60,7 @@ public class QuestionRepository extends Repository {
         }
     }
 
+    //TODO : use this function to generate questions
     public Integer insertQuestionInQuestionGame(int questionId,int gameId,int order){
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME)) {
             stmt.setInt(1, questionId);
@@ -71,7 +74,7 @@ public class QuestionRepository extends Repository {
     }
 
 
-    public Integer chnageQuestionState(int questionId) throws ChangeQuestionStateException {
+    public Integer changeQuestionState(int questionId) throws ChangeQuestionStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE)) {
             stmt.setInt(1, questionId);
             return stmt.executeUpdate();

@@ -22,7 +22,10 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -40,7 +43,6 @@ public class ServerImpl {
     private ServerImpl() {
     }
 
-    //TODO : broadcast for other unJoined users
     private static void createGame(String data) {
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
@@ -72,23 +74,28 @@ public class ServerImpl {
     private static void deleteGame(String data) throws GetPlayersOfGameException {
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameID = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
-        List<Player> list = playerRepository.getPlayersOfGame(gameID);
-        List<AsynchronousSocketChannel> clients = new ArrayList<>();
-        for (Player player : list) {
-            clients.add(listOfPlayers.get(new Credentials(player.getUsername(), gameID)));
-        }
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
+        List<Player> list = playerRepository.getPlayersOfGame(gameId);
         try {
-            gameRepository.deleteGameDB(gameID);
+            gameRepository.deleteGameDB(gameId);
             Response response = new Response(NetCodes.DELETE_GAME_SUCCEED, "Game deleted!");
-            for (AsynchronousSocketChannel client : clients) {
-                response(response, client);
+            for (Player playerOther : list) {
+                response(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
-        } catch (Exception e) {
+            for (Map.Entry<Credentials, AsynchronousSocketChannel> entryCredential : listOfPlayers.entrySet()) {
+                if (entryCredential.getKey().getGameId() == gameId) {
+                    addGuestClients(entryCredential.getValue());
+                    listOfPlayers.remove(entryCredential.getKey());
+                }
+            }
+            //listOfPlayers.entrySet().removeIf((entry) -> entry.getKey().getGameId() == gameId);
+        } catch (DeleteGameException e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
-            for (AsynchronousSocketChannel client : clients) {
-                response(response, client);
+            for (Player playerOther : list) {
+                response(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -181,15 +188,15 @@ public class ServerImpl {
 
     public static void getQuestionResponse(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
-        int idCurrentQuestion = Integer.valueOf(requestData.get(FieldsRequestName.CURRENT_QUESTION));
+        int idCurrentQuestion = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
         String playerResponse = requestData.get(FieldsRequestName.PLAYER_RESPONSE);
-        int score = Integer.valueOf(requestData.get(FieldsRequestName.PLAYER_SCORE));
+        int score = Integer.parseInt(requestData.get(FieldsRequestName.PLAYER_SCORE));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
 
-            if (questionRepository.verifyQuestionState(idCurrentQuestion)==0) {
+            if (questionRepository.verifyQuestionState(idCurrentQuestion) == 0) {
                 Question question = QuestionRepository.getRepository().getQuestion(idCurrentQuestion);
                 String questionResponse = question.getResponse();
                 Map<String, String> responseData = new HashMap<>();
@@ -200,21 +207,22 @@ public class ServerImpl {
                 if (questionResponse.equalsIgnoreCase(playerResponse)) {
                     score = score + 1;
                     int i = playerRepository.modifyScore(score, gameId, username);
-                    questionRepository.chnageQuestionState(idCurrentQuestion);
+                    questionRepository.changeQuestionState(idCurrentQuestion);
                     responseData.put(FieldsRequestName.STATE, "true");
                 } else {
                     responseData.put(FieldsRequestName.STATE, "false");
                 }
-                Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
+                Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED,
+                        GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
                 response(response, client);
-            }
-            else {
+            } else {
                 Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "the question responded");
                 response(response, client);
             }
 
         } catch (Exception e) {
-            Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_FAILED, "get response for question failure");
+            Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_FAILED, "get response for question " +
+                    "failure");
             response(response, client);
         }
     }
@@ -244,6 +252,7 @@ public class ServerImpl {
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::createGame);
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::getQuestionResponse);
+        listOfFunctions.put(NetCodes.NEXT_ROUND, ServerImpl::nextRoundInformation);
     }
 
     public static Consumer<String> getFunctionWithRequestCode(Request request) {
@@ -261,12 +270,6 @@ public class ServerImpl {
         attachment.clear();
         ByteBuffer newByteBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
         client.read(newByteBuffer, newByteBuffer, new ServerReaderCompletionHandler());
-    }
-
-    private static void broadcastResponseClient(AsynchronousSocketChannel broadcastClient, Response broadcastResponse) {
-        String responseJson = GsonConfiguration.gson.toJson(broadcastResponse);
-        ByteBuffer buffer = ByteBuffer.wrap(responseJson.getBytes());
-        broadcastClient.write(buffer, buffer, new ServerWriterCompletionHandler());
     }
 
 }

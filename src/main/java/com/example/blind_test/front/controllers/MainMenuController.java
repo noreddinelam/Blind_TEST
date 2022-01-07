@@ -11,9 +11,9 @@ import javafx.scene.control.ListView;
 
 public class MainMenuController extends Controller{
 
-    ObservableList<Integer> numberOfPlayersList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
-    ObservableList<Integer> numberOfQuestionsList = FXCollections.observableArrayList(5, 10, 15, 20);
-    ObservableList<Integer> responseTimeList = FXCollections.observableArrayList(10, 15, 20);
+    private final ObservableList<Integer> numberOfPlayersList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
+    private final ObservableList<Integer> numberOfQuestionsList = FXCollections.observableArrayList(5, 10, 15, 20);
+    private final ObservableList<Integer> responseTimeList = FXCollections.observableArrayList(10, 15, 20);
 
     @FXML
     private Button createAudioGameButton;
@@ -38,7 +38,7 @@ public class MainMenuController extends Controller{
 
     @FXML
     void onCreateAudioGame(ActionEvent event) {
-        this.clientImpl.createGame();
+        //this.clientImpl.createGame();
     }
 
     @FXML

@@ -11,6 +11,14 @@ public class Credentials {
         this.gameId = gameId;
     }
 
+    public int getGameId() {
+        return gameId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
