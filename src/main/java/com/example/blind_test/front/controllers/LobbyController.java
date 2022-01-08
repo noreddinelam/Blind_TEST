@@ -74,6 +74,7 @@ public class LobbyController extends Controller {
             }
         });
 
+        startGame.setDisable(true);
     }
 
     public void initView(JoinGameType jgt) {
@@ -89,7 +90,8 @@ public class LobbyController extends Controller {
             this.rounds.setText(String.valueOf(jgt.getPlayer().getGame().getRounds()));
             this.responseTime.setText(String.valueOf(jgt.getPlayer().getGame().getTimeQuestion()));
             this.gameType.setText(jgt.getPlayer().getGame().isImageGame() ? "Image Game" : "Audio Game");
-            startGame.setDisable(true);
+            if(this.nbPlayersInGame==jgt.getPlayer().getGame().getTotalPlayers()) startGame.setDisable(false);
+
         });
     }
 
