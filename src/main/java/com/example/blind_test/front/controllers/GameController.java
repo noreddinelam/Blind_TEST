@@ -142,9 +142,18 @@ public class GameController extends Controller {
             if (clickedButton != null)
                 clickedButton.setStyle("-fx-background-color: #343a40");
             this.responded = false;
-            this.timer.setText(String.valueOf(timePerQuestion));
             this.round.setText(String.valueOf(questionOrder));
-            new Timer(this.timePerQuestion, this).start();
+            this.timer.setText(String.valueOf(timePerQuestion));
+            new Timer(timePerQuestion, this).start();
+            this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
+            try {
+                String path = question.getResource();
+                FileInputStream questionImage = new FileInputStream(path);
+                Image image1 = new Image(questionImage, 400, 418, false, true);
+                currentQuestion.setImage(image1);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -161,6 +170,7 @@ public class GameController extends Controller {
     public void setResponded() {
         responded = true;
     }
+
 
     public void setAdminGame(boolean adminGame) {
         this.adminGame = adminGame;
@@ -186,7 +196,7 @@ public class GameController extends Controller {
             int round = Integer.parseInt(this.round.getText());
             if (round < this.nbQuestions)
                 this.clientImpl.nextRound(round + 1);
-            else{
+            else {
                 //TODO : send request to delete the game and return to mainMenuScreen;
             }
         }
