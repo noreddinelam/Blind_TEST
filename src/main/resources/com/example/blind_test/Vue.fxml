@@ -44,7 +44,7 @@
       </Text>
       <FontAwesomeIconView fill="WHITE" glyphName="QUESTION" layoutX="528.0" layoutY="38.0" size="26" />
       <FontAwesomeIconView fill="WHITE" glyphName="HOURGLASS" layoutX="680.0" layoutY="36.0" selectionEnd="0" size="20" />
-      <Text fx:id="timer1" fill="WHITE" layoutX="558.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="114.13671875">
+      <Text fx:id="round" fill="WHITE" layoutX="558.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="114.13671875">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>

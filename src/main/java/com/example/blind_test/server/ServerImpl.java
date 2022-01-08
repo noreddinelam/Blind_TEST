@@ -142,7 +142,7 @@ public class ServerImpl {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
-        byte type = Byte.parseByte(requestData.get(FieldsRequestName.GAME_TYPE));
+        boolean type = Boolean.parseBoolean((requestData.get(FieldsRequestName.GAME_TYPE)));
         int rounds = Integer.parseInt(requestData.get(FieldsRequestName.ROUNDS));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {

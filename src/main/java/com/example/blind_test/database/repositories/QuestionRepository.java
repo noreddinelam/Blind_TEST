@@ -114,11 +114,11 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    public List<Question> fetchQuestion(byte type) throws FetchQuestionException {
+    public List<Question> fetchQuestion(boolean type) throws FetchQuestionException {
         List<Question> questions;
         try {
-            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GENERATE_QUESTION);
-            stmt.setInt(1, type);
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.FETCH_QUESTION_DEPENDING_ON_TYPE);
+            stmt.setBoolean(1, type);
             questions = mapper.resultSetToListOfQuestion(stmt.executeQuery());
             return questions;
         } catch (SQLException e) {
