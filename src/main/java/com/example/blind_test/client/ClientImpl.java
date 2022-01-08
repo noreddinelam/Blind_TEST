@@ -89,6 +89,8 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
         listOfFunctions.put(NetCodes.NEXT_ROUND_SUCCEEDED, this::nextRoundSucceeded);
         listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
+        listOfFunctions.put(NetCodes.GAME_FINISHED_SUCCEED, this::gameFinishedSucceeded);
+        listOfFunctions.put(NetCodes.GAME_FINISHED_FAILED, this::gameFinishedFailed);
     }
 
     public void createGameSucceeded(String responseData) {
@@ -195,10 +197,17 @@ public class ClientImpl {
                 nextRoundInformation.getQuestion(), nextRoundInformation.getQuestionOrder());
     }
 
-    public void nextRoundInformationFailed(String responseData) {
+    private void nextRoundInformationFailed(String responseData) {
         this.controller.commandFailed(FailureMessages.NEXT_ROUND_INFORMATION, responseData);
     }
 
+    private void gameFinishedSucceeded(String responseData){
+        ((GameController) this.controller).gameFinished();
+    }
+
+    private void gameFinishedFailed(String responseData){
+
+    }
 
     // Functions that send the requests :
     public void createGame(boolean type, boolean state, int rounds, int players, int time_question, String username) {
@@ -274,6 +283,15 @@ public class ClientImpl {
         Request nextRound = new Request(NetCodes.NEXT_ROUND, GsonConfiguration.gson.toJson(requestData,
                 CommunicationTypes.mapJsonTypeData));
         request(nextRound);
+    }
+
+    public void gameFinished(){
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
+        Request gameFinished = new Request(NetCodes.GAME_FINISHED, GsonConfiguration.gson.toJson(requestData,
+                CommunicationTypes.mapJsonTypeData));
+        request(gameFinished);
     }
 
     // Functions that don't do sql requests :

@@ -9,10 +9,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="797.0" prefWidth="900.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.blind_test.front.controllers.LobbyController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="797.0" prefWidth="900.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.blind_test.front.controllers.ScoreBoardController">
    <children>
-      <ListView fx:id="joinedPlayerList" layoutX="26.0" layoutY="49.0" prefHeight="580.0" prefWidth="490.0" style="-fx-background-radius: 5px; -fx-background-color: white; -fx-border-color: #495057; -fx-border-width: 2px; -fx-border-radius: 5px;" styleClass="list_view1" stylesheets="@stylesheet.css" />
-      <AnchorPane layoutX="539.0" layoutY="105.0" prefHeight="260.0" prefWidth="318.0" style="-fx-background-color: #302F2F; -fx-background-radius: 5px;">
+      <ListView fx:id="playersList" layoutX="26.0" layoutY="49.0" prefHeight="580.0" prefWidth="490.0" style="-fx-background-radius: 5px; -fx-background-color: white; -fx-border-color: #495057; -fx-border-width: 2px; -fx-border-radius: 5px;" styleClass="list_view1" stylesheets="@stylesheet.css" />
+      <AnchorPane layoutX="539.0" layoutY="105.0" prefHeight="160.0" prefWidth="318.0" style="-fx-background-color: #302F2F; -fx-background-radius: 5px;">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of questions :" wrappingWidth="153.0">
                <font>
@@ -34,10 +34,24 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Text>
-            <AnchorPane layoutX="59.0" layoutY="186.0" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #222222; -fx-background-radius: 5px;" />
-            <Text fx:id="gameType" fill="#2eaae5" layoutX="82.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="AUDIO GAME" textAlignment="CENTER" wrappingWidth="153.0">
+            <ImageView fitHeight="41.0" fitWidth="57.0" layoutX="32.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/trophee.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="41.0" fitWidth="57.0" layoutX="48.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" rotate="18.4">
+               <image>
+                  <Image url="@images/trophee.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="41.0" fitWidth="75.0" layoutX="15.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" rotate="-18.4">
+               <image>
+                  <Image url="@images/trophee.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="winner" fill="WHITE" layoutX="98.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Winner" wrappingWidth="153.0">
                <font>
-                  <Font name="System Bold" size="22.0" />
+                  <Font name="System Bold" size="14.0" />
                </font>
             </Text>
          </children>
@@ -45,11 +59,6 @@
       <Text fill="WHITE" layoutX="587.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings :" wrappingWidth="128.966796875">
          <font>
             <Font name="System Bold" size="16.0" />
-         </font>
-      </Text>
-      <Text fx:id="numberOfJoinedPlayers" fill="WHITE" layoutX="440.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5 / 8" textAlignment="CENTER" underline="true" wrappingWidth="76.0">
-         <font>
-            <Font name="System Bold" size="14.0" />
          </font>
       </Text>
       <AnchorPane layoutX="1.0" layoutY="649.0" prefHeight="148.0" prefWidth="649.0" style="-fx-background-color: #000000;">
@@ -71,8 +80,7 @@
             <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
          </graphic>
       </Button>
-      <FontAwesomeIconView fill="WHITE" glyphName="USER" layoutX="433.0" layoutY="39.0" size="20" />
-      <Button fx:id="returnToMainMenu" layoutX="539.0" layoutY="536.0" mnemonicParsing="false" onAction="#onStartGame" prefHeight="67.0" prefWidth="318.0" styleClass="button_1" stylesheets="@stylesheet.css" text="RETURN TO MAIN MENU" textFill="WHITE">
+      <Button fx:id="returnToMainMenu" layoutX="539.0" layoutY="536.0" mnemonicParsing="false" onAction="#onReturnToMainMenu" prefHeight="67.0" prefWidth="318.0" styleClass="button_1" stylesheets="@stylesheet.css" text="RETURN TO MAIN MENU" textFill="WHITE">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

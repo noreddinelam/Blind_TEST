@@ -44,9 +44,9 @@ public class NetCodes {
     public static String INSERT_QUESTION_IN_QUESTION_GAME_SUCCEED = "801";
     public static String INSERT_QUESTION_IN_QUESTION_GAME_FAILED = "802";
 
-    public static String CREATE_PLAYER = "900";
-    public static String CREATE_PLAYER_SUCCEED = "901";
-    public static String CREATE_PLAYER_FAILED = "902";
+    public static String GAME_FINISHED = "900";
+    public static String GAME_FINISHED_SUCCEED = "901";
+    public static String GAME_FINISHED_FAILED = "902";
 
     public static String MODIFY_SCORE = "1000";
     public static String MODIFY_SCORE_SUCCEED = "1001";

@@ -1,5 +1,6 @@
 package com.example.blind_test.front.controllers;
 
+import com.example.blind_test.HelloApplication;
 import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.front.models.Question;
@@ -7,8 +8,10 @@ import com.example.blind_test.front.models.Timer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -19,6 +22,7 @@ import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -196,8 +200,21 @@ public class GameController extends Controller {
             if (round < this.nbQuestions)
                 this.clientImpl.nextRound(round + 1);
             else {
-                //TODO : send request to delete the game and return to mainMenuScreen;
+                this.clientImpl.gameFinished();
             }
+        }
+    }
+
+    public void gameFinished(){
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Scoreboard.fxml"));
+            Parent root = loader.load();
+            ScoreBoardController controller = loader.getController();
+            controller.scene = this.scene;
+            controller.initView(scoreBoard.getItems(),this.nbQuestions,this.timePerQuestion);
+            this.scene.setRoot(root);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

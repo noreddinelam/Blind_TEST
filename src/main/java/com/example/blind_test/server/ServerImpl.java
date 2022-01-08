@@ -276,6 +276,31 @@ public class ServerImpl {
         }
     }
 
+    public static void gameFinished(String data){
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
+        try {
+            List<Player> list = playerRepository.getPlayersOfGame(gameId);
+            gameRepository.deleteGameDB(gameId);
+            Response response = new Response(NetCodes.GAME_FINISHED_SUCCEED, "Game finished!");
+            for (Player playerOther : list) {
+                responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+            }
+            for (Map.Entry<Credentials, AsynchronousSocketChannel> entryCredential : listOfPlayers.entrySet()) {
+                if (entryCredential.getKey().getGameId() == gameId) {
+                    addGuestClients(entryCredential.getValue());
+                    listOfPlayers.remove(entryCredential.getKey());
+                }
+            }
+            ByteBuffer buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+            client.read(buffer, buffer, new ServerReaderCompletionHandler());
+        } catch (GetPlayersOfGameException | DeleteGameException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void initListOfFunctions() {
         // initialisation of methods;
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
@@ -285,6 +310,7 @@ public class ServerImpl {
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION, ServerImpl::getQuestionResponse);
         listOfFunctions.put(NetCodes.JOIN_GAME, ServerImpl::joinGame);
         listOfFunctions.put(NetCodes.NEXT_ROUND, ServerImpl::nextRoundInformation);
+        listOfFunctions.put(NetCodes.GAME_FINISHED, ServerImpl::gameFinished);
         Repository.initConnectionToDatabase();
     }
 
