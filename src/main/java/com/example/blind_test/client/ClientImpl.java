@@ -86,10 +86,10 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.CREATE_GAME_SUCCEED, this::createGameSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_SUCCEED, this::createGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_FAILED, this::createGameBroadcastFailed);
-        listOfFunctions.put(NetCodes.DELETE_GAME_BROADCAST_SUCCEED,this::deleteGameBroadcastSucceeded);
-        listOfFunctions.put(NetCodes.JOIN_GAME_SUCCEED,this::joinGameSucceeded);
-        listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,this::joinGameBroadcastSucceeded);
-        listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_FAILED,this::joinGameBroadcastFailed);
+        listOfFunctions.put(NetCodes.DELETE_GAME_BROADCAST_SUCCEED, this::deleteGameBroadcastSucceeded);
+        listOfFunctions.put(NetCodes.JOIN_GAME_SUCCEED, this::joinGameSucceeded);
+        listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_SUCCEED, this::joinGameBroadcastSucceeded);
+        listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_FAILED, this::joinGameBroadcastFailed);
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceeded);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceeded);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceeded);
@@ -102,6 +102,17 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.JOIN_GAME_FAILED, this::joinGameFailed);
         listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
         listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
+        listOfFunctions.put(NetCodes.LEAVE_GAME_FAILED, this::leaveGameFailed);
+        listOfFunctions.put(NetCodes.LEAVE_GAME_SUCCEED, this::leaveGameSucceed);
+    }
+
+    private void leaveGameSucceed(String s) {
+
+        this.controller.backMainMenu();
+    }
+
+    private void leaveGameFailed(String s) {
+        this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
     }
 
     private void deleteGameBroadcastSucceeded(String s) {
@@ -109,7 +120,7 @@ public class ClientImpl {
     }
 
     public void createGameSucceeded(String responseData) {
-        this.admin=true;
+        this.admin = true;
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
         ((MainMenuController) this.controller).enterGameSucceeded(new JoinGameType(player));
@@ -125,9 +136,9 @@ public class ClientImpl {
     }
 
     private void joinGameSucceeded(String responseData) {
-        JoinGameType joinGameType = GsonConfiguration.gson.fromJson(responseData,JoinGameType.class);
+        JoinGameType joinGameType = GsonConfiguration.gson.fromJson(responseData, JoinGameType.class);
         this.player = joinGameType.getPlayer();
-        ((MainMenuController)this.controller).enterGameSucceeded(joinGameType);
+        ((MainMenuController) this.controller).enterGameSucceeded(joinGameType);
     }
 
     private void joinGameBroadcastSucceeded(String responseData) {
@@ -138,13 +149,13 @@ public class ClientImpl {
     private void joinGameBroadcastFailed(String s) {
     }
 
-    public void listOfNotStartedGameSucceeded(String responseData){
-        Map<String,List<Game>> games = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
+    public void listOfNotStartedGameSucceeded(String responseData) {
+        Map<String, List<Game>> games = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
         ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
     public void startGameSucceeded(String responseData) {
-       Question question = GsonConfiguration.gson.fromJson(responseData, Question.class);
+        Question question = GsonConfiguration.gson.fromJson(responseData, Question.class);
         ((LobbyController) this.controller).startGame(question);
         this.player.getGame().setState(true);
     }
@@ -216,11 +227,11 @@ public class ClientImpl {
                 GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(createGame);
     }
-    public void deleteGame(int gameId)
-    {
+
+    public void deleteGame(int gameId) {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-        requestData.put(FieldsRequestName.USERNAME,this.player.getUsername());
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
         Request deleteGame = new Request(NetCodes.DELETE_GAME,
                 GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(deleteGame);
@@ -236,8 +247,7 @@ public class ClientImpl {
         request(joinGame);
     }
 
-    public void leaveGame(int gameId,String username)
-    {
+    public void leaveGame(int gameId, String username) {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
         requestData.put(FieldsRequestName.USERNAME, username);
@@ -246,9 +256,12 @@ public class ClientImpl {
         request(leaveGame);
     }
 
-    public void leaveGameSucceed()
-    {
+    public void leaveGameSucceed() {
         this.controller.backMainMenu();
+    }
+
+    public void leaveGameFailed() {
+        this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
     }
 
     public void listOfNotStartedGame() {

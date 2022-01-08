@@ -53,7 +53,8 @@ public class LobbyController extends Controller {
     void onQuitGame(ActionEvent event) {
         if(this.clientImpl.isAdmin()) this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
         else {
-
+            this.clientImpl.leaveGame(this.clientImpl.getPlayer().getGame().getId(),
+                    this.clientImpl.getPlayer().getUsername());
         }
     }
 
