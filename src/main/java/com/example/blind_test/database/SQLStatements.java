@@ -1,5 +1,7 @@
 package com.example.blind_test.database;
 
+import com.example.blind_test.exception.GameAlreadyExists;
+
 import static com.example.blind_test.database.SQLTablesInformation.*;
 
 public class SQLStatements {
@@ -32,11 +34,15 @@ public class SQLStatements {
             + "(" + GAME_TYPE + "," + GAME_ROUNDS + "," + GAME_PLAYERS + "," + GAME_TOTAL_PLAYERS
             + "," + GAME_TIME_QUESTION + "," + GAME_STATE + ")" +
             " VALUES (?,?,?,?,?,?) ;";
+
     public static final String DELETE_GAME = "DELETE FROM " + GAME_TABLE + " where " + GAME_ID + " = ? ;";
+
     public static final String LIST_OF_GAME_NOT_STARTED = "SELECT * FROM "
             + GAME_TABLE + " WHERE " + GAME_STATE + "= 0 ;";
+
     public static final String CHANGE_GAME_STATE = "UPDATE " + GAME_TABLE + " SET " + GAME_STATE + "= 1" +
             " WHERE " + GAME_ID + "= ?; ";
+
     public static final String ID_OF_CURRENT_QUESTION = "UPDATE " + GAME_TABLE + " SET "
             + GAME_CURRENT_QUESTION + " = ? " +
             " WHERE " + GAME_ID + "= ?; ";
@@ -60,6 +66,15 @@ public class SQLStatements {
 
     public static final String CHANGE_QUESTION_STATE = "UPDATE "+ QUESTION_GAME_TABLE + " SET "+QUESTION_GAME_STATE +
             " = 1 WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
+
+    public static final String GENERATE_QUESTION = " INSERT INTO "+ QUESTION_GAME_TABLE +
+            " ( " + QUESTION_GAME_ID_QUESTION + "," + QUESTION_GAME_ID_GAME+ "," + QUESTION_GAME_ORDER + ", "+ QUESTION_GAME_STATE +")"+
+            "VALUE ( ?,?,?,0);";
+
+    public static final String FETCH_QUESTION_DEPENDING_ON_TYPE = "SELECT * FROM " + QUESTION_TABLE + " WHERE " + QUESTION_type +
+            "=?;";
+
+
 
     public static final String VERIFY_QUESTION_STATE = "SELECT "+  QUESTION_GAME_STATE + " FROM "+ QUESTION_GAME_TABLE +
             "  WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
