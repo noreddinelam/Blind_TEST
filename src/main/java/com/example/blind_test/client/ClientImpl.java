@@ -14,6 +14,7 @@ import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
 import com.example.blind_test.shared.Properties;
 import com.example.blind_test.shared.communication.JoinGameType;
+import com.example.blind_test.shared.communication.NextRoundInformation;
 import com.example.blind_test.shared.communication.Request;
 import com.example.blind_test.shared.communication.Response;
 import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
@@ -86,6 +87,7 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.CREATE_GAME_FAILED, this::createGameFailed);
         listOfFunctions.put(NetCodes.JOIN_GAME_FAILED, this::joinGameFailed);
         listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
+        listOfFunctions.put(NetCodes.NEXT_ROUND_SUCCEEDED, this::nextRoundSucceeded);
         listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
     }
 
@@ -185,6 +187,13 @@ public class ClientImpl {
 
     }
 
+    private void nextRoundSucceeded(String responseData) {
+        NextRoundInformation nextRoundInformation = GsonConfiguration.gson.fromJson(responseData,
+                NextRoundInformation.class);
+        ((GameController) this.controller).initView(nextRoundInformation.getPlayers(),
+                nextRoundInformation.getQuestion(), nextRoundInformation.getQuestionOrder());
+    }
+
     public void nextRoundInformationFailed(String responseData) {
         this.controller.commandFailed(FailureMessages.NEXT_ROUND_INFORMATION, responseData);
     }
@@ -256,9 +265,9 @@ public class ClientImpl {
         request(getQuestionResponse);
     }
 
-    public void nextRound(int idCurrentQuestion) {
+    public void nextRound(int questionOrder) {
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.CURRENT_QUESTION, String.valueOf(idCurrentQuestion));
+        requestData.put(FieldsRequestName.QUESTION_ORDER, String.valueOf(questionOrder));
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
         Request nextRound = new Request(NetCodes.NEXT_ROUND, GsonConfiguration.gson.toJson(requestData,
                 CommunicationTypes.mapJsonTypeData));

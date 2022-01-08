@@ -252,11 +252,11 @@ public class ServerImpl {
     public static void nextRoundInformation(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
-        int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
+        int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.QUESTION_ORDER));
         try {
             List<Player> list = playerRepository.getPlayersOfGame(gameId);
             Question nextQuestion = questionRepository.getQuestionByOrder(gameId, questionOrder);
-            NextRoundInformation nextRoundInformation = new NextRoundInformation(list, nextQuestion);
+            NextRoundInformation nextRoundInformation = new NextRoundInformation(list, nextQuestion,questionOrder);
             Response response = new Response(NetCodes.NEXT_ROUND_SUCCEEDED,
                     GsonConfiguration.gson.toJson(nextRoundInformation));
             for (Player player : list) {

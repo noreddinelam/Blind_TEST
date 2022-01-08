@@ -87,7 +87,7 @@ public class MainMenuController extends Controller {
 
     @FXML
     void onJoinGame(ActionEvent event) {
-        if (!this.usernameText.getText().trim().isEmpty())
+        if (!this.usernameText.getText().trim().isEmpty() && listOfGameToJoin.getSelectionModel().getSelectedItem() != null)
             this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(),
                     this.usernameText.getText().trim());
         else {

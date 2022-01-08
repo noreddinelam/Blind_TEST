@@ -19,6 +19,7 @@ public class Timer extends Thread {
                 cpt--;
                 this.gameController.setTimerTime(cpt);
             }
+            this.gameController.nextRound();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
