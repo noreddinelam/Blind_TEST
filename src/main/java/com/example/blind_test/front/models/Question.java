@@ -50,6 +50,10 @@ public class Question {
         this.state = state;
     }
 
+    public int getQuestionId() {
+        return questionId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

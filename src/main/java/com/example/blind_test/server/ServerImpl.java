@@ -22,10 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -143,31 +140,45 @@ public class ServerImpl {
         }
     }
 
-    //TODO : broadcast
-    private static void modifyGameState(String data) {
+    public static void startGame(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
+        byte type = Byte.parseByte(requestData.get(FieldsRequestName.GAME_TYPE));
+        int rounds = Integer.parseInt(requestData.get(FieldsRequestName.ROUNDS));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
-            Integer i = gameRepository.changeGameState(gameId);
-            Map<String, String> responseData = new HashMap<>();
-            responseData.put(FieldsRequestName.GAME_STATE, "true");
-            responseData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-            Response response = new Response(NetCodes.CHANGE_GAME_STATE_SUCCEED,
-                    GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
-            response(response, client);
-        } catch (ChangeGameStateException e) {
-            Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "change state failure");
-            response(response, client);
+            gameRepository.changeGameState(gameId);
+            List<Question> questions = questionRepository.fetchQuestion(type);
+            List<Player> players = playerRepository.getPlayersOfGame(gameId);
+            int random = new Random().nextInt(rounds);
+            for (int i = 0; i < random; i++)
+                Collections.shuffle(questions);
+            Question firstQuestion = questions.get(0);
+            int j = 0;
+            for (Question q : questions) {
+                questionRepository.generateQuestion(q.getQuestionId(), gameId, j);
+                j++;
+                if (j == rounds) break;
+            }
+            Response response = new Response(NetCodes.START_GAME_SUCCEED, GsonConfiguration.gson.toJson(firstQuestion));
+            for (Player playerOther : players) {
+                responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+            }
+            ByteBuffer newBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+            client.read(newBuffer,newBuffer,new ServerReaderCompletionHandler());
+        } catch (FetchQuestionException e) {
+            e.printStackTrace();
+        } catch (GenerateQuestionException | ChangeGameStateException | GetPlayersOfGameException e) {
+            e.printStackTrace();
         }
     }
 
     public static void modifyPlayerScore(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
-        int score = Integer.valueOf(requestData.get(FieldsRequestName.PLAYER_SCORE));
+        int score = Integer.parseInt(requestData.get(FieldsRequestName.PLAYER_SCORE));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
             int newScore = score + 1;
@@ -214,7 +225,7 @@ public class ServerImpl {
                         GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
                 response(response, client);
             } else {
-                Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "the question responded");
+                Response response = new Response(NetCodes.START_GAME_FAILED, "the question responded");
                 response(response, client);
             }
 
@@ -246,7 +257,7 @@ public class ServerImpl {
     public static void initListOfFunctions() {
         // initialisation of methods;
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
-        listOfFunctions.put(NetCodes.CHANGE_GAME_STATE, ServerImpl::modifyGameState);
+        listOfFunctions.put(NetCodes.START_GAME, ServerImpl::startGame);
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
         listOfFunctions.put(NetCodes.CREATE_GAME, ServerImpl::createGame);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION, ServerImpl::getQuestionResponse);

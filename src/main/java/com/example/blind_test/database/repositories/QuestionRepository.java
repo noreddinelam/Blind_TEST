@@ -1,14 +1,13 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
-import com.example.blind_test.exception.ChangeQuestionStateException;
-import com.example.blind_test.exception.QuestionNotFoundException;
-import com.example.blind_test.exception.VerifyQuestionStateException;
+import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Question;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class QuestionRepository extends Repository {
 
@@ -98,6 +97,33 @@ public class QuestionRepository extends Repository {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new VerifyQuestionStateException();
+        }
+    }
+
+    public Integer generateQuestion(int questionId, int gameId, int questionOrder) throws GenerateQuestionException {
+        List<Question> questions;
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GENERATE_QUESTION);
+            stmt.setInt(1, questionId);
+            stmt.setInt(2, gameId);
+            stmt.setInt(3, questionOrder);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new GenerateQuestionException();
+        }
+    }
+
+    public List<Question> fetchQuestion(byte type) throws FetchQuestionException {
+        List<Question> questions;
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GENERATE_QUESTION);
+            stmt.setInt(1, type);
+            questions = mapper.resultSetToListOfQuestion(stmt.executeQuery());
+            return questions;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new FetchQuestionException();
         }
     }
 
