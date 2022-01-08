@@ -1,14 +1,13 @@
 package com.example.blind_test.database.repositories;
 
 import com.example.blind_test.database.SQLStatements;
-import com.example.blind_test.exception.ChangeQuestionStateException;
-import com.example.blind_test.exception.QuestionNotFoundException;
-import com.example.blind_test.exception.VerifyQuestionStateException;
+import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Question;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class QuestionRepository extends Repository {
 
@@ -18,7 +17,6 @@ public class QuestionRepository extends Repository {
     }
 
     public static QuestionRepository getRepository() {
-        initConnectionToDatabase();
         return repository;
     }
 
@@ -75,10 +73,11 @@ public class QuestionRepository extends Repository {
     }
 
 
-    public Integer changeQuestionState(int questionId) throws ChangeQuestionStateException {
+    public Integer changeQuestionState(int gameId, int questionOrder) throws ChangeQuestionStateException {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE);
-            stmt.setInt(1, questionId);
+            stmt.setInt(1, questionOrder);
+            stmt.setInt(2,gameId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -87,9 +86,10 @@ public class QuestionRepository extends Repository {
 
     }
 
-    public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException {
+    public Integer verifyQuestionState(int gameId,int questionOrder) throws VerifyQuestionStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE)) {
-            stmt.setInt(1, questionId);
+            stmt.setInt(1, questionOrder);
+            stmt.setInt(2,gameId);
             ResultSet resultSet = stmt.executeQuery();
             int qs = -1;
             while (resultSet.next())
@@ -98,6 +98,33 @@ public class QuestionRepository extends Repository {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new VerifyQuestionStateException();
+        }
+    }
+
+    public Integer generateQuestion(int questionId, int gameId, int questionOrder) throws GenerateQuestionException {
+        List<Question> questions;
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GENERATE_QUESTION);
+            stmt.setInt(1, questionId);
+            stmt.setInt(2, gameId);
+            stmt.setInt(3, questionOrder);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new GenerateQuestionException();
+        }
+    }
+
+    public List<Question> fetchQuestion(boolean type) throws FetchQuestionException {
+        List<Question> questions;
+        try {
+            PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.FETCH_QUESTION_DEPENDING_ON_TYPE);
+            stmt.setBoolean(1, type);
+            questions = mapper.resultSetToListOfQuestion(stmt.executeQuery());
+            return questions;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new FetchQuestionException();
         }
     }
 

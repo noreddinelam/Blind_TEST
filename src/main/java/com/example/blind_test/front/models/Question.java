@@ -50,6 +50,13 @@ public class Question {
         this.state = state;
     }
 
+    public int getQuestionId() {
+        return questionId;
+    }
+
+    public String getChoiceByIndex(int index){
+        return this.choices.get(index);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

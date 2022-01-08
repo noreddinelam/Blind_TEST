@@ -18,7 +18,7 @@
                   <Image url="@images/logo.png" />
                </image>
             </ImageView>
-            <Button fx:id="startGame" layoutX="257.0" layoutY="6.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="246.0" styleClass="button_1" stylesheets="@stylesheet.css" text="START GAME" textFill="WHITE">
+            <Button fx:id="startGame" layoutX="257.0" layoutY="6.0" mnemonicParsing="false" onAction="#onStartGame" prefHeight="35.0" prefWidth="246.0" styleClass="button_1" stylesheets="@stylesheet.css" text="START GAME" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
@@ -66,17 +66,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Text fx:id="numberOfJoinedPlayers" fill="WHITE" layoutX="371.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5/8" textAlignment="CENTER" underline="true" wrappingWidth="29.0">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Text>
-      <Text fill="WHITE" layoutX="201.0" layoutY="495.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remaining time :" wrappingWidth="128.966796875">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Text>
-      <Text fx:id="remainingTime" fill="WHITE" layoutX="355.0" layoutY="494.0" strokeType="OUTSIDE" strokeWidth="0.0" text="57 sec" textAlignment="CENTER" wrappingWidth="44.0">
+      <Text fx:id="numberOfJoinedPlayers" fill="WHITE" layoutX="339.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5 / 8" textAlignment="CENTER" underline="true" wrappingWidth="76.0">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

@@ -23,11 +23,10 @@ public class NetCodes {
     public static final String LIST_OF_GAME_NOT_STARTED_SUCCEED = "301";
     public static final String LIST_OF_GAME_NOT_STARTED_FAILED = "302";
 
-    public static final String CHANGE_GAME_STATE = "400";
-    public static final String CHANGE_GAME_STATE_SUCCEED = "401";
-    public static final String CHANGE_GAME_STATE_FAILED = "402";
-    public static final String CHANGE_GAME_STATE_BROADCAST_SUCCEED = "303";
-    public static final String CHANGE_GAME_STATE_BROADCAST_FAILED = "304";
+    public static final String START_GAME = "400";
+    public static final String START_GAME_SUCCEED = "401";
+    public static final String START_GAME_FAILED = "402";
+
 
     public static String ID_OF_CURRENT_QUESTION = "500";
     public static String ID_OF_CURRENT_QUESTION_SUCCEED = "501";

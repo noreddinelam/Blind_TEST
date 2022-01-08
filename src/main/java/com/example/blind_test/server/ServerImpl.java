@@ -3,6 +3,7 @@ package com.example.blind_test.server;
 import com.example.blind_test.database.repositories.GameRepository;
 import com.example.blind_test.database.repositories.PlayerRepository;
 import com.example.blind_test.database.repositories.QuestionRepository;
+import com.example.blind_test.database.repositories.Repository;
 import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
@@ -11,10 +12,7 @@ import com.example.blind_test.shared.CommunicationTypes;
 import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
 import com.example.blind_test.shared.Properties;
-import com.example.blind_test.shared.communication.Credentials;
-import com.example.blind_test.shared.communication.NextRoundInformation;
-import com.example.blind_test.shared.communication.Request;
-import com.example.blind_test.shared.communication.Response;
+import com.example.blind_test.shared.communication.*;
 import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -108,7 +103,8 @@ public class ServerImpl {
         try {
             List<Player> list = playerRepository.getPlayersOfGame(gameId);
             Player player = gameRepository.joinGameDB(gameId, username);
-            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED, GsonConfiguration.gson.toJson(player));
+            JoinGameType joinGameType = new JoinGameType(player,list);
+            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED, GsonConfiguration.gson.toJson(joinGameType));
             listOfGuests.remove(ipAddress);
             response(response, clientJoin);
             Response aPlayerHasJoined = new Response(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,
@@ -143,31 +139,45 @@ public class ServerImpl {
         }
     }
 
-    //TODO : broadcast
-    private static void modifyGameState(String data) {
+    public static void startGame(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
+        boolean type = Boolean.parseBoolean((requestData.get(FieldsRequestName.GAME_TYPE)));
+        int rounds = Integer.parseInt(requestData.get(FieldsRequestName.ROUNDS));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
-            Integer i = gameRepository.changeGameState(gameId);
-            Map<String, String> responseData = new HashMap<>();
-            responseData.put(FieldsRequestName.GAME_STATE, "true");
-            responseData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-            Response response = new Response(NetCodes.CHANGE_GAME_STATE_SUCCEED,
-                    GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
-            response(response, client);
-        } catch (ChangeGameStateException e) {
-            Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "change state failure");
-            response(response, client);
+            gameRepository.changeGameState(gameId);
+            List<Question> questions = questionRepository.fetchQuestion(type);
+            List<Player> players = playerRepository.getPlayersOfGame(gameId);
+            int random = new Random().nextInt(rounds);
+            for (int i = 0; i < random; i++)
+                Collections.shuffle(questions);
+            Question firstQuestion = questions.get(0);
+            int j = 0;
+            for (Question q : questions) {
+                questionRepository.generateQuestion(q.getQuestionId(), gameId, j+1);
+                j++;
+                if (j == rounds) break;
+            }
+            Response response = new Response(NetCodes.START_GAME_SUCCEED, GsonConfiguration.gson.toJson(firstQuestion));
+            for (Player playerOther : players) {
+                responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+            }
+            ByteBuffer newBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+            client.read(newBuffer,newBuffer,new ServerReaderCompletionHandler());
+        } catch (FetchQuestionException e) {
+            e.printStackTrace();
+        } catch (GenerateQuestionException | ChangeGameStateException | GetPlayersOfGameException e) {
+            e.printStackTrace();
         }
     }
 
     public static void modifyPlayerScore(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.valueOf(requestData.get(FieldsRequestName.GAME_ID));
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
-        int score = Integer.valueOf(requestData.get(FieldsRequestName.PLAYER_SCORE));
+        int score = Integer.parseInt(requestData.get(FieldsRequestName.PLAYER_SCORE));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
             int newScore = score + 1;
@@ -189,39 +199,53 @@ public class ServerImpl {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         String username = requestData.get(FieldsRequestName.USERNAME);
-        int idCurrentQuestion = Integer.parseInt(requestData.get(FieldsRequestName.CURRENT_QUESTION));
         String playerResponse = requestData.get(FieldsRequestName.PLAYER_RESPONSE);
         int score = Integer.parseInt(requestData.get(FieldsRequestName.PLAYER_SCORE));
+        int order = Integer.parseInt(requestData.get(FieldsRequestName.QUESTION_ORDER));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
-            if (questionRepository.verifyQuestionState(idCurrentQuestion) == 0) {
-                Question question = QuestionRepository.getRepository().getQuestion(idCurrentQuestion);
+            if (questionRepository.verifyQuestionState(gameId,order) == 0) {
+                List<Player> players = playerRepository.getPlayersOfGame(gameId);
+                Question question = questionRepository.getQuestionByOrder(gameId,order);
+                logger.info("test ");
                 String questionResponse = question.getResponse();
                 Map<String, String> responseData = new HashMap<>();
                 responseData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
                 responseData.put(FieldsRequestName.USERNAME, username);
-                responseData.put(FieldsRequestName.CURRENT_QUESTION, questionResponse);
-
+                responseData.put(FieldsRequestName.QUESTION_ORDER, String.valueOf(order));
                 if (questionResponse.equalsIgnoreCase(playerResponse)) {
                     score = score + 1;
+                    responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(score));
                     int i = playerRepository.modifyScore(score, gameId, username);
-                    questionRepository.changeQuestionState(idCurrentQuestion);
+                    questionRepository.changeQuestionState(gameId,order);
                     responseData.put(FieldsRequestName.STATE, "true");
+                    Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED,
+                            GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
+                    for (Player playerOther : players) {
+                        responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+                    }
                 } else {
+                    responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(score));
                     responseData.put(FieldsRequestName.STATE, "false");
+                    Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED,
+                            GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
+                    response(response, client);
                 }
-                Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED,
-                        GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
-                response(response, client);
             } else {
-                Response response = new Response(NetCodes.CHANGE_GAME_STATE_FAILED, "the question responded");
+                Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, "the question already responded");
                 response(response, client);
             }
-
-        } catch (Exception e) {
-            Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_FAILED, "get response for question " +
-                    "failure");
-            response(response, client);
+        } catch (ModifyPlayerScoreDBException e) {
+            logger.info("1");
+            e.printStackTrace();
+        } catch (VerifyQuestionStateException e) {
+            logger.info("3");
+            e.printStackTrace();
+        } catch (ChangeQuestionStateException e) {
+            logger.info("4");
+            e.printStackTrace();
+        } catch (GetPlayersOfGameException e) {
+            e.printStackTrace();
         }
     }
 
@@ -246,12 +270,13 @@ public class ServerImpl {
     public static void initListOfFunctions() {
         // initialisation of methods;
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED, ServerImpl::listOfNotStartedGame);
-        listOfFunctions.put(NetCodes.CHANGE_GAME_STATE, ServerImpl::modifyGameState);
+        listOfFunctions.put(NetCodes.START_GAME, ServerImpl::startGame);
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
         listOfFunctions.put(NetCodes.CREATE_GAME, ServerImpl::createGame);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION, ServerImpl::getQuestionResponse);
         listOfFunctions.put(NetCodes.JOIN_GAME, ServerImpl::joinGame);
         listOfFunctions.put(NetCodes.NEXT_ROUND, ServerImpl::nextRoundInformation);
+        Repository.initConnectionToDatabase();
     }
 
     public static Consumer<String> getFunctionWithRequestCode(Request request) {

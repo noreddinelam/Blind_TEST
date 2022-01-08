@@ -4,6 +4,8 @@ public class FailureMessages {
 
     public static final String CREATE_GAME = "Failed to create game";
 
+    public static final String CREATE_GAME_BROADCAST = "Failed create game broadcast";
+
     public static final String DELETE_GAME = "Failed to delete game";
 
     public static final String JOIN_GAME = "Failed to join game";

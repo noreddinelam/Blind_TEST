@@ -18,7 +18,7 @@ public abstract class Repository {
     protected static Mapper mapper = Mapper.getMapper();
     private static Logger logger = LoggerFactory.getLogger(Repository.class);
 
-    protected static void initConnectionToDatabase() {
+    public static void initConnectionToDatabase() {
         try {
             connectionDB = Database.getDatabaseConnection();
             logger.info("Initialisation of connection to database");

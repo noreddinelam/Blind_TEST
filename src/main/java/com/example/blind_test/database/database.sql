@@ -15,7 +15,7 @@ CREATE TABLE `Question`
     `choice1`    varchar(255) NOT NULL ,
     `choice2`    varchar(255) NOT NULL ,
     `choice3`    varchar(255) NOT NULL ,
-
+    `type`        bit NOT NULL,
     PRIMARY KEY (`id`)
 );
 
@@ -26,9 +26,10 @@ CREATE TABLE `Game`
     `id`               integer NOT NULL auto_increment,
     `type`             binary NOT NULL ,
     `rounds`           integer NOT NULL ,
-    `players`          integer NOT NULL ,
+    `remainedPlayers`  integer NOT NULL ,
+    `totalPlayers`     integer NOT NULL ,
     `timeQuestion`     integer NOT NULL ,
-    `state`             binary NOT NULL ,
+    `state`             bit NOT NULL ,
 
     PRIMARY KEY (`id`)
 );

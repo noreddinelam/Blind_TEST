@@ -4,7 +4,6 @@ import com.example.blind_test.database.SQLTablesInformation;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.front.models.Question;
-import com.example.blind_test.front.models.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,33 +28,34 @@ public class Mapper {
         String username;
         int gameId;
         int score;
-        while(rs.next())
-        {
-            username=rs.getString(SQLTablesInformation.PLAYER_USERNAME);
-            gameId=rs.getInt(SQLTablesInformation.PLAYER_ID_GAME);
-            score=rs.getInt(SQLTablesInformation.PLAYER_SCORE);
-            players.add(new Player(username, new Game.GameBuilder(gameId).build(),score));
+        while (rs.next()) {
+            username = rs.getString(SQLTablesInformation.PLAYER_USERNAME);
+            gameId = rs.getInt(SQLTablesInformation.PLAYER_ID_GAME);
+            score = rs.getInt(SQLTablesInformation.PLAYER_SCORE);
+            players.add(new Player(username, new Game.GameBuilder(gameId).build(), score));
         }
         return players;
     }
 
     public Game resultSetToGame(ResultSet resultSet) throws SQLException {
-        Game game=null;
+        Game game = null;
         int id;
         Boolean type;
         int rounds;
-        int players;
+        int remainedPlayers;
+        int totalPlayers;
         int timeQuestion;
         Boolean state;
         while (resultSet.next()) {
             id = resultSet.getInt(SQLTablesInformation.GAME_ID);
             type = resultSet.getBoolean(SQLTablesInformation.GAME_TYPE);
             rounds = resultSet.getInt(SQLTablesInformation.GAME_ROUNDS);
-            players = resultSet.getInt(SQLTablesInformation.GAME_PLAYERS);
+            remainedPlayers = resultSet.getInt(SQLTablesInformation.GAME_PLAYERS);
+            totalPlayers = resultSet.getInt(SQLTablesInformation.GAME_TOTAL_PLAYERS);
             timeQuestion = resultSet.getInt(SQLTablesInformation.GAME_TIME_QUESTION);
             state = resultSet.getBoolean(SQLTablesInformation.GAME_STATE);
-            game=new Game.GameBuilder(id).type(type).rounds(rounds)
-                    .players(players).timeQuestion(timeQuestion).state(state).build();
+            game = new Game.GameBuilder(id).type(type).rounds(rounds)
+                    .remainedPlayers(remainedPlayers).totalPlayers(totalPlayers).timeQuestion(timeQuestion).state(state).build();
         }
         return game;
     }
@@ -65,18 +65,20 @@ public class Mapper {
         int id;
         boolean type;
         int rounds;
-        int players;
+        int remainedPlayers;
+        int totalPlayers;
         int timeQuestion;
         boolean state;
         while (resultSet.next()) {
             id = resultSet.getInt(SQLTablesInformation.GAME_ID);
             type = resultSet.getBoolean(SQLTablesInformation.GAME_TYPE);
             rounds = resultSet.getInt(SQLTablesInformation.GAME_ROUNDS);
-            players = resultSet.getInt(SQLTablesInformation.GAME_PLAYERS);
+            remainedPlayers = resultSet.getInt(SQLTablesInformation.GAME_PLAYERS);
+            totalPlayers = resultSet.getInt(SQLTablesInformation.GAME_TOTAL_PLAYERS);
             timeQuestion = resultSet.getInt(SQLTablesInformation.GAME_TIME_QUESTION);
             state = resultSet.getBoolean(SQLTablesInformation.GAME_STATE);
             games.add(new Game.GameBuilder(id).type(type).rounds(rounds)
-                    .players(players).timeQuestion(timeQuestion).state(state).build());
+                    .remainedPlayers(remainedPlayers).totalPlayers(totalPlayers).timeQuestion(timeQuestion).state(state).build());
         }
         return games;
     }
@@ -94,7 +96,7 @@ public class Mapper {
         String resource = "";
         String response = "";
         List<String> list = new ArrayList<>();
-        int randomInt = random.nextInt();
+        int randomInt = random.nextInt(10);
         while (resultSet.next()) {
             questionId = resultSet.getInt(SQLTablesInformation.QUESTION_ID);
             resource = resultSet.getString(SQLTablesInformation.QUESTION_ID_RESOURCE);
@@ -108,5 +110,25 @@ public class Mapper {
             Collections.shuffle(list);
         return new Question.QuestionBuilder(questionId).resource(resource).response(response).choices(list).build();
     }
+
+    public List<Question> resultSetToListOfQuestion(ResultSet resultSet) throws SQLException {
+        int questionId = -1;
+        String resource = "";
+        String response = "";
+        List<Question> listQuestion = new ArrayList<>();
+        while (resultSet.next()) {
+            List<String> list = new ArrayList<>();
+            questionId = resultSet.getInt(SQLTablesInformation.QUESTION_ID);
+            resource = resultSet.getString(SQLTablesInformation.QUESTION_ID_RESOURCE);
+            response = resultSet.getString(SQLTablesInformation.QUESTION_RESPONSE);
+            list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE1));
+            list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE2));
+            list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE3));
+            list.add(response);
+            listQuestion.add( new Question.QuestionBuilder(questionId).resource(resource).response(response).choices(list).build());
+        }
+        return listQuestion;
+    }
+
 
 }

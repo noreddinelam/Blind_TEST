@@ -18,17 +18,17 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="responseA1" layoutX="17.0" layoutY="101.0" mnemonicParsing="false" onAction="#onResponseA" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.leftAnchor="17.0">
+            <Button fx:id="responseC" layoutX="17.0" layoutY="101.0" mnemonicParsing="false" onAction="#onResponseC" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.leftAnchor="17.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="responseA11" layoutX="450.0" layoutY="101.0" mnemonicParsing="false" onAction="#onResponseA" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.rightAnchor="17.0">
+            <Button fx:id="responseD" layoutX="450.0" layoutY="101.0" mnemonicParsing="false" onAction="#onResponseD" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.rightAnchor="17.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="responseA2" layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#onResponseA" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.rightAnchor="17.0">
+            <Button fx:id="responseB" layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#onResponseB" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.rightAnchor="17.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -44,12 +44,12 @@
       </Text>
       <FontAwesomeIconView fill="WHITE" glyphName="QUESTION" layoutX="528.0" layoutY="38.0" size="26" />
       <FontAwesomeIconView fill="WHITE" glyphName="HOURGLASS" layoutX="680.0" layoutY="36.0" selectionEnd="0" size="20" />
-      <Text fx:id="timer1" fill="WHITE" layoutX="558.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="114.13671875">
+      <Text fx:id="round" fill="WHITE" layoutX="558.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="114.13671875">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Text>
-      <ImageView fitHeight="94.0" fitWidth="275.0" layoutX="55.0" layoutY="492.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="94.0" fitWidth="275.0" layoutX="55.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/logo.png" />
          </image>
@@ -59,5 +59,10 @@
             <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
          </graphic>
       </Button>
+      <Text fx:id="currentPlayerName" fill="WHITE" layoutX="87.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USERNAME">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

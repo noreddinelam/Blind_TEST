@@ -14,6 +14,7 @@ public class SQLTablesInformation {
     public static final String QUESTION_CHOICE1 = "choice1";
     public static final String QUESTION_CHOICE2 = "choice2";
     public static final String QUESTION_CHOICE3 = "choice3";
+    public static final String QUESTION_type = "type";
 
     public static final String QUESTION_GAME_TABLE = "QUESTION_GAME";
     public static final String QUESTION_GAME_ID_QUESTION = "id_question";
@@ -26,7 +27,8 @@ public class SQLTablesInformation {
     public static final String GAME_TYPE = "type";
     public static final String GAME_CURRENT_QUESTION = "current_question";
     public static final String GAME_ROUNDS = "rounds";
-    public static final String GAME_PLAYERS = "players";
+    public static final String GAME_PLAYERS = "remainedPlayers";
+    public static final String GAME_TOTAL_PLAYERS = "totalPlayers";
     public static final String GAME_TIME_QUESTION = "timeQuestion";
     public static final String GAME_STATE = "state";
 
