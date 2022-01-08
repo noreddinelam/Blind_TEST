@@ -1,11 +1,9 @@
 .button_1{
 	-fx-text-fill: white;
-    	-fx-background-color: #343a40;
+	-fx-background-color: #343a40;
 	-fx-border-color: #495057;
 	-fx-border-width: 2px;
 	-fx-border-radius: 5px;
-
-	
 }
 
 .list_view1{

@@ -31,6 +31,7 @@ public class GameController extends Controller {
     private boolean responded = false;
     private int timePerQuestion;
     private boolean adminGame = false;
+    private int nbQuestions;
 
     @FXML
     private Button quitGame;
@@ -131,20 +132,23 @@ public class GameController extends Controller {
         });
     }
 
-    public void initView(List<Player> list, Question question,int questionOrder) {
+    public void initView(List<Player> list, Question question, int questionOrder) {
         Platform.runLater(() -> {
             this.scoreBoard.getItems().setAll(list);
             this.responseA.setText(question.getChoiceByIndex(0));
             this.responseB.setText(question.getChoiceByIndex(1));
             this.responseC.setText(question.getChoiceByIndex(2));
             this.responseD.setText(question.getChoiceByIndex(3));
+            if (clickedButton != null)
+                clickedButton.setStyle("-fx-background-color: #343a40");
+            this.responded = false;
             this.timer.setText(String.valueOf(timePerQuestion));
             this.round.setText(String.valueOf(questionOrder));
             new Timer(this.timePerQuestion, this).start();
         });
     }
 
-    public void setTimePerQuestion(int timePerQuestion){
+    public void setTimePerQuestion(int timePerQuestion) {
         this.timePerQuestion = timePerQuestion;
     }
 
@@ -162,6 +166,10 @@ public class GameController extends Controller {
         this.adminGame = adminGame;
     }
 
+    public void setNbQuestions(int nbQuestions) {
+        this.nbQuestions = nbQuestions;
+    }
+
     public void updateScoreBoard(Player p) {
         int index = this.scoreBoard.getItems().indexOf(p);
         Platform.runLater(() -> {
@@ -173,10 +181,14 @@ public class GameController extends Controller {
         this.timer.setText(String.valueOf(remainingTime));
     }
 
-    public void nextRound(){
-        if(this.adminGame) {
+    public void nextRound() {
+        if (this.adminGame) {
             int round = Integer.parseInt(this.round.getText());
-            this.clientImpl.nextRound(round + 1);
+            if (round < this.nbQuestions)
+                this.clientImpl.nextRound(round + 1);
+            else{
+                //TODO : send request to delete the game and return to mainMenuScreen;
+            }
         }
     }
 }

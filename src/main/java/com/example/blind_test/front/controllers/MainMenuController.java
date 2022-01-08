@@ -108,7 +108,7 @@ public class MainMenuController extends Controller {
         numberOfPlayers.setItems(numberOfPlayersList);
         numberOfQuestions.setItems(numberOfQuestionsList);
         responseTime.setItems(responseTimeList);
-        numberOfPlayers.getSelectionModel().select(2);
+        numberOfPlayers.getSelectionModel().select(1);
         numberOfQuestions.getSelectionModel().selectFirst();
         responseTime.getSelectionModel().selectFirst();
         this.clientImpl = ClientImpl.getUniqueInstanceClientImpl();

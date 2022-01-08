@@ -108,6 +108,7 @@ public class LobbyController extends Controller {
             controller.scene = this.scene;
             controller.setTimePerQuestion(Integer.parseInt(this.responseTime.getText()));
             controller.setAdminGame(isAdmin);
+            controller.setNbQuestions(Integer.parseInt(this.rounds.getText()));
             controller.initView(this.joinedPlayerList.getItems(), question, 1);
             this.scene.setRoot(root);
         } catch (IOException e) {

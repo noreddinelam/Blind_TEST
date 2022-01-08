@@ -269,6 +269,7 @@ public class ClientImpl {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.QUESTION_ORDER, String.valueOf(questionOrder));
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
         Request nextRound = new Request(NetCodes.NEXT_ROUND, GsonConfiguration.gson.toJson(requestData,
                 CommunicationTypes.mapJsonTypeData));
         request(nextRound);

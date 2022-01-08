@@ -103,14 +103,15 @@ public class ServerImpl {
         try {
             List<Player> list = playerRepository.getPlayersOfGame(gameId);
             Player player = gameRepository.joinGameDB(gameId, username);
-            JoinGameType joinGameType = new JoinGameType(player,list);
+            JoinGameType joinGameType = new JoinGameType(player, list);
             Response response = new Response(NetCodes.JOIN_GAME_SUCCEED, GsonConfiguration.gson.toJson(joinGameType));
             listOfGuests.remove(ipAddress);
             response(response, clientJoin);
             Response aPlayerHasJoined = new Response(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,
                     GsonConfiguration.gson.toJson(player));
             for (Player playerOther : list) {
-                responseBroadcast(aPlayerHasJoined, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+                responseBroadcast(aPlayerHasJoined, listOfPlayers.get(new Credentials(playerOther.getUsername(),
+                        gameId)));
             }
             listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
         } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
@@ -156,7 +157,7 @@ public class ServerImpl {
             Question firstQuestion = questions.get(0);
             int j = 0;
             for (Question q : questions) {
-                questionRepository.generateQuestion(q.getQuestionId(), gameId, j+1);
+                questionRepository.generateQuestion(q.getQuestionId(), gameId, j + 1);
                 j++;
                 if (j == rounds) break;
             }
@@ -165,7 +166,7 @@ public class ServerImpl {
                 responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
             ByteBuffer newBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
-            client.read(newBuffer,newBuffer,new ServerReaderCompletionHandler());
+            client.read(newBuffer, newBuffer, new ServerReaderCompletionHandler());
         } catch (FetchQuestionException e) {
             e.printStackTrace();
         } catch (GenerateQuestionException | ChangeGameStateException | GetPlayersOfGameException e) {
@@ -204,9 +205,9 @@ public class ServerImpl {
         int order = Integer.parseInt(requestData.get(FieldsRequestName.QUESTION_ORDER));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
-            if (questionRepository.verifyQuestionState(gameId,order) == 0) {
+            if (questionRepository.verifyQuestionState(gameId, order) == 0) {
                 List<Player> players = playerRepository.getPlayersOfGame(gameId);
-                Question question = questionRepository.getQuestionByOrder(gameId,order);
+                Question question = questionRepository.getQuestionByOrder(gameId, order);
                 logger.info("test ");
                 String questionResponse = question.getResponse();
                 Map<String, String> responseData = new HashMap<>();
@@ -217,12 +218,13 @@ public class ServerImpl {
                     score = score + 1;
                     responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(score));
                     int i = playerRepository.modifyScore(score, gameId, username);
-                    questionRepository.changeQuestionState(gameId,order);
+                    questionRepository.changeQuestionState(gameId, order);
                     responseData.put(FieldsRequestName.STATE, "true");
                     Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED,
                             GsonConfiguration.gson.toJson(responseData, CommunicationTypes.mapJsonTypeData));
                     for (Player playerOther : players) {
-                        responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
+                        responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(),
+                                gameId)));
                     }
                 } else {
                     responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(score));
@@ -232,7 +234,8 @@ public class ServerImpl {
                     response(response, client);
                 }
             } else {
-                Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, "the question already responded");
+                Response response = new Response(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, "the question already " +
+                        "responded");
                 response(response, client);
             }
         } catch (ModifyPlayerScoreDBException e) {
@@ -252,16 +255,20 @@ public class ServerImpl {
     public static void nextRoundInformation(String data) {
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
+        String username = requestData.get(FieldsRequestName.USERNAME);
         int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.QUESTION_ORDER));
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
             List<Player> list = playerRepository.getPlayersOfGame(gameId);
             Question nextQuestion = questionRepository.getQuestionByOrder(gameId, questionOrder);
-            NextRoundInformation nextRoundInformation = new NextRoundInformation(list, nextQuestion,questionOrder);
+            NextRoundInformation nextRoundInformation = new NextRoundInformation(list, nextQuestion, questionOrder);
             Response response = new Response(NetCodes.NEXT_ROUND_SUCCEEDED,
                     GsonConfiguration.gson.toJson(nextRoundInformation));
             for (Player player : list) {
                 responseBroadcast(response, listOfPlayers.get(new Credentials(player.getUsername(), gameId)));
             }
+            ByteBuffer buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+            client.read(buffer, buffer, new ServerReaderCompletionHandler());
         } catch (GetPlayersOfGameException e) {
             e.printStackTrace();
         }
