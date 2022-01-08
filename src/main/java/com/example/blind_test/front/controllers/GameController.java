@@ -27,10 +27,11 @@ public class GameController extends Controller {
     @FXML
     private Text currentPlayerName;
 
-    private Question currentQuestionModel;
     private Button clickedButton;
     private boolean responded = false;
     private int timePerQuestion;
+    private boolean adminGame = false;
+    private int nbQuestions;
 
     @FXML
     private Button quitGame;
@@ -96,6 +97,7 @@ public class GameController extends Controller {
     private void initialize() {
         this.clientImpl = ClientImpl.getUniqueInstanceClientImpl();
         this.clientImpl.setController(this);
+        this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
         this.scoreBoard.setCellFactory((param) -> new ListCell<>() {
             @Override
             protected void updateItem(Player player, boolean b) {
@@ -104,7 +106,6 @@ public class GameController extends Controller {
                     setText(null);
                     setGraphic(null);
                 } else {
-
                     try {
                         HBox hbox = new HBox(30);
                         String path = "src/main/resources/com/example/blind_test/images/player.png";
@@ -129,35 +130,34 @@ public class GameController extends Controller {
                 }
             }
         });
-
     }
 
-    public void initView(List<Player> list, Question firstQuestion, int timePerQuestion) {
+    public void initView(List<Player> list, Question question, int questionOrder) {
         Platform.runLater(() -> {
             this.scoreBoard.getItems().setAll(list);
-            this.currentQuestionModel = firstQuestion;
-            this.responseA.setText(firstQuestion.getChoiceByIndex(0));
-            this.responseB.setText(firstQuestion.getChoiceByIndex(1));
-            this.responseC.setText(firstQuestion.getChoiceByIndex(2));
-            this.responseD.setText(firstQuestion.getChoiceByIndex(3));
-            this.timePerQuestion = timePerQuestion;
-            this.timer.setText(String.valueOf(timePerQuestion));
-            new Timer(timePerQuestion, this).start();
-            this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
-
+            this.responseA.setText(question.getChoiceByIndex(0));
+            this.responseB.setText(question.getChoiceByIndex(1));
+            this.responseC.setText(question.getChoiceByIndex(2));
+            this.responseD.setText(question.getChoiceByIndex(3));
+            if (clickedButton != null)
+                clickedButton.setStyle("-fx-background-color: #343a40");
+            this.responded = false;
+            this.round.setText(String.valueOf(questionOrder));
+            this.timer.setText(String.valueOf(this.timePerQuestion));
+            new Timer(this.timePerQuestion, this).start();
             try {
-                this.currentQuestionModel = firstQuestion;
-               String path = this.currentQuestionModel.getResource();
-               FileInputStream question = new FileInputStream(path);
-               Image image1 = new Image(question, 400, 418, false, true);
-               currentQuestion.setImage(image1);
-
+                String path = question.getResource();
+                FileInputStream questionImage = new FileInputStream(path);
+                Image image1 = new Image(questionImage, 400, 418, false, true);
+                currentQuestion.setImage(image1);
             } catch (FileNotFoundException e) {
-               e.printStackTrace();
-           }
+                e.printStackTrace();
+            }
         });
+    }
 
-
+    public void setTimePerQuestion(int timePerQuestion) {
+        this.timePerQuestion = timePerQuestion;
     }
 
     public void changeQuestionState(String color) {
@@ -168,6 +168,15 @@ public class GameController extends Controller {
 
     public void setResponded() {
         responded = true;
+    }
+
+
+    public void setAdminGame(boolean adminGame) {
+        this.adminGame = adminGame;
+    }
+
+    public void setNbQuestions(int nbQuestions) {
+        this.nbQuestions = nbQuestions;
     }
 
     public void updateScoreBoard(Player p) {
@@ -181,4 +190,14 @@ public class GameController extends Controller {
         this.timer.setText(String.valueOf(remainingTime));
     }
 
+    public void nextRound() {
+        if (this.adminGame) {
+            int round = Integer.parseInt(this.round.getText());
+            if (round < this.nbQuestions)
+                this.clientImpl.nextRound(round + 1);
+            else {
+                //TODO : send request to delete the game and return to mainMenuScreen;
+            }
+        }
+    }
 }

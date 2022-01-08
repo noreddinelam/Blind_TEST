@@ -14,6 +14,7 @@ import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
 import com.example.blind_test.shared.Properties;
 import com.example.blind_test.shared.communication.JoinGameType;
+import com.example.blind_test.shared.communication.NextRoundInformation;
 import com.example.blind_test.shared.communication.Request;
 import com.example.blind_test.shared.communication.Response;
 import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
@@ -86,6 +87,7 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.CREATE_GAME_FAILED, this::createGameFailed);
         listOfFunctions.put(NetCodes.JOIN_GAME_FAILED, this::joinGameFailed);
         listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
+        listOfFunctions.put(NetCodes.NEXT_ROUND_SUCCEEDED, this::nextRoundSucceeded);
         listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
     }
 
@@ -146,6 +148,7 @@ public class ClientImpl {
         boolean state = Boolean.parseBoolean(data.get(FieldsRequestName.STATE));
         if (state) {
             if (username.equalsIgnoreCase(this.player.getUsername())) {
+                this.player.setScore(score);
                 ((GameController) this.controller).changeQuestionState("-fx-background-color: #11ec0d");
             }
             ((GameController) this.controller).updateScoreBoard(new Player(username, this.player.getGame(), score));
@@ -183,6 +186,13 @@ public class ClientImpl {
     public void getQuestionResponseFailed(String responseData) {
         this.controller.commandFailed(FailureMessages.GET_QUESTION_RESPONSE, responseData);
 
+    }
+
+    private void nextRoundSucceeded(String responseData) {
+        NextRoundInformation nextRoundInformation = GsonConfiguration.gson.fromJson(responseData,
+                NextRoundInformation.class);
+        ((GameController) this.controller).initView(nextRoundInformation.getPlayers(),
+                nextRoundInformation.getQuestion(), nextRoundInformation.getQuestionOrder());
     }
 
     public void nextRoundInformationFailed(String responseData) {
@@ -256,10 +266,11 @@ public class ClientImpl {
         request(getQuestionResponse);
     }
 
-    public void nextRound(int idCurrentQuestion) {
+    public void nextRound(int questionOrder) {
         Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.CURRENT_QUESTION, String.valueOf(idCurrentQuestion));
+        requestData.put(FieldsRequestName.QUESTION_ORDER, String.valueOf(questionOrder));
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
         Request nextRound = new Request(NetCodes.NEXT_ROUND, GsonConfiguration.gson.toJson(requestData,
                 CommunicationTypes.mapJsonTypeData));
         request(nextRound);
