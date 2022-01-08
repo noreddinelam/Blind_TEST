@@ -12,7 +12,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="797.0" prefWidth="900.0" style="-fx-background-color: #0A0A0A; -fx-border-width: 2px; -fx-border-radius: 5px; -fx-border-color: #000000; -fx-background-radius: 5px;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.blind_test.front.controllers.ScoreBoardController">
    <children>
       <ListView fx:id="playersList" layoutX="26.0" layoutY="49.0" prefHeight="580.0" prefWidth="490.0" style="-fx-background-radius: 5px; -fx-background-color: white; -fx-border-color: #495057; -fx-border-width: 2px; -fx-border-radius: 5px;" styleClass="list_view1" stylesheets="@stylesheet.css" />
-      <AnchorPane layoutX="539.0" layoutY="105.0" prefHeight="160.0" prefWidth="318.0" style="-fx-background-color: #302F2F; -fx-background-radius: 5px;">
+      <AnchorPane layoutX="539.0" layoutY="105.0" prefHeight="105.0" prefWidth="318.0" style="-fx-background-color: #302F2F; -fx-background-radius: 5px;">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of questions :" wrappingWidth="153.0">
                <font>
@@ -30,26 +30,6 @@
                </font>
             </Text>
             <Text fx:id="responseTime" fill="WHITE" layoutX="251.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="20" textAlignment="CENTER" underline="true" wrappingWidth="44.0">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Text>
-            <ImageView fitHeight="41.0" fitWidth="57.0" layoutX="32.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/trophee.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="41.0" fitWidth="57.0" layoutX="48.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true" rotate="18.4">
-               <image>
-                  <Image url="@images/trophee.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="41.0" fitWidth="75.0" layoutX="15.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true" rotate="-18.4">
-               <image>
-                  <Image url="@images/trophee.png" />
-               </image>
-            </ImageView>
-            <Text fx:id="winner" fill="WHITE" layoutX="98.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Winner" wrappingWidth="153.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

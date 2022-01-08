@@ -80,14 +80,14 @@ public class PlayerRepository extends Repository {
         }
     }
 
-    public List<Player> getPlayersOfGame(int gameId) {
+    public List<Player> getPlayersOfGame(int gameId) throws GetPlayersOfGameException {
         try  {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
             stmt.setInt(1, gameId);
             return mapper.resultSetToPlayers(stmt.executeQuery());
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            throw new GetPlayersOfGameException();
         }
     }
 
