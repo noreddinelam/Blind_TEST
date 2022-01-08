@@ -4,10 +4,12 @@
 	-fx-border-color: #495057;
 	-fx-border-width: 2px;
 	-fx-border-radius: 5px;
+
+	
 }
 
 .list_view1{
-    	-fx-background-color: #343a40;
+    	-fx-background-color: white;
 	-fx-border-color: #495057;
 	-fx-border-width: 2px;
 	-fx-border-radius: 5px;
@@ -17,10 +19,15 @@
     -fx-background-color: white;
 }
 
-.choice-box>.label, { -fx-text-fill: WHITE; }
-
-.choice-box>.context-menu>.label, {
+.button-2>.choice-box>.context-menu>.label, {
 	-fx-text-fill: white;
-    	-fx-background-color: #343a40;
+    	-fx-background-color: #343a40;	
 	-fx-background-radius : 2px;
 }
+
+.choice-box>.label, { -fx-text-fill: WHITE; }
+
+
+
+
+
