@@ -28,6 +28,8 @@ public class FieldsRequestName {
 
     public static final String PLAYER_SCORE = "PlayerScore";
 
+    public static final String QUESTION_ORDER = "QuestionOrder";
+
     //NetCode
     public static String netCode = "NetCode";
 

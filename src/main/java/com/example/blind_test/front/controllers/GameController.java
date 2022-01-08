@@ -28,6 +28,8 @@ public class GameController extends Controller {
     private Text currentPlayerName;
 
     private Question currentQuestionModel;
+    private Button clickedButton;
+    private boolean responded = false;
     private int timePerQuestion;
 
     @FXML
@@ -59,22 +61,30 @@ public class GameController extends Controller {
 
     @FXML
     void onResponseA(ActionEvent event) {
-        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseA.getText());
+        this.clickedButton = responseA;
+        if (!this.responded)
+            this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseA.getText());
     }
 
     @FXML
     void onResponseB(ActionEvent event) {
-        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseB.getText());
+        this.clickedButton = responseB;
+        if (!this.responded)
+            this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseB.getText());
     }
 
     @FXML
     void onResponseC(ActionEvent event) {
-        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseC.getText());
+        this.clickedButton = responseC;
+        if (!this.responded)
+            this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseC.getText());
     }
 
     @FXML
     void onResponseD(ActionEvent event) {
-        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseD.getText());
+        this.clickedButton = responseD;
+        if (!this.responded)
+            this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseD.getText());
     }
 
     @FXML
@@ -135,6 +145,22 @@ public class GameController extends Controller {
             this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
         });
     }
+
+    public void changeQuestionState(String color) {
+        Platform.runLater(()->{
+            this.clickedButton.setStyle(color);
+        });
+    }
+
+    public void setResponded(){
+        responded = true;
+    }
+
+    public void updateScoreBoard(Player p){
+        int index = this.scoreBoard.getItems().indexOf(p);
+        Platform.runLater(() -> {
+           this.scoreBoard.getItems().set(index,p);
+        });
 
     public void setTimerTime(int remainingTime){
         this.timer.setText(String.valueOf(remainingTime));

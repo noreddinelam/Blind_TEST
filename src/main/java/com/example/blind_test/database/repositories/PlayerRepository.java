@@ -21,7 +21,6 @@ public class PlayerRepository extends Repository {
     }
 
     public static PlayerRepository getRepository() {
-        initConnectionToDatabase();
         return repository;
     }
 
