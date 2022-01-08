@@ -148,6 +148,7 @@ public class ClientImpl {
         boolean state = Boolean.parseBoolean(data.get(FieldsRequestName.STATE));
         if (state) {
             if (username.equalsIgnoreCase(this.player.getUsername())) {
+                this.player.setScore(score);
                 ((GameController) this.controller).changeQuestionState("-fx-background-color: #11ec0d");
             }
             ((GameController) this.controller).updateScoreBoard(new Player(username, this.player.getGame(), score));

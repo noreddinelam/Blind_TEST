@@ -226,6 +226,8 @@ public class ServerImpl {
                         responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(),
                                 gameId)));
                     }
+                    ByteBuffer buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+                    client.read(buffer, buffer, new ServerReaderCompletionHandler());
                 } else {
                     responseData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(score));
                     responseData.put(FieldsRequestName.STATE, "false");

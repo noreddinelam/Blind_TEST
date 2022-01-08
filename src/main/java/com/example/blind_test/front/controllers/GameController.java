@@ -143,9 +143,8 @@ public class GameController extends Controller {
                 clickedButton.setStyle("-fx-background-color: #343a40");
             this.responded = false;
             this.round.setText(String.valueOf(questionOrder));
-            this.timer.setText(String.valueOf(timePerQuestion));
-            new Timer(timePerQuestion, this).start();
-            this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
+            this.timer.setText(String.valueOf(this.timePerQuestion));
+            new Timer(this.timePerQuestion, this).start();
             try {
                 String path = question.getResource();
                 FileInputStream questionImage = new FileInputStream(path);
