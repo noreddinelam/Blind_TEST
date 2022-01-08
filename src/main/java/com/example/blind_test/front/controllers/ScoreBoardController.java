@@ -2,6 +2,7 @@ package com.example.blind_test.front.controllers;
 
 import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Player;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -47,6 +48,11 @@ public class ScoreBoardController extends Controller {
     }
 
     public void initView(List<Player> players, int numberOfQuestions, int responseTime) {
+        Platform.runLater(() -> {
+            this.playersList.getItems().setAll(players);
+            this.rounds.setText(String.valueOf(numberOfQuestions));
+            this.responseTime.setText(String.valueOf(responseTime));
+        });
     }
 
 }
