@@ -124,9 +124,8 @@ public class ClientImpl {
     }
 
     public void startGameSucceeded(String responseData) {
-        Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
-        String username = data.get(FieldsRequestName.USERNAME);
+       Question question = GsonConfiguration.gson.fromJson(responseData, Question.class);
+        ((LobbyController) this.controller).startGame(question);
         this.player.getGame().setState(true);
     }
 
@@ -219,6 +218,8 @@ public class ClientImpl {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
+        requestData.put(FieldsRequestName.GAME_TYPE, String.valueOf(this.player.getGame().isImageGame()));
+        requestData.put(FieldsRequestName.ROUNDS, String.valueOf(this.player.getGame().getRounds()));
         Request modifyGameState = new Request(NetCodes.START_GAME, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(modifyGameState);
     }

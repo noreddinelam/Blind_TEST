@@ -54,6 +54,9 @@ public class Question {
         return questionId;
     }
 
+    public String getChoiceByIndex(int index){
+        return this.choices.get(index);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
