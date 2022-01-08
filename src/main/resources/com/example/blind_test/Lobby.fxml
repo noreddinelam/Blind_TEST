@@ -71,16 +71,6 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Text>
-      <Text fill="WHITE" layoutX="201.0" layoutY="495.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remaining time :" wrappingWidth="128.966796875">
-         <font>
-            <Font name="System Bold" size="16.0" />
-         </font>
-      </Text>
-      <Text fx:id="remainingTime" fill="WHITE" layoutX="355.0" layoutY="494.0" strokeType="OUTSIDE" strokeWidth="0.0" text="57 sec" textAlignment="CENTER" wrappingWidth="44.0">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Text>
       <ImageView fitHeight="127.0" fitWidth="449.0" layoutX="251.0" layoutY="108.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/logo.png" />

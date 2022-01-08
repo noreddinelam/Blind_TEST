@@ -33,9 +33,6 @@ public class LobbyController extends Controller {
     private Text numberOfJoinedPlayers;
 
     @FXML
-    private Text remainingTime;
-
-    @FXML
     private Text responseTime;
 
     @FXML
@@ -82,24 +79,23 @@ public class LobbyController extends Controller {
             if (jgt.getOtherPlayers() != null) {
                 this.joinedPlayerList.getItems().setAll(jgt.getOtherPlayers());
                 this.nbPlayersInGame = jgt.getOtherPlayers().size() + 1;
-            }
-            else
+            } else
                 this.nbPlayersInGame = 1;
             this.numberOfJoinedPlayers.setText(nbPlayersInGame + " / " + jgt.getPlayer().getGame().getTotalPlayers());
             this.joinedPlayerList.getItems().add(jgt.getPlayer());
             this.rounds.setText(String.valueOf(jgt.getPlayer().getGame().getRounds()));
             this.responseTime.setText(String.valueOf(jgt.getPlayer().getGame().getTimeQuestion()));
             this.gameType.setText(jgt.getPlayer().getGame().isImageGame() ? "Image Game" : "Audio Game");
-            if(this.nbPlayersInGame==jgt.getPlayer().getGame().getTotalPlayers()) startGame.setDisable(false);
+            if (this.nbPlayersInGame == jgt.getPlayer().getGame().getTotalPlayers()) startGame.setDisable(false);
 
         });
     }
 
-    public void addPlayerToListOfPlayers(Player player){
+    public void addPlayerToListOfPlayers(Player player) {
         Platform.runLater(() -> {
             this.joinedPlayerList.getItems().add(player);
-            this.numberOfJoinedPlayers.setText((++nbPlayersInGame) +" / " + player.getGame().getTotalPlayers());
-            if(this.nbPlayersInGame==player.getGame().getTotalPlayers()) startGame.setDisable(false);
+            this.numberOfJoinedPlayers.setText((++nbPlayersInGame) + " / " + player.getGame().getTotalPlayers());
+            if (this.nbPlayersInGame == player.getGame().getTotalPlayers()) startGame.setDisable(false);
         });
     }
 
@@ -107,13 +103,13 @@ public class LobbyController extends Controller {
         this.totalNbPlayersInGame = totalNbPlayersInGame;
     }
 
-    public void startGame(Question question){
+    public void startGame(Question question) {
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Vue.fxml"));
             Parent root = loader.load();
             GameController controller = loader.getController();
             controller.scene = this.scene;
-            controller.initView(this.joinedPlayerList.getItems(),question);
+            controller.initView(this.joinedPlayerList.getItems(), question);
             this.scene.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
