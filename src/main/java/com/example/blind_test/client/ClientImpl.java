@@ -72,6 +72,8 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_SUCCEED, this::createGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_FAILED, this::createGameBroadcastFailed);
         listOfFunctions.put(NetCodes.JOIN_GAME_SUCCEED,this::joinGameSucceeded);
+        listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,this::joinGameBroadcastSucceeded);
+        listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_FAILED,this::joinGameBroadcastFailed);
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceeded);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceeded);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceeded);
@@ -105,6 +107,14 @@ public class ClientImpl {
         JoinGameType joinGameType = GsonConfiguration.gson.fromJson(responseData,JoinGameType.class);
         this.player = joinGameType.getPlayer();
         ((MainMenuController)this.controller).enterGameSucceeded(joinGameType);
+    }
+
+    private void joinGameBroadcastSucceeded(String responseData) {
+        Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
+        ((LobbyController) this.controller).addPlayerToListOfPlayers(player);
+    }
+
+    private void joinGameBroadcastFailed(String s) {
     }
 
     public void listOfNotStartedGameSucceeded(String responseData){
@@ -187,8 +197,7 @@ public class ClientImpl {
         request(createGame);
     }
 
-    public void joinGame(int gameId,String username)
-    {
+    public void joinGame(int gameId,String username) {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));

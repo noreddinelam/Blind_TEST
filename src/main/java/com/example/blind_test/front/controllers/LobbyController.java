@@ -13,6 +13,9 @@ import javafx.scene.text.Text;
 
 public class LobbyController extends Controller {
 
+    private int nbPlayersInGame = 0;
+    private int totalNbPlayersInGame = 0;
+
     @FXML
     private Text gameType;
 
@@ -64,9 +67,11 @@ public class LobbyController extends Controller {
         Platform.runLater(() -> {
             if (jgt.getOtherPlayers() != null) {
                 this.joinedPlayerList.getItems().setAll(jgt.getOtherPlayers());
-                this.numberOfJoinedPlayers.setText((jgt.getOtherPlayers().size() + 1) + " / " + jgt.getPlayer().getGame().getPlayers());
-            } else
-                this.numberOfJoinedPlayers.setText("1 / " + jgt.getPlayer().getGame().getPlayers());
+                this.nbPlayersInGame = jgt.getOtherPlayers().size() + 1;
+            }
+            else
+                this.nbPlayersInGame = 1;
+            this.numberOfJoinedPlayers.setText(nbPlayersInGame + " / " + jgt.getPlayer().getGame().getTotalPlayers());
             this.joinedPlayerList.getItems().add(jgt.getPlayer());
             this.rounds.setText(String.valueOf(jgt.getPlayer().getGame().getRounds()));
             this.responseTime.setText(String.valueOf(jgt.getPlayer().getGame().getTimeQuestion()));
@@ -74,4 +79,14 @@ public class LobbyController extends Controller {
         });
     }
 
+    public void addPlayerToListOfPlayers(Player player){
+        Platform.runLater(() -> {
+            this.joinedPlayerList.getItems().add(player);
+            this.numberOfJoinedPlayers.setText((++nbPlayersInGame) +" / " + player.getGame().getTotalPlayers());
+        });
+    }
+
+    public void setTotalNbPlayersInGame(int totalNbPlayersInGame) {
+        this.totalNbPlayersInGame = totalNbPlayersInGame;
+    }
 }

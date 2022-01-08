@@ -31,9 +31,10 @@ public class GameRepository extends Repository {
                     Statement.RETURN_GENERATED_KEYS);
             stmt.setBoolean(1, type);
             stmt.setInt(2, rounds);
-            stmt.setInt(3, players);
-            stmt.setInt(4, timeQuestion);
-            stmt.setBoolean(5, state);
+            stmt.setInt(3, players - 1);
+            stmt.setInt(4, players);
+            stmt.setInt(5, timeQuestion);
+            stmt.setBoolean(6, state);
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             int gameId = -1;
@@ -41,7 +42,7 @@ public class GameRepository extends Repository {
                 gameId = rs.getInt(1);
             }
             Game game = new Game.GameBuilder(gameId).type(type)
-                    .rounds(rounds).players(players).timeQuestion(timeQuestion).state(state).build();
+                    .rounds(rounds).remainedPlayers(players-1).totalPlayers(players).timeQuestion(timeQuestion).state(state).build();
             Player player = PlayerRepository.getRepository().addNewPlayerDB(username, game.getId());
             player.setGame(game);
             return player;
@@ -80,7 +81,7 @@ public class GameRepository extends Repository {
 
     public Player joinGameDB(int gameId, String username) throws PlayerAlreadyExists, GameIsFullException,
             JoinGameDBException, GetGameDBException, GetNbPlayersInGameException, AddNewPlayerDBException {
-        Player player = null;
+        Player player;
         try {
             Game game = getGame(gameId);
             if (getNbPlayersInGame(gameId) > 0) {

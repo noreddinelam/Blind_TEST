@@ -133,7 +133,7 @@ public class MainMenuController extends Controller {
                         ImageView imageView = new ImageView(image);
                         List<Node> itemsInVbox = new ArrayList<>();
                         itemsInVbox.add(new Text("Questions  : " + game.getRounds()));
-                        itemsInVbox.add(new Text("Players : " + game.getPlayers()));
+                        itemsInVbox.add(new Text("Players : " + game.getTotalPlayers()));
                         itemsInVbox.add(new Text("Time per question : " + game.getTimeQuestion()));
                         vbox1.getChildren().setAll(itemsInVbox);
                         hbox.getChildren().addAll(vbox1, imageView);

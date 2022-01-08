@@ -6,7 +6,8 @@ public class Game {
     private int id;
     private boolean type;
     private int rounds;
-    private int players;
+    private int remainedPlayers;
+    private int totalPlayers;
     private int timeQuestion;
     private boolean state;
     private List<Question> questions;
@@ -15,7 +16,8 @@ public class Game {
         this.id = gb.id;
         this.type = gb.type;
         this.rounds = gb.rounds;
-        this.players = gb.players;
+        this.remainedPlayers = gb.remainedPlayers;
+        this.totalPlayers = gb.totalPlayers;
         this.timeQuestion = gb.timeQuestion;
         this.state = gb.state;
     }
@@ -40,8 +42,12 @@ public class Game {
         return this.type;
     }
 
-    public int getPlayers() {
-        return players;
+    public int getRemainedPlayers() {
+        return remainedPlayers;
+    }
+
+    public int getTotalPlayers() {
+        return totalPlayers;
     }
 
     public int getRounds() {
@@ -56,9 +62,11 @@ public class Game {
         private int id;
         private boolean type;
         private int rounds;
-        private int players;
+        private int remainedPlayers;
+        private int totalPlayers;
         private int timeQuestion;
         private boolean state;
+        private List<Question> questions;
 
         public GameBuilder(int gameId) {
             this.id = gameId;
@@ -74,8 +82,13 @@ public class Game {
             return this;
         }
 
-        public GameBuilder players(int players) {
-            this.players = players;
+        public GameBuilder remainedPlayers(int remainedPlayers) {
+            this.remainedPlayers = remainedPlayers;
+            return this;
+        }
+
+        public GameBuilder totalPlayers(int totalPlayers) {
+            this.totalPlayers = totalPlayers;
             return this;
         }
 
@@ -86,6 +99,11 @@ public class Game {
 
         public GameBuilder state(boolean state) {
             this.state = state;
+            return this;
+        }
+
+        public GameBuilder questions(List<Question> questions){
+            this.questions = questions;
             return this;
         }
 
