@@ -11,10 +11,7 @@ import com.example.blind_test.shared.CommunicationTypes;
 import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
 import com.example.blind_test.shared.Properties;
-import com.example.blind_test.shared.communication.Credentials;
-import com.example.blind_test.shared.communication.NextRoundInformation;
-import com.example.blind_test.shared.communication.Request;
-import com.example.blind_test.shared.communication.Response;
+import com.example.blind_test.shared.communication.*;
 import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,7 +105,8 @@ public class ServerImpl {
         try {
             List<Player> list = playerRepository.getPlayersOfGame(gameId);
             Player player = gameRepository.joinGameDB(gameId, username);
-            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED, GsonConfiguration.gson.toJson(player));
+            JoinGameType joinGameType = new JoinGameType(player,list);
+            Response response = new Response(NetCodes.JOIN_GAME_SUCCEED, GsonConfiguration.gson.toJson(joinGameType));
             listOfGuests.remove(ipAddress);
             response(response, clientJoin);
             Response aPlayerHasJoined = new Response(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,
