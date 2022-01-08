@@ -31,6 +31,7 @@ public abstract class Controller {
             MainMenuController controller = fxmlLoader.getController();
             controller.initializeListOfUnStartedGames();
             this.clientImpl.setController(controller);
+            controller.scene=this.scene;
             this.scene.setRoot(parent);
         } catch (IOException e) {
             e.printStackTrace();

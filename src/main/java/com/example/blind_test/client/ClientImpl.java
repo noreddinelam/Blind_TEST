@@ -220,7 +220,7 @@ public class ClientImpl {
     {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-        requestData.put(FieldsRequestName.IP_ADDRESS,this.ipAddress);
+        requestData.put(FieldsRequestName.USERNAME,this.player.getUsername());
         Request deleteGame = new Request(NetCodes.DELETE_GAME,
                 GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(deleteGame);

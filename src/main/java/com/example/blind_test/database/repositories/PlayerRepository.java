@@ -67,6 +67,20 @@ public class PlayerRepository extends Repository {
         }
     }
 
+    public Boolean deletePlayerFromGame(String username,int gameId) throws DeletePlayerException {
+        try
+        {
+            PreparedStatement deletePlayer = connectionDB.prepareStatement(SQLStatements.DELETE_PLAYER_FROM_GAME);
+            deletePlayer.setInt(1,gameId);
+            deletePlayer.setString(2,username);
+            return deletePlayer.execute();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new DeletePlayerException();
+        }
+    }
+
     public List<Player> getPlayersOfGame(int gameId) {
         try  {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_PLAYERS_FROM_GAME);
