@@ -116,14 +116,15 @@ public class Mapper {
         String resource = "";
         String response = "";
         List<Question> listQuestion = new ArrayList<>();
-        List<String> list = new ArrayList<>();
         while (resultSet.next()) {
+            List<String> list = new ArrayList<>();
             questionId = resultSet.getInt(SQLTablesInformation.QUESTION_ID);
             resource = resultSet.getString(SQLTablesInformation.QUESTION_ID_RESOURCE);
             response = resultSet.getString(SQLTablesInformation.QUESTION_RESPONSE);
             list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE1));
             list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE2));
             list.add(resultSet.getString(SQLTablesInformation.QUESTION_CHOICE3));
+            list.add(response);
             listQuestion.add( new Question.QuestionBuilder(questionId).resource(resource).response(response).choices(list).build());
         }
         return listQuestion;
