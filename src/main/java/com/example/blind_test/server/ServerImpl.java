@@ -133,12 +133,15 @@ public class ServerImpl {
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
             playerRepository.deletePlayerFromGame(username, gameId);
+            List<Player> list = playerRepository.getPlayersOfGame(gameId);
             Response response = new Response(NetCodes.LEAVE_GAME_SUCCEED, "YOU LEFT THE GAME !");
             addGuestClients(client);
             listOfPlayers.remove(new Credentials(username, gameId));
             Response broadcastResponse = new Response(NetCodes.LEAVE_GAME_BROADCAST, username);
-            listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse,
-                    entry.getValue()));
+            for (Player playerOther : list) {
+                responseBroadcast(broadcastResponse, listOfPlayers.get(new Credentials(playerOther.getUsername(),
+                        gameId)));
+            }
             // TODO: increment players in game in db
             response(response, client);
         } catch (Exception e) {
