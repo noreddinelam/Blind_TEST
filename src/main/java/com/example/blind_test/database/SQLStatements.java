@@ -63,6 +63,8 @@ public class SQLStatements {
                     + " (" + PLAYER_USERNAME + "," + PLAYER_ID_GAME + "," + PLAYER_SCORE
                     + ")" +
                     " VALUES (?,?,0) ;";
+    public static String DELETE_PLAYER_FROM_GAME = "DELETE FROM " + PLAYER_TABLE + " WHERE " + PLAYER_ID_GAME
+            +" = ? and " + PLAYER_USERNAME + " = ? ;";
 
     public static final String CHANGE_QUESTION_STATE = "UPDATE "+ QUESTION_GAME_TABLE + " SET "+QUESTION_GAME_STATE +
             " = 1 WHERE " + QUESTION_GAME_ORDER + " = ? AND " + QUESTION_GAME_ID_GAME +" =?;";

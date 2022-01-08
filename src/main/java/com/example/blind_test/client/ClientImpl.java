@@ -34,10 +34,25 @@ public class ClientImpl {
     protected static final Hashtable<String, Consumer<String>> listOfFunctions = new Hashtable<>();
     private static final Logger logger = LoggerFactory.getLogger(ClientImpl.class);
     private static final ClientImpl clientImpl = new ClientImpl();
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
     private String ipAddress;
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
     private AsynchronousSocketChannel client;
     private Controller controller;
     private Player player;
+    private boolean admin = false;
 
     private ClientImpl() {
     }
@@ -73,6 +88,7 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.CREATE_GAME_SUCCEED, this::createGameSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_SUCCEED, this::createGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_FAILED, this::createGameBroadcastFailed);
+        listOfFunctions.put(NetCodes.DELETE_GAME_BROADCAST_SUCCEED, this::deleteGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.JOIN_GAME_SUCCEED, this::joinGameSucceeded);
         listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_SUCCEED, this::joinGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_FAILED, this::joinGameBroadcastFailed);
@@ -89,11 +105,31 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
         listOfFunctions.put(NetCodes.NEXT_ROUND_SUCCEEDED, this::nextRoundSucceeded);
         listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
+        listOfFunctions.put(NetCodes.LEAVE_GAME_FAILED, this::leaveGameFailed);
+        listOfFunctions.put(NetCodes.LEAVE_GAME_SUCCEED, this::leaveGameSucceed);
+        listOfFunctions.put(NetCodes.LEAVE_GAME_BROADCAST,this::leaveGameBroadcast);
+    }
+
+    private void leaveGameSucceed(String s) {
+        this.controller.backMainMenu();
+    }
+
+    private void leaveGameFailed(String s) {
+        this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
+    }
+    private void leaveGameBroadcast(String s)
+    {
+        //String usernameOfLeftPlayer = GsonConfiguration.gson.fromJson(s, );
+    }
+
+    private void deleteGameBroadcastSucceeded(String s) {
+        this.controller.backMainMenu();
         listOfFunctions.put(NetCodes.GAME_FINISHED_SUCCEED, this::gameFinishedSucceeded);
         listOfFunctions.put(NetCodes.GAME_FINISHED_FAILED, this::gameFinishedFailed);
     }
 
     public void createGameSucceeded(String responseData) {
+        this.admin = true;
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
         ((MainMenuController) this.controller).enterGameSucceeded(new JoinGameType(player));
@@ -107,7 +143,6 @@ public class ClientImpl {
     public void createGameBroadcastFailed(String responseData) {
         this.controller.commandFailed(FailureMessages.CREATE_GAME_BROADCAST, responseData);
     }
-
 
     private void joinGameSucceeded(String responseData) {
         JoinGameType joinGameType = GsonConfiguration.gson.fromJson(responseData, JoinGameType.class);
@@ -224,6 +259,15 @@ public class ClientImpl {
         request(createGame);
     }
 
+    public void deleteGame(int gameId) {
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
+        Request deleteGame = new Request(NetCodes.DELETE_GAME,
+                GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        request(deleteGame);
+    }
+
     public void joinGame(int gameId, String username) {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
@@ -232,6 +276,23 @@ public class ClientImpl {
         Request joinGame = new Request(NetCodes.JOIN_GAME,
                 GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(joinGame);
+    }
+
+    public void leaveGame(int gameId, String username) {
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+        requestData.put(FieldsRequestName.USERNAME, username);
+        Request leaveGame = new Request(NetCodes.LEAVE_GAME,
+                GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        request(leaveGame);
+    }
+
+    public void leaveGameSucceed() {
+        this.controller.backMainMenu();
+    }
+
+    public void leaveGameFailed() {
+        this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
     }
 
     public void listOfNotStartedGame() {
