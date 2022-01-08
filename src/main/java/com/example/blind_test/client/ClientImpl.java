@@ -35,24 +35,14 @@ public class ClientImpl {
     private static final Logger logger = LoggerFactory.getLogger(ClientImpl.class);
     private static final ClientImpl clientImpl = new ClientImpl();
 
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
     private String ipAddress;
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
-
     private AsynchronousSocketChannel client;
     private Controller controller;
     private Player player;
-    private boolean admin = false;
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
 
     private ClientImpl() {
     }
@@ -129,7 +119,6 @@ public class ClientImpl {
     }
 
     public void createGameSucceeded(String responseData) {
-        this.admin = true;
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
         ((MainMenuController) this.controller).enterGameSucceeded(new JoinGameType(player));

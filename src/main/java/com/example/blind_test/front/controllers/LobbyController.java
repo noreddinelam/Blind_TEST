@@ -52,7 +52,7 @@ public class LobbyController extends Controller {
 
     @FXML
     void onQuitGame(ActionEvent event) {
-        if(this.clientImpl.isAdmin()) this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
+        if(this.isAdmin) this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
         else {
             this.clientImpl.leaveGame(this.clientImpl.getPlayer().getGame().getId(),
                     this.clientImpl.getPlayer().getUsername());

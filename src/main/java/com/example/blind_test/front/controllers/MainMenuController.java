@@ -104,7 +104,6 @@ public class MainMenuController extends Controller {
     void onQuitGame(ActionEvent event) {
         //TODO : delete game when closing
         Stage stage = (Stage) quitGame.getScene().getWindow();
-        this.clientImpl.setAdmin(false);
         stage.close();
     }
 
