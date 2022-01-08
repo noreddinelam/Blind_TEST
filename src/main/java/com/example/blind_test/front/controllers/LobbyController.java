@@ -52,7 +52,7 @@ public class LobbyController extends Controller {
 
     @FXML
     void onQuitGame(ActionEvent event) {
-        if(this.clientImpl.isAdmin()) this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
+        if(this.isAdmin) this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
         else {
             this.clientImpl.leaveGame(this.clientImpl.getPlayer().getGame().getId(),
                     this.clientImpl.getPlayer().getUsername());
@@ -105,6 +105,17 @@ public class LobbyController extends Controller {
             if (this.nbPlayersInGame == player.getGame().getTotalPlayers()) startGame.setDisable(false);
         });
     }
+
+    public void removePlayerToListOfPlayers(String username)
+    {
+        Platform.runLater(() -> {
+            Player player = new Player(username);
+            this.joinedPlayerList.getItems().remove(player);
+            this.numberOfJoinedPlayers.setText((--this.nbPlayersInGame) + " / " + player.getGame().getTotalPlayers());
+            startGame.setDisable(true);
+        });
+    }
+
     public void startGame(Question question) {
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Vue.fxml"));

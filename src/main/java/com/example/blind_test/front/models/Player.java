@@ -19,6 +19,10 @@ public class Player {
         this.score = score;
     }
 
+    public Player(String username) {
+        this.username=username;
+    }
+
     public String getUsername() {
         return username;
     }
