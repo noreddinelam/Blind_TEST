@@ -4,6 +4,7 @@ import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.shared.communication.JoinGameType;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
@@ -34,6 +35,14 @@ public class LobbyController extends Controller {
     private Button startGame;
 
     @FXML
+    private Button quitGame;
+
+    @FXML
+    void onQuitGame(ActionEvent event) {
+
+    }
+
+    @FXML
     private void initialize() {
         this.clientImpl = ClientImpl.getUniqueInstanceClientImpl();
         this.clientImpl.setController(this);
@@ -55,9 +64,9 @@ public class LobbyController extends Controller {
         Platform.runLater(() -> {
             if (jgt.getOtherPlayers() != null) {
                 this.joinedPlayerList.getItems().setAll(jgt.getOtherPlayers());
-                this.numberOfJoinedPlayers.setText("1 / " + jgt.getPlayer().getGame().getPlayers());
-            } else
                 this.numberOfJoinedPlayers.setText((jgt.getOtherPlayers().size() + 1) + " / " + jgt.getPlayer().getGame().getPlayers());
+            } else
+                this.numberOfJoinedPlayers.setText("1 / " + jgt.getPlayer().getGame().getPlayers());
             this.joinedPlayerList.getItems().add(jgt.getPlayer());
             this.rounds.setText(String.valueOf(jgt.getPlayer().getGame().getRounds()));
             this.responseTime.setText(String.valueOf(jgt.getPlayer().getGame().getTimeQuestion()));
