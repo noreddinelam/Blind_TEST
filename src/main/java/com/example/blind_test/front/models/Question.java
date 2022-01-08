@@ -50,6 +50,10 @@ public class Question {
         this.state = state;
     }
 
+    public String getResource() {
+        return resource;
+    }
+
     public int getQuestionId() {
         return questionId;
     }
