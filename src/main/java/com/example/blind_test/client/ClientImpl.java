@@ -119,7 +119,7 @@ public class ClientImpl {
     }
     private void leaveGameBroadcast(String usernameOfLeftPlayer)
     {
-        ((LobbyController) this.controller).
+        ((LobbyController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer);
     }
 
     private void deleteGameBroadcastSucceeded(String s) {

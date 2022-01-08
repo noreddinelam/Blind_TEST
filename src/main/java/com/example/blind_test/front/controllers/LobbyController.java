@@ -109,7 +109,11 @@ public class LobbyController extends Controller {
     public void removePlayerToListOfPlayers(String username)
     {
         Platform.runLater(() -> {
-            this.joinedPlayerList.getItems().remove(new Player(username));
+            Player player = new Player(username);
+            this.joinedPlayerList.getItems().remove(player);
+            this.numberOfJoinedPlayers.setText((--this.nbPlayersInGame) + " / " + player.getGame().getTotalPlayers());
+            startGame.setDisable(true);
+        });
     }
 
     public void startGame(Question question) {
