@@ -103,7 +103,7 @@ public class GameController extends Controller {
             this.responseD.setText(firstQuestion.getChoiceByIndex(3));
             this.timePerQuestion = timePerQuestion;
             this.timer.setText(String.valueOf(timePerQuestion));
-            new Timer(timePerQuestion,this);
+            new Timer(timePerQuestion,this).start();
             this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
         });
     }

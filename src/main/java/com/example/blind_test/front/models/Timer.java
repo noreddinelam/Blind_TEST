@@ -15,7 +15,7 @@ public class Timer extends Thread {
     public void run() {
         try {
             while (cpt != 0) {
-                this.wait(1000);
+                Thread.sleep(1000);
                 cpt--;
                 this.gameController.setTimerTime(cpt);
             }
