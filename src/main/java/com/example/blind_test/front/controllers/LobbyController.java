@@ -102,6 +102,13 @@ public class LobbyController extends Controller {
             if (this.nbPlayersInGame == player.getGame().getTotalPlayers()) startGame.setDisable(false);
         });
     }
+
+    public void removePlayerToListOfPlayers(String username)
+    {
+        Platform.runLater(() -> {
+            this.joinedPlayerList.getItems().remove(new Player(username));
+    }
+
     public void startGame(Question question) {
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Vue.fxml"));

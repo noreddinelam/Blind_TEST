@@ -114,9 +114,9 @@ public class ClientImpl {
     private void leaveGameFailed(String s) {
         this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
     }
-    private void leaveGameBroadcast(String s)
+    private void leaveGameBroadcast(String usernameOfLeftPlayer)
     {
-        //String usernameOfLeftPlayer = GsonConfiguration.gson.fromJson(s, );
+        ((LobbyController) this.controller).
     }
 
     private void deleteGameBroadcastSucceeded(String s) {
