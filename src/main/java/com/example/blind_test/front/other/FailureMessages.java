@@ -23,4 +23,7 @@ public class FailureMessages {
     public static final String USERNAME_EMPTY_TITLE = "Username Empty";
     public static final String USERNAME_EMPTY_MESSAGE = "Please provide a valid username !";
 
+    public static final String UNSELECTED_GAME = "Unselected game";
+    public static final String UNSELECTED_GAME_MESSAGE = "Please select game in the game list !";
+
 }

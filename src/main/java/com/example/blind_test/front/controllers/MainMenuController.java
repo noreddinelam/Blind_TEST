@@ -69,7 +69,7 @@ public class MainMenuController extends Controller {
                     usernameText.getText().trim());
         else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+            this.commandFailed(FailureMessages.UNSELECTED_GAME, FailureMessages.UNSELECTED_GAME_MESSAGE);
         }
     }
 
@@ -87,10 +87,14 @@ public class MainMenuController extends Controller {
 
     @FXML
     void onJoinGame(ActionEvent event) {
-        if (!this.usernameText.getText().trim().isEmpty() && listOfGameToJoin.getSelectionModel().getSelectedItem() != null)
-            this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(),
-                    this.usernameText.getText().trim());
-        else {
+        if (!this.usernameText.getText().trim().isEmpty()) {
+            if (listOfGameToJoin.getSelectionModel().getSelectedItem() != null)
+                this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(),
+                        this.usernameText.getText().trim());
+            else {
+                this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+            }
+        } else {
             this.usernameText.setText("");
             this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
         }
