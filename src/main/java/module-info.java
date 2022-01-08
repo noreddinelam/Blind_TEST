@@ -10,6 +10,7 @@ module com.example.blind_test {
     requires org.assertj.core;
     requires junit;
     requires java.sql;
+    requires java.desktop;
     opens com.example.blind_test to javafx.fxml;
     opens com.example.blind_test.shared.communication to com.google.gson ;
     opens com.example.blind_test.front.models to com.google.gson;

@@ -20,11 +20,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.sound.sampled.*;
 
 public class GameController extends Controller {
 
@@ -36,6 +38,7 @@ public class GameController extends Controller {
     private int timePerQuestion;
     private boolean adminGame = false;
     private int nbQuestions;
+    private Clip clip;
 
     @FXML
     private Button quitGame;
@@ -66,30 +69,34 @@ public class GameController extends Controller {
 
     @FXML
     void onResponseA(ActionEvent event) {
-        this.clickedButton = responseA;
-        if (!this.responded)
+        if (!this.responded){
+            this.clickedButton = responseA;
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseA.getText());
+        }
     }
 
     @FXML
     void onResponseB(ActionEvent event) {
-        this.clickedButton = responseB;
-        if (!this.responded)
+        if (!this.responded) {
+            this.clickedButton = responseB;
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseB.getText());
+        }
     }
 
     @FXML
     void onResponseC(ActionEvent event) {
-        this.clickedButton = responseC;
-        if (!this.responded)
+        if (!this.responded) {
+            this.clickedButton = responseC;
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseC.getText());
+        }
     }
 
     @FXML
     void onResponseD(ActionEvent event) {
-        this.clickedButton = responseD;
-        if (!this.responded)
+        if (!this.responded) {
+            this.clickedButton = responseD;
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseD.getText());
+        }
     }
 
     @FXML
@@ -151,10 +158,17 @@ public class GameController extends Controller {
             new Timer(this.timePerQuestion, this).start();
             try {
                 String path = question.getResource();
+                if(!this.clientImpl.getPlayer().getGame().isImageGame()) {
+                    clip = AudioSystem.getClip();
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(new FileInputStream(path));
+                    clip.open(inputStream);
+                    clip.start();
+                    path = "src/main/resources/com/example/blind_test/images/music.png";
+                }
                 FileInputStream questionImage = new FileInputStream(path);
                 Image image1 = new Image(questionImage, 400, 418, false, true);
                 currentQuestion.setImage(image1);
-            } catch (FileNotFoundException e) {
+            } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
                 e.printStackTrace();
             }
         });
@@ -195,6 +209,8 @@ public class GameController extends Controller {
     }
 
     public void nextRound() {
+        if(!this.clientImpl.getPlayer().getGame().isImageGame())
+            clip.stop();
         if (this.adminGame) {
             int round = Integer.parseInt(this.round.getText());
             if (round < this.nbQuestions)

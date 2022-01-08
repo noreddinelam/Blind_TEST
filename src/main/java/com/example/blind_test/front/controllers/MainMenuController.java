@@ -69,7 +69,7 @@ public class MainMenuController extends Controller {
                     usernameText.getText().trim());
         else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.UNSELECTED_GAME, FailureMessages.UNSELECTED_GAME_MESSAGE);
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
         }
     }
 
@@ -96,7 +96,7 @@ public class MainMenuController extends Controller {
             }
         } else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+            this.commandFailed(FailureMessages.UNSELECTED_GAME, FailureMessages.UNSELECTED_GAME_MESSAGE);;
         }
     }
 

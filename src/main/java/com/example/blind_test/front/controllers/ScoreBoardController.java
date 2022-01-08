@@ -19,7 +19,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class ScoreBoardController extends Controller {
@@ -89,7 +88,7 @@ public class ScoreBoardController extends Controller {
 
     public void initView(List<Player> players, int numberOfQuestions, int responseTime) {
         Platform.runLater(() -> {
-            Collections.sort(players, Comparator.comparingInt(Player::getScore));
+            Collections.sort(players, (player1, player2) -> player2.getScore() - player1.getScore());
             this.playersList.getItems().setAll(players);
             this.rounds.setText(String.valueOf(numberOfQuestions));
             this.responseTime.setText(String.valueOf(responseTime));
