@@ -10,7 +10,6 @@ import java.nio.channels.AsynchronousSocketChannel;
 public abstract class Controller {
     protected ClientImpl clientImpl;
     protected Scene scene;
-
     public void setNecessaryInformation(AsynchronousSocketChannel client, String ipAddress ,Scene scene){
         this.clientImpl.setController(this);
         this.clientImpl.setClient(client);

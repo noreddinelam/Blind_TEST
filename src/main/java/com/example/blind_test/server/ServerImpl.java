@@ -64,14 +64,14 @@ public class ServerImpl {
         }
     }
 
-    private static void deleteGame(String data) throws GetPlayersOfGameException {
+    private static void deleteGame(String data){
         logger.info("CREATE GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         List<Player> list = playerRepository.getPlayersOfGame(gameId);
         try {
             gameRepository.deleteGameDB(gameId);
-            Response response = new Response(NetCodes.DELETE_GAME_SUCCEED, "Game deleted!");
+            Response response = new Response(NetCodes.DELETE_GAME,"Game deleted!");
             for (Player playerOther : list) {
                 responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
@@ -112,7 +112,7 @@ public class ServerImpl {
                 responseBroadcast(aPlayerHasJoined, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
             listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
-        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
+        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
             response(response, clientJoin);
         }
@@ -167,7 +167,7 @@ public class ServerImpl {
             client.read(newBuffer,newBuffer,new ServerReaderCompletionHandler());
         } catch (FetchQuestionException e) {
             e.printStackTrace();
-        } catch (GenerateQuestionException | ChangeGameStateException | GetPlayersOfGameException e) {
+        } catch (GenerateQuestionException | ChangeGameStateException e) {
             e.printStackTrace();
         }
     }
@@ -247,7 +247,7 @@ public class ServerImpl {
             for (Player player : list) {
                 responseBroadcast(response, listOfPlayers.get(new Credentials(player.getUsername(), gameId)));
             }
-        } catch (GetPlayersOfGameException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -258,6 +258,7 @@ public class ServerImpl {
         listOfFunctions.put(NetCodes.START_GAME, ServerImpl::startGame);
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
         listOfFunctions.put(NetCodes.CREATE_GAME, ServerImpl::createGame);
+        listOfFunctions.put(NetCodes.DELETE_GAME,ServerImpl::deleteGame);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION, ServerImpl::getQuestionResponse);
         listOfFunctions.put(NetCodes.JOIN_GAME, ServerImpl::joinGame);
         listOfFunctions.put(NetCodes.NEXT_ROUND, ServerImpl::nextRoundInformation);

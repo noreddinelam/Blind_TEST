@@ -33,9 +33,19 @@ public class ClientImpl {
     private static final Logger logger = LoggerFactory.getLogger(ClientImpl.class);
     private static final ClientImpl clientImpl = new ClientImpl();
     private String ipAddress;
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
     private AsynchronousSocketChannel client;
     private Controller controller;
     private Player player;
+    private boolean admin = false;
 
     private ClientImpl() {
     }
@@ -89,6 +99,7 @@ public class ClientImpl {
     }
 
     public void createGameSucceeded(String responseData) {
+        this.admin=true;
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
         ((MainMenuController) this.controller).enterGameSucceeded(new JoinGameType(player));
@@ -103,6 +114,10 @@ public class ClientImpl {
         this.controller.commandFailed(FailureMessages.CREATE_GAME_BROADCAST, responseData);
     }
 
+    private void deleteGameBroadcastSucceeded()
+    {
+
+    }
 
     private void joinGameSucceeded(String responseData) {
         JoinGameType joinGameType = GsonConfiguration.gson.fromJson(responseData,JoinGameType.class);
@@ -195,6 +210,14 @@ public class ClientImpl {
         Request createGame = new Request(NetCodes.CREATE_GAME,
                 GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(createGame);
+    }
+    public void deleteGame(int gameId)
+    {
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+        Request deleteGame = new Request(NetCodes.DELETE_GAME,
+                GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        request(deleteGame);
     }
 
     public void joinGame(int gameId, String username) {

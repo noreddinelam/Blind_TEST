@@ -55,7 +55,7 @@ public class PlayerRepositoryTest {
         String username = "Batmann";
         try {
             assertThat(repository.getPlayersOfGame(gameId).get(0).getUsername()).isEqualTo(username);
-        } catch (GetPlayersOfGameException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

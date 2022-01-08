@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -49,7 +50,7 @@ public class LobbyController extends Controller {
 
     @FXML
     void onQuitGame(ActionEvent event) {
-
+        this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
     }
 
     @FXML
