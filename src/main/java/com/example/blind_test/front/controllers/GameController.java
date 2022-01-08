@@ -3,22 +3,34 @@ package com.example.blind_test.front.controllers;
 import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.front.models.Question;
+import com.example.blind_test.front.models.Timer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameController extends Controller {
 
+    @FXML
+    private Text currentPlayerName;
+
     private Question currentQuestionModel;
     private Button clickedButton;
     private boolean responded = false;
+    private int timePerQuestion;
 
     @FXML
     private Button quitGame;
@@ -52,7 +64,6 @@ public class GameController extends Controller {
         this.clickedButton = responseA;
         if (!this.responded)
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseA.getText());
-        setResponded();
     }
 
     @FXML
@@ -60,7 +71,6 @@ public class GameController extends Controller {
         this.clickedButton = responseB;
         if (!this.responded)
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseB.getText());
-        setResponded();
     }
 
     @FXML
@@ -68,7 +78,6 @@ public class GameController extends Controller {
         this.clickedButton = responseC;
         if (!this.responded)
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseC.getText());
-        setResponded();
     }
 
     @FXML
@@ -76,7 +85,6 @@ public class GameController extends Controller {
         this.clickedButton = responseD;
         if (!this.responded)
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseD.getText());
-        setResponded();
     }
 
     @FXML
@@ -96,26 +104,45 @@ public class GameController extends Controller {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    setText(player.getUsername());
+
+                    try {
+                        HBox hbox = new HBox(30);
+                        String path = "src/main/resources/com/example/blind_test/images/player.png";
+                        String path2 = "src/main/resources/com/example/blind_test/images/score.png";
+                        FileInputStream inputPlayer = new FileInputStream(path);
+                        FileInputStream inputScore = new FileInputStream(path2);
+                        Image image1 = new Image(inputPlayer, 30, 30, true, false);
+                        Image image2 = new Image(inputScore, 30, 30, false, false);
+                        ImageView playerView = new ImageView(image1);
+                        ImageView scoreView = new ImageView(image2);
+                        List<Node> itemsInHbox = new ArrayList<>();
+                        itemsInHbox.add(playerView);
+                        itemsInHbox.add(new Text(player.getUsername()));
+                        itemsInHbox.add(scoreView);
+                        itemsInHbox.add(new Text(""+player.getScore()));
+                        hbox.getChildren().setAll(itemsInHbox);
+                        hbox.setAlignment(Pos.CENTER);
+                        setGraphic(hbox);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
     }
 
-    public void initListPlayer(List<Player> list) {
-        Platform.runLater(() -> {
-            this.scoreBoard.getItems().addAll(list);
-        });
-    }
-
-    public void initView(List<Player> list, Question firstQuestion) {
-        Platform.runLater(() -> {
+    public void initView(List<Player> list, Question firstQuestion,int timePerQuestion){
+        Platform.runLater(()->{
             this.scoreBoard.getItems().setAll(list);
             this.currentQuestionModel = firstQuestion;
             this.responseA.setText(firstQuestion.getChoiceByIndex(0));
             this.responseB.setText(firstQuestion.getChoiceByIndex(1));
             this.responseC.setText(firstQuestion.getChoiceByIndex(2));
             this.responseD.setText(firstQuestion.getChoiceByIndex(3));
+            this.timePerQuestion = timePerQuestion;
+            this.timer.setText(String.valueOf(timePerQuestion));
+            new Timer(timePerQuestion,this).start();
+            this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
         });
     }
 
@@ -135,6 +162,8 @@ public class GameController extends Controller {
            this.scoreBoard.getItems().set(index,p);
         });
 
+    public void setTimerTime(int remainingTime){
+        this.timer.setText(String.valueOf(remainingTime));
     }
 
 }
