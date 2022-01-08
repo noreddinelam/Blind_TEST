@@ -35,7 +35,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <ListView fx:id="scoreBoard" layoutX="28.0" layoutY="43.0" prefHeight="412.0" prefWidth="328.0" style="-fx-background-image: #292929;" styleClass="list_view1" stylesheets="@stylesheet.css" />
+      <ListView fx:id="scoreBoard" layoutX="28.0" layoutY="43.0" prefHeight="412.0" prefWidth="328.0" style="-fx-background-color: white; -fx-border-color: #495057; -fx-border-width: 2px; -fx-background-radius: 5px; -fx-border-radius: 5px;" styleClass="list_view1" stylesheets="@stylesheet.css" />
       <ImageView fx:id="currentQuestion" fitHeight="194.0" fitWidth="262.0" layoutX="900.0" layoutY="797.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="timer" fill="WHITE" layoutX="712.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Times left" wrappingWidth="114.13671875">
          <font>
