@@ -29,10 +29,8 @@ public abstract class Controller {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("MainMenu.fxml"));
             Parent parent = fxmlLoader.load();
             MainMenuController controller = fxmlLoader.getController();
-            Scene scene = new Scene(parent);
-            controller.setNecessaryInformation(this.clientImpl.getClient(),this.clientImpl.getIpAddress(),scene);
             controller.initializeListOfUnStartedGames();
-            controller.scene = this.scene;
+            this.clientImpl.setController(controller);
             this.scene.setRoot(parent);
         } catch (IOException e) {
             e.printStackTrace();

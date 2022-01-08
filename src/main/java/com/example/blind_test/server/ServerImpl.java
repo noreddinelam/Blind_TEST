@@ -68,6 +68,8 @@ public class ServerImpl {
         logger.info("Delete GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         List<Player> list = playerRepository.getPlayersOfGame(gameId);
         try {
             gameRepository.deleteGameDB(gameId);
@@ -81,6 +83,8 @@ public class ServerImpl {
                     listOfPlayers.remove(entryCredential.getKey());
                 }
             }
+            ByteBuffer buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+            client.read(buffer, buffer, new ServerReaderCompletionHandler());
             //listOfPlayers.entrySet().removeIf((entry) -> entry.getKey().getGameId() == gameId);
         } catch (DeleteGameException e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
