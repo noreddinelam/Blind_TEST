@@ -29,9 +29,6 @@ public class ScoreBoardController extends Controller {
     private Text rounds;
 
     @FXML
-    private Text winner;
-
-    @FXML
     void onQuitGame(ActionEvent event) {
 
     }
@@ -54,5 +51,4 @@ public class ScoreBoardController extends Controller {
             this.responseTime.setText(String.valueOf(responseTime));
         });
     }
-
 }
