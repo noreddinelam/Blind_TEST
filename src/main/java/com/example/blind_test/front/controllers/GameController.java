@@ -99,8 +99,8 @@ public class GameController extends Controller {
                         String path2 = "src/main/resources/com/example/blind_test/images/score.png";
                         FileInputStream inputPlayer = new FileInputStream(path);
                         FileInputStream inputScore = new FileInputStream(path2);
-                        Image image1 = new Image(inputPlayer, 30, 30, true, true);
-                        Image image2 = new Image(inputScore, 30, 30, true, true);
+                        Image image1 = new Image(inputPlayer, 30, 30, true, false);
+                        Image image2 = new Image(inputScore, 30, 30, false, false);
                         ImageView playerView = new ImageView(image1);
                         ImageView scoreView = new ImageView(image2);
                         List<Node> itemsInHbox = new ArrayList<>();
