@@ -98,12 +98,12 @@ public class ClientImpl {
         this.controller.commandFailed(FailureMessages.CREATE_GAME_BROADCAST, responseData);
     }
 
-    public void listOfNotStartedGameSucceeded(String responseData){
-        Map<String,List<Game>> games = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
+    public void listOfNotStartedGameSucceeded(String responseData) {
+        Map<String, List<Game>> games = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
         ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
-    public void modifyGameStateSucceeded(String responseData) {
+    public void startGameSucceeded(String responseData) {
         Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
