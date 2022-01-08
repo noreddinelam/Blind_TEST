@@ -4,6 +4,7 @@ import com.example.blind_test.HelloApplication;
 import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.other.FailureMessages;
+import com.example.blind_test.shared.communication.JoinGameType;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -156,24 +157,25 @@ public class MainMenuController extends Controller {
         });
     }
 
-    public void createGameSucceeded() {
+    public void enterGameSucceeded(JoinGameType jgt) {
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Lobby.fxml"));
             Parent root = loader.load();
             LobbyController controller = loader.getController();
             controller.scene = this.scene;
+            controller.initView(jgt);
             this.scene.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void addGameToListGameToJoin(Game game) {
-            Platform.runLater(() -> {
-                this.listOfGameToJoin.getItems().add(game);
-            });
-    }
 
+    public void addGameToListGameToJoin(Game game) {
+        Platform.runLater(() -> {
+            this.listOfGameToJoin.getItems().add(game);
+        });
+    }
 
 
 }

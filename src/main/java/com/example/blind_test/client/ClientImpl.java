@@ -2,6 +2,7 @@ package com.example.blind_test.client;
 
 
 import com.example.blind_test.front.controllers.Controller;
+import com.example.blind_test.front.controllers.LobbyController;
 import com.example.blind_test.front.controllers.MainMenuController;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
@@ -11,6 +12,7 @@ import com.example.blind_test.shared.CommunicationTypes;
 import com.example.blind_test.shared.FieldsRequestName;
 import com.example.blind_test.shared.NetCodes;
 import com.example.blind_test.shared.Properties;
+import com.example.blind_test.shared.communication.JoinGameType;
 import com.example.blind_test.shared.communication.Request;
 import com.example.blind_test.shared.communication.Response;
 import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
@@ -69,6 +71,7 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.CREATE_GAME_SUCCEED, this::createGameSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_SUCCEED, this::createGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_FAILED, this::createGameBroadcastFailed);
+        listOfFunctions.put(NetCodes.JOIN_GAME_SUCCEED,this::joinGameSucceeded);
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceeded);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceeded);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceeded);
@@ -86,7 +89,7 @@ public class ClientImpl {
     public void createGameSucceeded(String responseData) {
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
         this.player = player;
-        ((MainMenuController) this.controller).createGameSucceeded();
+        ((MainMenuController) this.controller).enterGameSucceeded(new JoinGameType(player));
     }
 
     public void createGameBroadcastSucceeded(String responseData) {
@@ -98,8 +101,15 @@ public class ClientImpl {
         this.controller.commandFailed(FailureMessages.CREATE_GAME_BROADCAST, responseData);
     }
 
-    public void listOfNotStartedGameSucceeded(String responseData) {
-        Map<String, List<Game>> games = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
+
+    private void joinGameSucceeded(String responseData) {
+        JoinGameType joinGameType = GsonConfiguration.gson.fromJson(responseData,JoinGameType.class);
+        this.player = joinGameType.getPlayer();
+        ((MainMenuController)this.controller).enterGameSucceeded(joinGameType);
+    }
+
+    public void listOfNotStartedGameSucceeded(String responseData){
+        Map<String,List<Game>> games = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapListGameJsonTypeData);
         ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
