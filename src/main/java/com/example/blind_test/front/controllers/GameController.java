@@ -3,6 +3,7 @@ package com.example.blind_test.front.controllers;
 import com.example.blind_test.client.ClientImpl;
 import com.example.blind_test.front.models.Player;
 import com.example.blind_test.front.models.Question;
+import com.example.blind_test.front.models.Timer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import java.util.List;
 public class GameController extends Controller {
 
     private Question currentQuestionModel;
+    private int timePerQuestion;
 
     @FXML
     private Button quitGame;
@@ -88,13 +90,7 @@ public class GameController extends Controller {
         });
     }
 
-    public void initListPlayer(List<Player> list) {
-        Platform.runLater(() -> {
-            this.scoreBoard.getItems().addAll(list);
-        });
-    }
-
-    public void initView(List<Player> list, Question firstQuestion){
+    public void initView(List<Player> list, Question firstQuestion,int timePerQuestion){
         Platform.runLater(()->{
             this.scoreBoard.getItems().setAll(list);
             this.currentQuestionModel=firstQuestion;
@@ -102,7 +98,14 @@ public class GameController extends Controller {
             this.responseB.setText(firstQuestion.getChoiceByIndex(1));
             this.responseC.setText(firstQuestion.getChoiceByIndex(2));
             this.responseD.setText(firstQuestion.getChoiceByIndex(3));
+            this.timePerQuestion = timePerQuestion;
+            this.timer.setText(String.valueOf(timePerQuestion));
+            new Timer(timePerQuestion,this);
         });
+    }
+
+    public void setTimerTime(int remainingTime){
+        this.timer.setText(String.valueOf(remainingTime));
     }
 
 }
