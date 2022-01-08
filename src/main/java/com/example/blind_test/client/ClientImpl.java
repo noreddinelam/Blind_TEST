@@ -105,6 +105,8 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.DELETE_GAME_FAILED, this::deleteGameFailed);
         listOfFunctions.put(NetCodes.NEXT_ROUND_SUCCEEDED, this::nextRoundSucceeded);
         listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
+        listOfFunctions.put(NetCodes.GAME_FINISHED_SUCCEED, this::gameFinishedSucceeded);
+        listOfFunctions.put(NetCodes.GAME_FINISHED_FAILED, this::gameFinishedFailed);
         listOfFunctions.put(NetCodes.LEAVE_GAME_FAILED, this::leaveGameFailed);
         listOfFunctions.put(NetCodes.LEAVE_GAME_SUCCEED, this::leaveGameSucceed);
         listOfFunctions.put(NetCodes.LEAVE_GAME_BROADCAST,this::leaveGameBroadcast);
@@ -124,8 +126,6 @@ public class ClientImpl {
 
     private void deleteGameBroadcastSucceeded(String s) {
         this.controller.backMainMenu();
-        listOfFunctions.put(NetCodes.GAME_FINISHED_SUCCEED, this::gameFinishedSucceeded);
-        listOfFunctions.put(NetCodes.GAME_FINISHED_FAILED, this::gameFinishedFailed);
     }
 
     public void createGameSucceeded(String responseData) {

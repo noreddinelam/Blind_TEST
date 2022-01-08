@@ -89,7 +89,6 @@ public class ScoreBoardController extends Controller {
 
     public void initView(List<Player> players, int numberOfQuestions, int responseTime) {
         Platform.runLater(() -> {
-
             Collections.sort(players, Comparator.comparingInt(Player::getScore));
             this.playersList.getItems().setAll(players);
             this.rounds.setText(String.valueOf(numberOfQuestions));
