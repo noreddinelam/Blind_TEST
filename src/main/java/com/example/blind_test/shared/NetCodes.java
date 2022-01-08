@@ -17,6 +17,7 @@ public class NetCodes {
     public static final String LEAVE_GAME = "105";
     public static final String LEAVE_GAME_SUCCEED = "106";
     public static final String LEAVE_GAME_FAILED = "107";
+    public static final String LEAVE_GAME_BROADCAST = "108";
 
     public static final String DELETE_GAME = "200";
     public static final String DELETE_GAME_BROADCAST_SUCCEED = "201";

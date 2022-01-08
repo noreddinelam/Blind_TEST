@@ -236,6 +236,21 @@ public class ClientImpl {
         request(joinGame);
     }
 
+    public void leaveGame(int gameId,String username)
+    {
+        Map<String, String> requestData = new HashMap<>();
+        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
+        requestData.put(FieldsRequestName.USERNAME, username);
+        Request leaveGame = new Request(NetCodes.LEAVE_GAME,
+                GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        request(leaveGame);
+    }
+
+    public void leaveGameSucceed()
+    {
+        this.controller.backMainMenu();
+    }
+
     public void listOfNotStartedGame() {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);

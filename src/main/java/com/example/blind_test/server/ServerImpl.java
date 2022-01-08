@@ -133,6 +133,10 @@ public class ServerImpl {
             if(playerRepository.deletePlayerFromGame(username,gameId))
             {
                 Response response = new Response(NetCodes.LEAVE_GAME_SUCCEED,"YOU LEFT THE GAME !");
+                addGuestClients(client);
+                listOfPlayers.remove(new Credentials(username,gameId));
+                Response broadcastResponse = new Response(NetCodes.LEAVE_GAME_BROADCAST,username);
+                listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse, entry.getValue()));
                 response(response,client);
             }
             else throw new DeletePlayerException();
