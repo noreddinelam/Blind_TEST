@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -97,7 +98,6 @@ public class LobbyController extends Controller {
             if (this.nbPlayersInGame == player.getGame().getTotalPlayers()) startGame.setDisable(false);
         });
     }
-
     public void startGame(Question question) {
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Vue.fxml"));

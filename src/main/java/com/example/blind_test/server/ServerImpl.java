@@ -65,13 +65,13 @@ public class ServerImpl {
     }
 
     private static void deleteGame(String data){
-        logger.info("CREATE GAME INFO {} ", data);
+        logger.info("Delete GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         List<Player> list = playerRepository.getPlayersOfGame(gameId);
         try {
             gameRepository.deleteGameDB(gameId);
-            Response response = new Response(NetCodes.DELETE_GAME,"Game deleted!");
+            Response response = new Response(NetCodes.DELETE_GAME_BROADCAST_SUCCEED,"Game deleted!");
             for (Player playerOther : list) {
                 responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }

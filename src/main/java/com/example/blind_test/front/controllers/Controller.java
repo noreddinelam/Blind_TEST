@@ -1,10 +1,14 @@
 package com.example.blind_test.front.controllers;
 
+import com.example.blind_test.HelloApplication;
 import com.example.blind_test.client.ClientImpl;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
+import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;
 
 public abstract class Controller {
@@ -17,6 +21,22 @@ public abstract class Controller {
         this.clientImpl.initThreadReader();
         this.clientImpl.initListOfFunctions();
         this.scene = scene;
+    }
+
+    public void backMainMenu()
+    {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("MainMenu.fxml"));
+            Parent parent = fxmlLoader.load();
+            MainMenuController controller = fxmlLoader.getController();
+            Scene scene = new Scene(parent);
+            controller.setNecessaryInformation(this.clientImpl.getClient(),this.clientImpl.getIpAddress(),scene);
+            controller.initializeListOfUnStartedGames();
+            controller.scene = this.scene;
+            this.scene.setRoot(parent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void commandFailed(String title, String failureMessage) {

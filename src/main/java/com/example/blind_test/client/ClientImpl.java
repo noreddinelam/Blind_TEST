@@ -32,6 +32,11 @@ public class ClientImpl {
     protected static final Hashtable<String, Consumer<String>> listOfFunctions = new Hashtable<>();
     private static final Logger logger = LoggerFactory.getLogger(ClientImpl.class);
     private static final ClientImpl clientImpl = new ClientImpl();
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
     private String ipAddress;
 
     public boolean isAdmin() {
@@ -81,6 +86,7 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.CREATE_GAME_SUCCEED, this::createGameSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_SUCCEED, this::createGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.CREATE_GAME_BROADCAST_FAILED, this::createGameBroadcastFailed);
+        listOfFunctions.put(NetCodes.DELETE_GAME_BROADCAST_SUCCEED,this::deleteGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.JOIN_GAME_SUCCEED,this::joinGameSucceeded);
         listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_SUCCEED,this::joinGameBroadcastSucceeded);
         listOfFunctions.put(NetCodes.JOIN_GAME_BROADCAST_FAILED,this::joinGameBroadcastFailed);
@@ -98,6 +104,10 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
     }
 
+    private void deleteGameBroadcastSucceeded(String s) {
+        this.controller.backMainMenu();
+    }
+
     public void createGameSucceeded(String responseData) {
         this.admin=true;
         Player player = GsonConfiguration.gson.fromJson(responseData, Player.class);
@@ -112,11 +122,6 @@ public class ClientImpl {
 
     public void createGameBroadcastFailed(String responseData) {
         this.controller.commandFailed(FailureMessages.CREATE_GAME_BROADCAST, responseData);
-    }
-
-    private void deleteGameBroadcastSucceeded()
-    {
-
     }
 
     private void joinGameSucceeded(String responseData) {
