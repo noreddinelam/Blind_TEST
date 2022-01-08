@@ -6,12 +6,19 @@ import com.example.blind_test.front.models.Question;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameController extends Controller {
@@ -85,7 +92,28 @@ public class GameController extends Controller {
                     setText(null);
                     setGraphic(null);
                 } else {
-                    setText(player.getUsername());
+
+                    try {
+                        HBox hbox = new HBox(30);
+                        String path = "src/main/resources/com/example/blind_test/images/player.png";
+                        String path2 = "src/main/resources/com/example/blind_test/images/score.png";
+                        FileInputStream inputPlayer = new FileInputStream(path);
+                        FileInputStream inputScore = new FileInputStream(path2);
+                        Image image1 = new Image(inputPlayer, 30, 30, true, true);
+                        Image image2 = new Image(inputScore, 30, 30, true, true);
+                        ImageView playerView = new ImageView(image1);
+                        ImageView scoreView = new ImageView(image2);
+                        List<Node> itemsInHbox = new ArrayList<>();
+                        itemsInHbox.add(playerView);
+                        itemsInHbox.add(new Text(player.getUsername()));
+                        itemsInHbox.add(scoreView);
+                        itemsInHbox.add(new Text(""+player.getScore()));
+                        hbox.getChildren().setAll(itemsInHbox);
+                        hbox.setAlignment(Pos.CENTER);
+                        setGraphic(hbox);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
