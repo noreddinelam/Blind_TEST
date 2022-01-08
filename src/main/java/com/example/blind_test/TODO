@@ -1,5 +1,4 @@
-
 //todo : set all questions  when starting the game
-//todo : broadcast clientside for create_game
-//todo : initialize the lobby screen for the player
-
+//todo : choice box colors.
+//todo : start game to vue.fxml
+//todo : close button in the lobby mode.

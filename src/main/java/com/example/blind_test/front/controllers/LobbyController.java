@@ -41,6 +41,11 @@ public class LobbyController extends Controller {
     private Button quitGame;
 
     @FXML
+    void onStartGame(ActionEvent event) {
+
+    }
+
+    @FXML
     void onQuitGame(ActionEvent event) {
 
     }
@@ -89,4 +94,6 @@ public class LobbyController extends Controller {
     public void setTotalNbPlayersInGame(int totalNbPlayersInGame) {
         this.totalNbPlayersInGame = totalNbPlayersInGame;
     }
+
+    public void startGame(){}
 }

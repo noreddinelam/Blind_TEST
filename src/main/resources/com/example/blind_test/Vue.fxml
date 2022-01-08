@@ -18,17 +18,17 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="responseA1" layoutX="17.0" layoutY="101.0" mnemonicParsing="false" onAction="#onResponseA" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.leftAnchor="17.0">
+            <Button fx:id="responseC" layoutX="17.0" layoutY="101.0" mnemonicParsing="false" onAction="#onResponseC" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.leftAnchor="17.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="responseA11" layoutX="450.0" layoutY="101.0" mnemonicParsing="false" onAction="#onResponseA" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.rightAnchor="17.0">
+            <Button fx:id="responseD" layoutX="450.0" layoutY="101.0" mnemonicParsing="false" onAction="#onResponseD" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.rightAnchor="17.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
-            <Button fx:id="responseA2" layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#onResponseA" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.rightAnchor="17.0">
+            <Button fx:id="responseB" layoutX="17.0" layoutY="10.0" mnemonicParsing="false" onAction="#onResponseB" prefHeight="84.0" prefWidth="426.0" styleClass="button_1" stylesheets="@stylesheet.css" text="A" textFill="WHITE" AnchorPane.rightAnchor="17.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -36,7 +36,7 @@
          </children>
       </AnchorPane>
       <ListView fx:id="scoreBoard" layoutX="28.0" layoutY="43.0" prefHeight="412.0" prefWidth="328.0" style="-fx-background-image: #292929;" styleClass="list_view1" stylesheets="@stylesheet.css" />
-      <ImageView fx:id="currentQuestion" fitHeight="194.0" fitWidth="262.0" layoutX="900.0" layoutY="797.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="currentQuestion" fitHeight="400.0" fitWidth="400.0" layoutX="426.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="timer" fill="WHITE" layoutX="712.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Times left" wrappingWidth="114.13671875">
          <font>
             <Font name="System Bold" size="20.0" />
@@ -49,7 +49,7 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Text>
-      <ImageView fitHeight="94.0" fitWidth="275.0" layoutX="55.0" layoutY="492.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="94.0" fitWidth="275.0" layoutX="55.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/logo.png" />
          </image>

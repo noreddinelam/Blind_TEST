@@ -18,7 +18,7 @@
                   <Image url="@images/logo.png" />
                </image>
             </ImageView>
-            <Button fx:id="startGame" layoutX="257.0" layoutY="6.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="246.0" styleClass="button_1" stylesheets="@stylesheet.css" text="START GAME" textFill="WHITE">
+            <Button fx:id="startGame" layoutX="257.0" layoutY="6.0" mnemonicParsing="false" onAction="#onStartGame" prefHeight="35.0" prefWidth="246.0" styleClass="button_1" stylesheets="@stylesheet.css" text="START GAME" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
