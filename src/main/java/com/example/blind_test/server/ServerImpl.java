@@ -65,14 +65,16 @@ public class ServerImpl {
         }
     }
 
-    private static void deleteGame(String data) throws GetPlayersOfGameException {
-        logger.info("CREATE GAME INFO {} ", data);
+    private static void deleteGame(String data){
+        logger.info("Delete GAME INFO {} ", data);
         Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         List<Player> list = playerRepository.getPlayersOfGame(gameId);
         try {
             gameRepository.deleteGameDB(gameId);
-            Response response = new Response(NetCodes.DELETE_GAME_SUCCEED, "Game deleted!");
+            Response response = new Response(NetCodes.DELETE_GAME_BROADCAST_SUCCEED,"Game deleted!");
             for (Player playerOther : list) {
                 responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
@@ -82,6 +84,8 @@ public class ServerImpl {
                     listOfPlayers.remove(entryCredential.getKey());
                 }
             }
+            ByteBuffer buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
+            client.read(buffer, buffer, new ServerReaderCompletionHandler());
             //listOfPlayers.entrySet().removeIf((entry) -> entry.getKey().getGameId() == gameId);
         } catch (DeleteGameException e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
@@ -114,12 +118,35 @@ public class ServerImpl {
                         gameId)));
             }
             listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
-        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
+        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
             response(response, clientJoin);
         }
     }
 
+    private static void leaveGame(String data)
+    {
+        logger.info(" leave game info ", data);
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username,gameId));
+        try {
+            if(playerRepository.deletePlayerFromGame(username,gameId))
+            {
+                Response response = new Response(NetCodes.LEAVE_GAME_SUCCEED,"YOU LEFT THE GAME !");
+                addGuestClients(client);
+                listOfPlayers.remove(new Credentials(username,gameId));
+                Response broadcastResponse = new Response(NetCodes.LEAVE_GAME_BROADCAST,username);
+                listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse, entry.getValue()));
+                response(response,client);
+            }
+            else throw new DeletePlayerException();
+        } catch (Exception e) {
+            Response response = new Response(NetCodes.LEAVE_GAME_FAILED,"YOU CAN'T LEAVE THE GAME !");
+            response(response,client);
+        }
+    }
 
     private static void listOfNotStartedGame(String data) {
         logger.info("list of started game {} ", data);
@@ -169,7 +196,7 @@ public class ServerImpl {
             client.read(newBuffer, newBuffer, new ServerReaderCompletionHandler());
         } catch (FetchQuestionException e) {
             e.printStackTrace();
-        } catch (GenerateQuestionException | ChangeGameStateException | GetPlayersOfGameException e) {
+        } catch (GenerateQuestionException | ChangeGameStateException e) {
             e.printStackTrace();
         }
     }
@@ -307,9 +334,11 @@ public class ServerImpl {
         listOfFunctions.put(NetCodes.START_GAME, ServerImpl::startGame);
         listOfFunctions.put(NetCodes.MODIFY_SCORE, ServerImpl::modifyPlayerScore);
         listOfFunctions.put(NetCodes.CREATE_GAME, ServerImpl::createGame);
+        listOfFunctions.put(NetCodes.DELETE_GAME,ServerImpl::deleteGame);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION, ServerImpl::getQuestionResponse);
         listOfFunctions.put(NetCodes.JOIN_GAME, ServerImpl::joinGame);
         listOfFunctions.put(NetCodes.NEXT_ROUND, ServerImpl::nextRoundInformation);
+        listOfFunctions.put(NetCodes.LEAVE_GAME,ServerImpl::leaveGame);
         listOfFunctions.put(NetCodes.GAME_FINISHED, ServerImpl::gameFinished);
         Repository.initConnectionToDatabase();
     }

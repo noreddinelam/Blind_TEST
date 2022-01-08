@@ -14,8 +14,13 @@ public class NetCodes {
     public static final String JOIN_GAME_BROADCAST_SUCCEED = "103";
     public static final String JOIN_GAME_BROADCAST_FAILED = "104";
 
+    public static final String LEAVE_GAME = "105";
+    public static final String LEAVE_GAME_SUCCEED = "106";
+    public static final String LEAVE_GAME_FAILED = "107";
+    public static final String LEAVE_GAME_BROADCAST = "108";
+
     public static final String DELETE_GAME = "200";
-    public static final String DELETE_GAME_SUCCEED = "201";
+    public static final String DELETE_GAME_BROADCAST_SUCCEED = "201";
     public static final String DELETE_GAME_FAILED = "202";
 
 

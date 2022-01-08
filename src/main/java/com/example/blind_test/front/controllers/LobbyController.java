@@ -10,10 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -50,7 +52,11 @@ public class LobbyController extends Controller {
 
     @FXML
     void onQuitGame(ActionEvent event) {
-
+        if(this.clientImpl.isAdmin()) this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
+        else {
+            this.clientImpl.leaveGame(this.clientImpl.getPlayer().getGame().getId(),
+                    this.clientImpl.getPlayer().getUsername());
+        }
     }
 
     @FXML
@@ -99,7 +105,6 @@ public class LobbyController extends Controller {
             if (this.nbPlayersInGame == player.getGame().getTotalPlayers()) startGame.setDisable(false);
         });
     }
-
     public void startGame(Question question) {
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Vue.fxml"));
