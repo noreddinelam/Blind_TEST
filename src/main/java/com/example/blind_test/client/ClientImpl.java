@@ -2,6 +2,7 @@ package com.example.blind_test.client;
 
 
 import com.example.blind_test.front.controllers.Controller;
+import com.example.blind_test.front.controllers.GameController;
 import com.example.blind_test.front.controllers.LobbyController;
 import com.example.blind_test.front.controllers.MainMenuController;
 import com.example.blind_test.front.models.Game;
@@ -139,12 +140,19 @@ public class ClientImpl {
 
     public void getQuestionResponseSucceeded(String responseData) {
         Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
-        int idCurrentQuestion = Integer.parseInt(data.get(FieldsRequestName.CURRENT_QUESTION));
-        String playerResponse = data.get(FieldsRequestName.PLAYER_RESPONSE);
         int score = Integer.parseInt(data.get(FieldsRequestName.PLAYER_SCORE));
-        this.player.getGame().getQuestion(new Question.QuestionBuilder(idCurrentQuestion).build()).setState(true);
+        boolean state = Boolean.parseBoolean(data.get(FieldsRequestName.STATE));
+        if (state){
+            if (username.equalsIgnoreCase(data.get(FieldsRequestName.USERNAME))){
+                ((GameController)this.controller).changeQuestionState("-fx-background-color: #11ec0d");
+            }
+            ((GameController)this.controller).updateScoreBoard(new Player(username,this.player.getGame(),score));
+        }
+        else {
+            ((GameController) this.controller).changeQuestionState("-fx-background-color: #ec350d");
+        }
+        ((GameController)this.controller).setResponded();
     }
 
     public void createGameFailed(String responseData) {
@@ -233,13 +241,13 @@ public class ClientImpl {
         request(modifyPlayerScore);
     }
 
-    public void getQuestionResponse(int idCurrentQuestion, String playerResponse) {
+    public void getQuestionResponse(int orderQuestion, String playerResponse) {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
         requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(this.player.getScore()));
-        requestData.put(FieldsRequestName.CURRENT_QUESTION, String.valueOf(idCurrentQuestion));
         requestData.put(FieldsRequestName.PLAYER_RESPONSE, playerResponse);
+        requestData.put(FieldsRequestName.QUESTION_ORDER, String.valueOf(orderQuestion));
         Request getQuestionResponse = new Request(NetCodes.GET_RESPONSE_FOR_QUESTION, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(getQuestionResponse);
     }

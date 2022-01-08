@@ -96,7 +96,7 @@ public class Mapper {
         String resource = "";
         String response = "";
         List<String> list = new ArrayList<>();
-        int randomInt = random.nextInt();
+        int randomInt = random.nextInt(10);
         while (resultSet.next()) {
             questionId = resultSet.getInt(SQLTablesInformation.QUESTION_ID);
             resource = resultSet.getString(SQLTablesInformation.QUESTION_ID_RESOURCE);
