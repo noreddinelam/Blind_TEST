@@ -104,7 +104,6 @@ public class GameController extends Controller {
                     setText(null);
                     setGraphic(null);
                 } else {
-
                     try {
                         HBox hbox = new HBox(30);
                         String path = "src/main/resources/com/example/blind_test/images/player.png";
@@ -119,7 +118,7 @@ public class GameController extends Controller {
                         itemsInHbox.add(playerView);
                         itemsInHbox.add(new Text(player.getUsername()));
                         itemsInHbox.add(scoreView);
-                        itemsInHbox.add(new Text(""+player.getScore()));
+                        itemsInHbox.add(new Text("" + player.getScore()));
                         hbox.getChildren().setAll(itemsInHbox);
                         hbox.setAlignment(Pos.CENTER);
                         setGraphic(hbox);
@@ -131,8 +130,8 @@ public class GameController extends Controller {
         });
     }
 
-    public void initView(List<Player> list, Question firstQuestion,int timePerQuestion){
-        Platform.runLater(()->{
+    public void initView(List<Player> list, Question firstQuestion, int timePerQuestion) {
+        Platform.runLater(() -> {
             this.scoreBoard.getItems().setAll(list);
             this.currentQuestionModel = firstQuestion;
             this.responseA.setText(firstQuestion.getChoiceByIndex(0));
@@ -141,28 +140,29 @@ public class GameController extends Controller {
             this.responseD.setText(firstQuestion.getChoiceByIndex(3));
             this.timePerQuestion = timePerQuestion;
             this.timer.setText(String.valueOf(timePerQuestion));
-            new Timer(timePerQuestion,this).start();
+            new Timer(timePerQuestion, this).start();
             this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
         });
     }
 
     public void changeQuestionState(String color) {
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             this.clickedButton.setStyle(color);
         });
     }
 
-    public void setResponded(){
+    public void setResponded() {
         responded = true;
     }
 
-    public void updateScoreBoard(Player p){
+    public void updateScoreBoard(Player p) {
         int index = this.scoreBoard.getItems().indexOf(p);
         Platform.runLater(() -> {
-           this.scoreBoard.getItems().set(index,p);
+            this.scoreBoard.getItems().set(index, p);
         });
+    }
 
-    public void setTimerTime(int remainingTime){
+    public void setTimerTime(int remainingTime) {
         this.timer.setText(String.valueOf(remainingTime));
     }
 
