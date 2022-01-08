@@ -20,7 +20,6 @@ public class GameRepository extends Repository {
     }
 
     public static GameRepository getRepository() {
-        initConnectionToDatabase();
         return repository;
     }
 

@@ -1,5 +1,11 @@
-1 A PARIS LONDRE TOKYO ALGER 1
-2 A ALGER PARIS WASHINGTON TOKYO 1
-3 A TOKYO LONDRE ALGER PARIS 1
-4 A WASHINGTON LONDRE TOKYO PARIS 1
-5 A LONDRE PARIS ALGER WASHINGTON 1
+1 src/main/resources/com/example/blind_test/questions/images/paris.jpg PARIS LONDRE TOKYO ALGER 1
+2 src/main/resources/com/example/blind_test/questions/images/alger.jpg ALGER PARIS WASHINGTON TOKYO 1
+3 src/main/resources/com/example/blind_test/questions/images/washington.jpg WASHINGTON LONDRE TOKYO PARIS 1
+4 src/main/resources/com/example/blind_test/questions/images/tokyo.jpg TOKYO LONDRE ALGER PARIS 1
+5 src/main/resources/com/example/blind_test/questions/images/londre.jpg LONDRE PARIS ALGER WASHINGTON 1
+6 src/main/resources/com/example/blind_test/questions/songs/djSnake.mp3 DJSNAKE JUL LUIS-FONSI STROMAE 0
+7 src/main/resources/com/example/blind_test/questions/songs/jul.mp3 JUL STROMAE STROMAE DJSNAKE 0
+8 src/main/resources/com/example/blind_test/questions/songs/luis-fonsi.mp3 LUIS-FONSI DJSNAKE STROMAE JUL 0
+9 src/main/resources/com/example/blind_test/questions/songs/sheran.mp3 SHERAN JUL DJSNAKE STROMAE 0
+10 src/main/resources/com/example/blind_test/questions/songs/stromae.mp3 STROMAE SHERAN JUL DJSNAKE 0
+

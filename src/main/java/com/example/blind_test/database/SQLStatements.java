@@ -67,7 +67,7 @@ public class SQLStatements {
             +" = ? and " + PLAYER_USERNAME + " = ? ;";
 
     public static final String CHANGE_QUESTION_STATE = "UPDATE "+ QUESTION_GAME_TABLE + " SET "+QUESTION_GAME_STATE +
-            " = 1 WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
+            " = 1 WHERE " + QUESTION_GAME_ORDER + " = ? AND " + QUESTION_GAME_ID_GAME +" =?;";
 
     public static final String GENERATE_QUESTION = " INSERT INTO "+ QUESTION_GAME_TABLE +
             " ( " + QUESTION_GAME_ID_QUESTION + "," + QUESTION_GAME_ID_GAME+ "," + QUESTION_GAME_ORDER + ", "+ QUESTION_GAME_STATE +")"+
@@ -79,7 +79,7 @@ public class SQLStatements {
 
 
     public static final String VERIFY_QUESTION_STATE = "SELECT "+  QUESTION_GAME_STATE + " FROM "+ QUESTION_GAME_TABLE +
-            "  WHERE " + QUESTION_GAME_ID_QUESTION + " = ? ;";
+            "  WHERE " + QUESTION_GAME_ORDER + " = ? AND " + QUESTION_GAME_ID_GAME +" =?;";
     private SQLStatements() {
     }
 

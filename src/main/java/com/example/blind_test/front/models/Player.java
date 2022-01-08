@@ -1,5 +1,7 @@
 package com.example.blind_test.front.models;
 
+import java.util.Objects;
+
 public class Player {
     private String username;
     private Game game;
@@ -45,5 +47,16 @@ public class Player {
         this.score = score;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return username.equals(player.username);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(username);
+    }
 }

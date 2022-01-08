@@ -1,16 +1,31 @@
 .button_1{
-    	-fx-background-color: #343a40;
+	-fx-text-fill: white;
+	-fx-background-color: #343a40;
 	-fx-border-color: #495057;
 	-fx-border-width: 2px;
 	-fx-border-radius: 5px;
-	-fx-text-fill: white;
 }
 
 .list_view1{
-    	-fx-background-color: #343a40;
+	-fx-background-color: white;
 	-fx-border-color: #495057;
 	-fx-border-width: 2px;
 	-fx-border-radius: 5px;
 }
+
+.choice-box>.open-button>.arrow {
+    -fx-background-color: white;
+}
+
+.button-2>.choice-box>.context-menu>.label {
+	-fx-text-fill: white;
+    	-fx-background-color: #343a40;	
+	-fx-background-radius : 2px;
+}
+
+.choice-box>.label { -fx-text-fill: WHITE; }
+
+
+
 
 
