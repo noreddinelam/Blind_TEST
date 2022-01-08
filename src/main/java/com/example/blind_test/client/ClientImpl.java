@@ -104,15 +104,19 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.NEXT_ROUND_FAILED, this::nextRoundInformationFailed);
         listOfFunctions.put(NetCodes.LEAVE_GAME_FAILED, this::leaveGameFailed);
         listOfFunctions.put(NetCodes.LEAVE_GAME_SUCCEED, this::leaveGameSucceed);
+        listOfFunctions.put(NetCodes.LEAVE_GAME_BROADCAST,this::leaveGameBroadcast);
     }
 
     private void leaveGameSucceed(String s) {
-
         this.controller.backMainMenu();
     }
 
     private void leaveGameFailed(String s) {
         this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
+    }
+    private void leaveGameBroadcast(String s)
+    {
+        //String usernameOfLeftPlayer = GsonConfiguration.gson.fromJson(s, );
     }
 
     private void deleteGameBroadcastSucceeded(String s) {
