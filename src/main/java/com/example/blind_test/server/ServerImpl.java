@@ -122,6 +122,25 @@ public class ServerImpl {
         }
     }
 
+    private static void leaveGame(String data)
+    {
+        logger.info(" leave game info ", data);
+        Map<String, String> requestData = GsonConfiguration.gson.fromJson(data, CommunicationTypes.mapJsonTypeData);
+        String username = requestData.get(FieldsRequestName.USERNAME);
+        int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
+        AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username,gameId));
+        try {
+            if(playerRepository.deletePlayerFromGame(username,gameId))
+            {
+                Response response = new Response(NetCodes.LEAVE_GAME_SUCCEED,"YOU LEFT THE GAME !");
+                response(response,client);
+            }
+            else throw new DeletePlayerException();
+        } catch (Exception e) {
+            Response response = new Response(NetCodes.LEAVE_GAME_FAILED,"YOU CAN'T LEAVE THE GAME !");
+            response(response,client);
+        }
+    }
 
     private static void listOfNotStartedGame(String data) {
         logger.info("list of started game {} ", data);
@@ -266,6 +285,7 @@ public class ServerImpl {
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION, ServerImpl::getQuestionResponse);
         listOfFunctions.put(NetCodes.JOIN_GAME, ServerImpl::joinGame);
         listOfFunctions.put(NetCodes.NEXT_ROUND, ServerImpl::nextRoundInformation);
+        listOfFunctions.put(NetCodes.LEAVE_GAME,ServerImpl::leaveGame);
     }
 
     public static Consumer<String> getFunctionWithRequestCode(Request request) {
