@@ -48,9 +48,9 @@ public class QuestionRepositoryTest {
     @Test
     public void changeQuestionState(){
         int questionId = 3;
-
+        int gameId = 1;
         try {
-            assertThat(repository.changeQuestionState(questionId));
+            assertThat(repository.changeQuestionState(gameId,questionId));
         } catch (ChangeQuestionStateException e) {
             e.printStackTrace();
         }
@@ -60,8 +60,9 @@ public class QuestionRepositoryTest {
     @Test
     public void verifyQuestionState(){
         int questionId = 3;
+        int gameId = 1;
         try {
-            assertThat(repository.verifyQuestionState(questionId));
+            assertThat(repository.verifyQuestionState(gameId,questionId));
         } catch (VerifyQuestionStateException e) {
             e.printStackTrace();
         }

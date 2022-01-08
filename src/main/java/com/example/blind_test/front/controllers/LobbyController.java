@@ -22,6 +22,7 @@ import java.io.IOException;
 public class LobbyController extends Controller {
 
     private int nbPlayersInGame = 0;
+    private boolean isAdmin = false;
 
     @FXML
     private Text gameType;
@@ -74,7 +75,6 @@ public class LobbyController extends Controller {
                 }
             }
         });
-
         startGame.setDisable(true);
     }
 
@@ -83,8 +83,11 @@ public class LobbyController extends Controller {
             if (jgt.getOtherPlayers() != null) {
                 this.joinedPlayerList.getItems().setAll(jgt.getOtherPlayers());
                 this.nbPlayersInGame = jgt.getOtherPlayers().size() + 1;
-            } else
+                this.isAdmin = false;
+            } else {
                 this.nbPlayersInGame = 1;
+                this.isAdmin = true;
+            }
             this.numberOfJoinedPlayers.setText(this.nbPlayersInGame + " / " + jgt.getPlayer().getGame().getTotalPlayers());
             this.joinedPlayerList.getItems().add(jgt.getPlayer());
             this.rounds.setText(String.valueOf(jgt.getPlayer().getGame().getRounds()));
@@ -108,8 +111,10 @@ public class LobbyController extends Controller {
             Parent root = loader.load();
             GameController controller = loader.getController();
             controller.scene = this.scene;
-            controller.initView(this.joinedPlayerList.getItems(), question,
-                    Integer.parseInt(this.responseTime.getText()));
+            controller.setTimePerQuestion(Integer.parseInt(this.responseTime.getText()));
+            controller.setAdminGame(isAdmin);
+            controller.setNbQuestions(Integer.parseInt(this.rounds.getText()));
+            controller.initView(this.joinedPlayerList.getItems(), question, 1);
             this.scene.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();

@@ -17,7 +17,6 @@ public class QuestionRepository extends Repository {
     }
 
     public static QuestionRepository getRepository() {
-        initConnectionToDatabase();
         return repository;
     }
 
@@ -74,10 +73,11 @@ public class QuestionRepository extends Repository {
     }
 
 
-    public Integer changeQuestionState(int questionId) throws ChangeQuestionStateException {
+    public Integer changeQuestionState(int gameId, int questionOrder) throws ChangeQuestionStateException {
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_QUESTION_STATE);
-            stmt.setInt(1, questionId);
+            stmt.setInt(1, questionOrder);
+            stmt.setInt(2,gameId);
             return stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,9 +86,10 @@ public class QuestionRepository extends Repository {
 
     }
 
-    public Integer verifyQuestionState(int questionId) throws VerifyQuestionStateException {
+    public Integer verifyQuestionState(int gameId,int questionOrder) throws VerifyQuestionStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.VERIFY_QUESTION_STATE)) {
-            stmt.setInt(1, questionId);
+            stmt.setInt(1, questionOrder);
+            stmt.setInt(2,gameId);
             ResultSet resultSet = stmt.executeQuery();
             int qs = -1;
             while (resultSet.next())

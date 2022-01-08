@@ -35,8 +35,8 @@
             </Button>
          </children>
       </AnchorPane>
-      <ListView fx:id="scoreBoard" layoutX="28.0" layoutY="77.0" prefHeight="412.0" prefWidth="328.0" style="-fx-background-image: #292929;" styleClass="list_view1" stylesheets="@stylesheet.css" />
-      <ImageView fx:id="currentQuestion" fitHeight="400.0" fitWidth="400.0" layoutX="426.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true" />
+      <ListView fx:id="scoreBoard" layoutX="21.0" layoutY="89.0" prefHeight="418.0" prefWidth="328.0" style="-fx-background-color: white; -fx-border-color: #495057; -fx-border-width: 2px; -fx-background-radius: 5px; -fx-border-radius: 5px;" styleClass="list_view1" stylesheets="@stylesheet.css" />
+      <ImageView fx:id="currentQuestion" fitHeight="418.0" fitWidth="400.0" layoutX="450.0" layoutY="89.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="timer" fill="WHITE" layoutX="712.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Times left" wrappingWidth="114.13671875">
          <font>
             <Font name="System Bold" size="20.0" />
@@ -49,7 +49,7 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Text>
-      <ImageView fitHeight="94.0" fitWidth="275.0" layoutX="55.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="94.0" fitWidth="275.0" layoutX="55.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/logo.png" />
          </image>
