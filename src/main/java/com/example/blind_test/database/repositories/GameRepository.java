@@ -5,6 +5,7 @@ import com.example.blind_test.database.SQLTablesInformation;
 import com.example.blind_test.exception.*;
 import com.example.blind_test.front.models.Game;
 import com.example.blind_test.front.models.Player;
+import com.example.blind_test.front.models.Question;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -123,7 +124,7 @@ public class GameRepository extends Repository {
     }
 
 
-    public Integer changeGameState(Integer gameId) throws ChangeGameStateException {
+    public Integer changeGameState(int gameId) throws ChangeGameStateException {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_GAME_STATE)) {
             stmt.setBoolean(1, true);
             stmt.setInt(2, gameId);
@@ -144,4 +145,5 @@ public class GameRepository extends Repository {
             throw new ChangeCurrentQuestionIdException();
         }
     }
+
 }

@@ -75,8 +75,8 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_SUCCEED, this::listOfNotStartedGameSucceeded);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_SUCCEED, this::modifyPlayerScoreSucceeded);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_SUCCEED, this::getQuestionResponseSucceeded);
-        listOfFunctions.put(NetCodes.CHANGE_GAME_STATE_SUCCEED, this::modifyGameStateSucceeded);
-        listOfFunctions.put(NetCodes.CHANGE_GAME_STATE_FAILED, this::modifyGameStateFailed);
+        listOfFunctions.put(NetCodes.START_GAME_SUCCEED, this::startGameSucceeded);
+        listOfFunctions.put(NetCodes.START_GAME_FAILED, this::startGameFailed);
         listOfFunctions.put(NetCodes.GET_RESPONSE_FOR_QUESTION_FAILED, this::getQuestionResponseFailed);
         listOfFunctions.put(NetCodes.MODIFY_SCORE_FAILED, this::modifyPlayerScoreFailed);
         listOfFunctions.put(NetCodes.LIST_OF_GAME_NOT_STARTED_FAILED, this::listOfNotStartedGameFailed);
@@ -101,6 +101,7 @@ public class ClientImpl {
         this.controller.commandFailed(FailureMessages.CREATE_GAME_BROADCAST, responseData);
     }
 
+
     private void joinGameSucceeded(String responseData) {
         JoinGameType joinGameType = GsonConfiguration.gson.fromJson(responseData,JoinGameType.class);
         this.player = joinGameType.getPlayer();
@@ -112,7 +113,7 @@ public class ClientImpl {
         ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
-    public void modifyGameStateSucceeded(String responseData) {
+    public void startGameSucceeded(String responseData) {
         Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
         int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
         String username = data.get(FieldsRequestName.USERNAME);
@@ -153,7 +154,7 @@ public class ClientImpl {
         this.controller.commandFailed(FailureMessages.LIST_OF_NOT_STARTED_GAME, responseData);
     }
 
-    public void modifyGameStateFailed(String responseData) {
+    public void startGameFailed(String responseData) {
         this.controller.commandFailed(FailureMessages.MODIFY_GAME_STATE, responseData);
     }
 
@@ -187,12 +188,11 @@ public class ClientImpl {
         request(createGame);
     }
 
-    public void joinGame(int gameId,String username)
-    {
+    public void joinGame(int gameId, String username) {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(gameId));
-        requestData.put(FieldsRequestName.USERNAME,username);
+        requestData.put(FieldsRequestName.USERNAME, username);
         Request joinGame = new Request(NetCodes.JOIN_GAME,
                 GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(joinGame);
@@ -205,11 +205,11 @@ public class ClientImpl {
         request(lisOfNotStartedGame);
     }
 
-    public void modifyGameState() {
+    public void startGame() {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
-        Request modifyGameState = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        Request modifyGameState = new Request(NetCodes.START_GAME, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(modifyGameState);
     }
 
@@ -218,7 +218,7 @@ public class ClientImpl {
         requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
         requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(this.player.getScore()));
-        Request modifyPlayerScore = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        Request modifyPlayerScore = new Request(NetCodes.MODIFY_SCORE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(modifyPlayerScore);
     }
 
@@ -229,7 +229,7 @@ public class ClientImpl {
         requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(this.player.getScore()));
         requestData.put(FieldsRequestName.CURRENT_QUESTION, String.valueOf(idCurrentQuestion));
         requestData.put(FieldsRequestName.PLAYER_RESPONSE, playerResponse);
-        Request getQuestionResponse = new Request(NetCodes.CHANGE_GAME_STATE, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
+        Request getQuestionResponse = new Request(NetCodes.GET_RESPONSE_FOR_QUESTION, GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(getQuestionResponse);
     }
 
