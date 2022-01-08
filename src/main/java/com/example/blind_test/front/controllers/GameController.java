@@ -27,10 +27,10 @@ public class GameController extends Controller {
     @FXML
     private Text currentPlayerName;
 
-    private Question currentQuestionModel;
     private Button clickedButton;
     private boolean responded = false;
     private int timePerQuestion;
+    private boolean adminGame = false;
 
     @FXML
     private Button quitGame;
@@ -96,6 +96,7 @@ public class GameController extends Controller {
     private void initialize() {
         this.clientImpl = ClientImpl.getUniqueInstanceClientImpl();
         this.clientImpl.setController(this);
+        this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
         this.scoreBoard.setCellFactory((param) -> new ListCell<>() {
             @Override
             protected void updateItem(Player player, boolean b) {
@@ -130,19 +131,21 @@ public class GameController extends Controller {
         });
     }
 
-    public void initView(List<Player> list, Question firstQuestion, int timePerQuestion) {
+    public void initView(List<Player> list, Question question,int questionOrder) {
         Platform.runLater(() -> {
             this.scoreBoard.getItems().setAll(list);
-            this.currentQuestionModel = firstQuestion;
-            this.responseA.setText(firstQuestion.getChoiceByIndex(0));
-            this.responseB.setText(firstQuestion.getChoiceByIndex(1));
-            this.responseC.setText(firstQuestion.getChoiceByIndex(2));
-            this.responseD.setText(firstQuestion.getChoiceByIndex(3));
-            this.timePerQuestion = timePerQuestion;
+            this.responseA.setText(question.getChoiceByIndex(0));
+            this.responseB.setText(question.getChoiceByIndex(1));
+            this.responseC.setText(question.getChoiceByIndex(2));
+            this.responseD.setText(question.getChoiceByIndex(3));
             this.timer.setText(String.valueOf(timePerQuestion));
-            new Timer(timePerQuestion, this).start();
-            this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
+            this.round.setText(String.valueOf(questionOrder));
+            new Timer(this.timePerQuestion, this).start();
         });
+    }
+
+    public void setTimePerQuestion(int timePerQuestion){
+        this.timePerQuestion = timePerQuestion;
     }
 
     public void changeQuestionState(String color) {
@@ -153,6 +156,10 @@ public class GameController extends Controller {
 
     public void setResponded() {
         responded = true;
+    }
+
+    public void setAdminGame(boolean adminGame) {
+        this.adminGame = adminGame;
     }
 
     public void updateScoreBoard(Player p) {
@@ -166,4 +173,10 @@ public class GameController extends Controller {
         this.timer.setText(String.valueOf(remainingTime));
     }
 
+    public void nextRound(){
+        if(this.adminGame) {
+            int round = Integer.parseInt(this.round.getText());
+            this.clientImpl.nextRound(round + 1);
+        }
+    }
 }
