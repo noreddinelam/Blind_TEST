@@ -131,6 +131,7 @@ public class GameController extends Controller {
         });
     }
 
+
     public void initView(List<Player> list, Question question,int questionOrder) {
         Platform.runLater(() -> {
             this.scoreBoard.getItems().setAll(list);
@@ -138,9 +139,19 @@ public class GameController extends Controller {
             this.responseB.setText(question.getChoiceByIndex(1));
             this.responseC.setText(question.getChoiceByIndex(2));
             this.responseD.setText(question.getChoiceByIndex(3));
+          this.round.setText(String.valueOf(questionOrder));
             this.timer.setText(String.valueOf(timePerQuestion));
-            this.round.setText(String.valueOf(questionOrder));
-            new Timer(this.timePerQuestion, this).start();
+            new Timer(timePerQuestion, this).start();
+            this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
+            try {
+               this.currentQuestionModel = question;
+               String path = this.currentQuestionModel.getResource();
+               FileInputStream question = new FileInputStream(path);
+               Image image1 = new Image(question, 400, 418, false, true);
+               currentQuestion.setImage(image1);
+            } catch (FileNotFoundException e) {
+               e.printStackTrace();
+            }
         });
     }
 
@@ -158,9 +169,11 @@ public class GameController extends Controller {
         responded = true;
     }
 
+
     public void setAdminGame(boolean adminGame) {
         this.adminGame = adminGame;
     }
+
 
     public void updateScoreBoard(Player p) {
         int index = this.scoreBoard.getItems().indexOf(p);
