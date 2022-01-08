@@ -17,6 +17,9 @@ import java.util.List;
 
 public class GameController extends Controller {
 
+    @FXML
+    private Text currentPlayerName;
+
     private Question currentQuestionModel;
     private int timePerQuestion;
 
@@ -49,22 +52,22 @@ public class GameController extends Controller {
 
     @FXML
     void onResponseA(ActionEvent event) {
-        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()),responseA.getText());
+        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseA.getText());
     }
 
     @FXML
     void onResponseB(ActionEvent event) {
-        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()),responseB.getText());
+        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseB.getText());
     }
 
     @FXML
     void onResponseC(ActionEvent event) {
-        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()),responseC.getText());
+        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseC.getText());
     }
 
     @FXML
     void onResponseD(ActionEvent event) {
-        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()),responseD.getText());
+        this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseD.getText());
     }
 
     @FXML
@@ -93,7 +96,7 @@ public class GameController extends Controller {
     public void initView(List<Player> list, Question firstQuestion,int timePerQuestion){
         Platform.runLater(()->{
             this.scoreBoard.getItems().setAll(list);
-            this.currentQuestionModel=firstQuestion;
+            this.currentQuestionModel = firstQuestion;
             this.responseA.setText(firstQuestion.getChoiceByIndex(0));
             this.responseB.setText(firstQuestion.getChoiceByIndex(1));
             this.responseC.setText(firstQuestion.getChoiceByIndex(2));
@@ -101,6 +104,7 @@ public class GameController extends Controller {
             this.timePerQuestion = timePerQuestion;
             this.timer.setText(String.valueOf(timePerQuestion));
             new Timer(timePerQuestion,this);
+            this.currentPlayerName.setText(this.clientImpl.getPlayer().getUsername());
         });
     }
 

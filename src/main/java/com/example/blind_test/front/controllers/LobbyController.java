@@ -31,9 +31,6 @@ public class LobbyController extends Controller {
     private Text numberOfJoinedPlayers;
 
     @FXML
-    private Text remainingTime;
-
-    @FXML
     private Text responseTime;
 
     @FXML
@@ -107,7 +104,7 @@ public class LobbyController extends Controller {
             GameController controller = loader.getController();
             controller.scene = this.scene;
             controller.initView(this.joinedPlayerList.getItems(), question,
-                    Integer.parseInt(this.remainingTime.getText()));
+                    Integer.parseInt(this.responseTime.getText()));
             this.scene.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
