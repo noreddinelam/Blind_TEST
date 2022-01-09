@@ -159,6 +159,7 @@ public class ClientImpl {
     public void listOfNotStartedGameSucceeded(String responseData) {
         Map<String, List<Game>> games = GsonConfiguration.gson.fromJson(responseData,
                 CommunicationTypes.mapListGameJsonTypeData);
+        if(this.controller instanceof MainMenuController)
         ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
@@ -243,6 +244,7 @@ public class ClientImpl {
     }
 
     private void removeGameFromListOfAvailableGames(String responseData) {
+        if(this.controller instanceof MainMenuController)
         ((MainMenuController) this.controller).deleteGameFromList(Integer.parseInt(responseData));
     }
 
