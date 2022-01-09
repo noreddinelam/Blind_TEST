@@ -42,8 +42,12 @@ public class GUIClient extends Application {
         controller.setNecessaryInformation(client,clientIpAddress,scene);
         controller.initializeListOfUnStartedGames();
         stage.setTitle("Blind Test!");
-        //stage.initStyle(StageStyle.UNDECORATED);
+        stage.setResizable(false);
         stage.setScene(scene);
+        // TODO : detect all the closing methods.
+        stage.setOnCloseRequest(event -> {
+            System.out.println("Stage is closing");
+        });
         stage.show();
     }
 }

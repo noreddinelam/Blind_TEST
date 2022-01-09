@@ -120,11 +120,14 @@ public class ServerImpl {
                         gameId)));
             }
             listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
-        } catch (PlayerAlreadyExists | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
+        } catch ( JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
             response(response, clientJoin);
         } catch (GameIsFullException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Game is full");
+            response(response, clientJoin);
+        } catch (PlayerAlreadyExists playerAlreadyExists) {
+            Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Username already chosen for this game !");
             response(response, clientJoin);
         }
     }

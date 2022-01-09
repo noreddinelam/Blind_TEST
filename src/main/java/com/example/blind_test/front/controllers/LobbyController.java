@@ -10,12 +10,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -52,7 +50,7 @@ public class LobbyController extends Controller {
 
     @FXML
     void onQuitGame(ActionEvent event) {
-        if(this.isAdmin) this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
+        if (this.isAdmin) this.clientImpl.deleteGame(this.clientImpl.getPlayer().getGame().getId());
         else {
             this.clientImpl.leaveGame(this.clientImpl.getPlayer().getGame().getId(),
                     this.clientImpl.getPlayer().getUsername());
@@ -106,8 +104,7 @@ public class LobbyController extends Controller {
         });
     }
 
-    public void removePlayerToListOfPlayers(String username,int totalPlayers)
-    {
+    public void removePlayerToListOfPlayers(String username, int totalPlayers) {
         Platform.runLater(() -> {
             Player player = new Player(username);
             this.joinedPlayerList.getItems().remove(player);

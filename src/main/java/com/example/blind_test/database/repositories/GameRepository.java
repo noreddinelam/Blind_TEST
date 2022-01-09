@@ -84,10 +84,10 @@ public class GameRepository extends Repository {
         try {
             Game game = getGame(gameId);
             if (getNbPlayersInGame(gameId) > 0) {
+                player = PlayerRepository.getRepository().addNewPlayerDB(username, gameId);
                 PreparedStatement decPlayers = connectionDB.prepareStatement(SQLStatements.DEC_PLAYERS_IN_GAME);
                 decPlayers.setInt(1, gameId);
                 decPlayers.execute();
-                player = PlayerRepository.getRepository().addNewPlayerDB(username, gameId);
                 player.setGame(game);
                 return player;
             }
