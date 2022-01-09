@@ -96,7 +96,8 @@ public class MainMenuController extends Controller {
             }
         } else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.UNSELECTED_GAME, FailureMessages.UNSELECTED_GAME_MESSAGE);;
+            this.commandFailed(FailureMessages.UNSELECTED_GAME, FailureMessages.UNSELECTED_GAME_MESSAGE);
+            ;
         }
     }
 
@@ -180,5 +181,9 @@ public class MainMenuController extends Controller {
         });
     }
 
-
+    public void deleteGameFromList(int gameId) {
+        Platform.runLater(() -> {
+            this.listOfGameToJoin.getItems().remove(new Game.GameBuilder(gameId).build());
+        });
+    }
 }

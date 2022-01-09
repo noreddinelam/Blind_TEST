@@ -1,6 +1,7 @@
 package com.example.blind_test.front.models;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Game {
     private int id;
@@ -56,6 +57,19 @@ public class Game {
 
     public int getTimeQuestion() {
         return timeQuestion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Game game = (Game) o;
+        return id == game.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public static class GameBuilder {

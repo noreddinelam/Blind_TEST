@@ -40,10 +40,6 @@ public class ClientImpl {
     private Controller controller;
     private Player player;
 
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
     private ClientImpl() {
     }
 
@@ -53,6 +49,14 @@ public class ClientImpl {
 
     public static Consumer<String> getFunctionWithRequestCode(Response response) {
         return listOfFunctions.get(response.getNetCode());
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public void initThreadReader() {
@@ -99,7 +103,9 @@ public class ClientImpl {
         listOfFunctions.put(NetCodes.GAME_FINISHED_FAILED, this::gameFinishedFailed);
         listOfFunctions.put(NetCodes.LEAVE_GAME_FAILED, this::leaveGameFailed);
         listOfFunctions.put(NetCodes.LEAVE_GAME_SUCCEED, this::leaveGameSucceed);
-        listOfFunctions.put(NetCodes.LEAVE_GAME_BROADCAST,this::leaveGameBroadcast);
+        listOfFunctions.put(NetCodes.LEAVE_GAME_BROADCAST, this::leaveGameBroadcast);
+        listOfFunctions.put(NetCodes.REMOVE_GAME_FROM_LIST_OF_AVAILABLE_GAMES,
+                this::removeGameFromListOfAvailableGames);
     }
 
     private void leaveGameSucceed(String s) {
@@ -109,10 +115,12 @@ public class ClientImpl {
     private void leaveGameFailed(String s) {
         this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
     }
-    private void leaveGameBroadcast(String usernameOfLeftPlayer)
-    {
-        ((LobbyController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer,this.player.getGame().getTotalPlayers());
+
+    private void leaveGameBroadcast(String usernameOfLeftPlayer) {
+        ((LobbyController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer,
+                this.player.getGame().getTotalPlayers());
     }
+
     //TODO: There are two types of Broadcast : type one for joinedPlayers and type two for MainMenuPlayers
     private void deleteGameBroadcastSucceeded(String s) {
         this.controller.backMainMenu();
@@ -225,12 +233,16 @@ public class ClientImpl {
         this.controller.commandFailed(FailureMessages.NEXT_ROUND_INFORMATION, responseData);
     }
 
-    private void gameFinishedSucceeded(String responseData){
+    private void gameFinishedSucceeded(String responseData) {
         ((GameController) this.controller).gameFinished();
     }
 
-    private void gameFinishedFailed(String responseData){
+    private void gameFinishedFailed(String responseData) {
 
+    }
+
+    private void removeGameFromListOfAvailableGames(String responseData) {
+        ((MainMenuController) this.controller).deleteGameFromList(Integer.parseInt(responseData));
     }
 
     // Functions that send the requests :
@@ -327,7 +339,9 @@ public class ClientImpl {
         request(nextRound);
     }
 
-    public void gameFinished(){
+    // Functions that don't do sql requests :
+
+    public void gameFinished() {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
         requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
@@ -336,14 +350,8 @@ public class ClientImpl {
         request(gameFinished);
     }
 
-    // Functions that don't do sql requests :
-
     public void setController(Controller controller) {
         this.controller = controller;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
     }
 
     public AsynchronousSocketChannel getClient() {

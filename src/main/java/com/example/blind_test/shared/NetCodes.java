@@ -32,7 +32,6 @@ public class NetCodes {
     public static final String START_GAME_SUCCEED = "401";
     public static final String START_GAME_FAILED = "402";
 
-
     public static String ID_OF_CURRENT_QUESTION = "500";
     public static String ID_OF_CURRENT_QUESTION_SUCCEED = "501";
     public static String ID_OF_CURRENT_QUESTION_FAILED = "502";
@@ -45,9 +44,7 @@ public class NetCodes {
     public static String GET_QUESTION_SUCCEED = "701";
     public static String GET_QUESTION_FAILED = "702";
 
-    public static String INSERT_QUESTION_IN_QUESTION_GAME = "800";
-    public static String INSERT_QUESTION_IN_QUESTION_GAME_SUCCEED = "801";
-    public static String INSERT_QUESTION_IN_QUESTION_GAME_FAILED = "802";
+    public static final String REMOVE_GAME_FROM_LIST_OF_AVAILABLE_GAMES = "800";
 
     public static String GAME_FINISHED = "900";
     public static String GAME_FINISHED_SUCCEED = "901";

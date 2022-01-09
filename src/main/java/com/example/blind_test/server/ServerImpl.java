@@ -119,8 +119,11 @@ public class ServerImpl {
                         gameId)));
             }
             listOfPlayers.put(new Credentials(username, player.getGame().getId()), clientJoin);
-        } catch (PlayerAlreadyExists | GameIsFullException | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
+        } catch (PlayerAlreadyExists | JoinGameDBException | GetGameDBException | GetNbPlayersInGameException | AddNewPlayerDBException | GetPlayersOfGameException e) {
             Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Join game failure");
+            response(response, clientJoin);
+        } catch (GameIsFullException e) {
+            Response response = new Response(NetCodes.JOIN_GAME_FAILED, "Game is full");
             response(response, clientJoin);
         }
     }
@@ -194,6 +197,8 @@ public class ServerImpl {
             for (Player playerOther : players) {
                 responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
+            Response broadcastResponse = new Response(NetCodes.REMOVE_GAME_FROM_LIST_OF_AVAILABLE_GAMES,String.valueOf(gameId));
+            listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse, entry.getValue()));
             ByteBuffer newBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
             client.read(newBuffer, newBuffer, new ServerReaderCompletionHandler());
         } catch (GenerateQuestionException | ChangeGameStateException | GetPlayersOfGameException | FetchQuestionException e) {
