@@ -11,6 +11,9 @@ public class SQLStatements {
     public static final String DEC_PLAYERS_IN_GAME = "UPDATE " + GAME_TABLE +
             " SET " + GAME_PLAYERS + " = " + GAME_PLAYERS + " - 1 " +
             "WHERE " + GAME_ID + " = ? ; ";
+    public static final String INC_PLAYERS_IN_GAME = "UPDATE " + GAME_TABLE +
+            " SET " + GAME_PLAYERS + " = " + GAME_PLAYERS + " + 1 " +
+            "WHERE " + GAME_ID + " = ? ; ";
     public static final String GET_PLAYERS_FROM_GAME = "SELECT " + GAME_PLAYERS + " FROM " + GAME_TABLE + " WHERE id=" +
             " ? ;";
     public static final String GET_GAME_FROM_ID = "SELECT * FROM " + GAME_TABLE + " WHERE id= ? ;";

@@ -111,9 +111,9 @@ public class ClientImpl {
     }
     private void leaveGameBroadcast(String usernameOfLeftPlayer)
     {
-        ((LobbyController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer);
+        ((LobbyController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer,this.player.getGame().getTotalPlayers());
     }
-
+    //TODO: There are two types of Broadcast : type one for joinedPlayers and type two for MainMenuPlayers
     private void deleteGameBroadcastSucceeded(String s) {
         this.controller.backMainMenu();
     }
@@ -274,14 +274,6 @@ public class ClientImpl {
         Request leaveGame = new Request(NetCodes.LEAVE_GAME,
                 GsonConfiguration.gson.toJson(requestData, CommunicationTypes.mapJsonTypeData));
         request(leaveGame);
-    }
-
-    public void leaveGameSucceed() {
-        this.controller.backMainMenu();
-    }
-
-    public void leaveGameFailed() {
-        this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
     }
 
     public void listOfNotStartedGame() {
