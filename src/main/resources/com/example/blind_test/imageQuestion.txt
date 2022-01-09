@@ -18,7 +18,7 @@
 18 src/main/resources/com/example/blind_test/questions/images/rabat.jpg RABAT PARIS MADRID WASHINGTON 1
 19 src/main/resources/com/example/blind_test/questions/images/rome.jpg ROME OTTAWA ALGER BERLIN 1
 20 src/main/resources/com/example/blind_test/questions/images/varsovie.jpg VARSOVIE MADRID ALGER BUDAPEST 1
-21 src/main/resources/com/example/blind_test/questions/songs/djSna.wav DJSNAKE JUL LUIS-FONSI EMINEM 0
+21 src/main/resources/com/example/blind_test/questions/songs/djSnake.wav DJSNAKE JUL LUIS-FONSI EMINEM 0
 22 src/main/resources/com/example/blind_test/questions/songs/jul.wav JUL STROMAE STROMAE DJSNAKE 0
 23 src/main/resources/com/example/blind_test/questions/songs/luis-fonsi.wav LUIS-FONSI ADELE STROMAE EMINEM 0
 24 src/main/resources/com/example/blind_test/questions/songs/sheran.wav SHERAN NINHO DJSNAKE STROMAE 0
@@ -37,4 +37,4 @@
 37 src/main/resources/com/example/blind_test/questions/songs/rihanna.wav RIHANNA SHERAN JUL DJSNAKE 0
 38 src/main/resources/com/example/blind_test/questions/songs/shakira.wav SHAKIRA RIHANNA PNL DJSNAKE 0
 39 src/main/resources/com/example/blind_test/questions/songs/sia.wav SIA NEKFEU LACRIM DJSNAKE 0
-40 src/main/resources/com/example/blind_test/questions/songs/soolking.v SOOLKING NEKFEU JUL PNL 0
+40 src/main/resources/com/example/blind_test/questions/songs/soolking.wav SOOLKING NEKFEU JUL PNL 0
