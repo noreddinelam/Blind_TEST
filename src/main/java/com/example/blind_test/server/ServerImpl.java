@@ -132,15 +132,18 @@ public class ServerImpl {
         int gameId = Integer.parseInt(requestData.get(FieldsRequestName.GAME_ID));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
-            if (playerRepository.deletePlayerFromGame(username, gameId)) {
-                Response response = new Response(NetCodes.LEAVE_GAME_SUCCEED, "YOU LEFT THE GAME !");
-                addGuestClients(client);
-                listOfPlayers.remove(new Credentials(username, gameId));
-                Response broadcastResponse = new Response(NetCodes.LEAVE_GAME_BROADCAST, username);
-                listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse,
-                        entry.getValue()));
-                response(response, client);
-            } else throw new DeletePlayerException();
+            playerRepository.deletePlayerFromGame(username, gameId);
+            List<Player> list = playerRepository.getPlayersOfGame(gameId);
+            Response response = new Response(NetCodes.LEAVE_GAME_SUCCEED, "YOU LEFT THE GAME !");
+            addGuestClients(client);
+            listOfPlayers.remove(new Credentials(username, gameId));
+            Response broadcastResponse = new Response(NetCodes.LEAVE_GAME_BROADCAST, username);
+            for (Player playerOther : list) {
+                responseBroadcast(broadcastResponse, listOfPlayers.get(new Credentials(playerOther.getUsername(),
+                        gameId)));
+            }
+            // TODO: increment players in game in db
+            response(response, client);
         } catch (Exception e) {
             Response response = new Response(NetCodes.LEAVE_GAME_FAILED, "YOU CAN'T LEAVE THE GAME !");
             response(response, client);

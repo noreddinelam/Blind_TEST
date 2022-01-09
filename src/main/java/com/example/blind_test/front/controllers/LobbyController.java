@@ -106,12 +106,12 @@ public class LobbyController extends Controller {
         });
     }
 
-    public void removePlayerToListOfPlayers(String username)
+    public void removePlayerToListOfPlayers(String username,int totalPlayers)
     {
         Platform.runLater(() -> {
             Player player = new Player(username);
             this.joinedPlayerList.getItems().remove(player);
-            this.numberOfJoinedPlayers.setText((--this.nbPlayersInGame) + " / " + player.getGame().getTotalPlayers());
+            this.numberOfJoinedPlayers.setText((--this.nbPlayersInGame) + " / " + totalPlayers);
             startGame.setDisable(true);
         });
     }
