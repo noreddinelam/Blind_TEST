@@ -58,7 +58,6 @@ public class QuestionRepository extends Repository {
         }
     }
 
-    //TODO : use this function to generate questions
     public Integer insertQuestionInQuestionGame(int questionId,int gameId,int orderQuestion){
         try  {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.INSERT_QUESTION_IN_QUESTION_GAME);

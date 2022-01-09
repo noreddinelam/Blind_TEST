@@ -85,9 +85,10 @@ public class ServerImpl {
                     listOfPlayers.remove(entryCredential.getKey());
                 }
             }
+            Response broadcastResponse = new Response(NetCodes.REMOVE_GAME_FROM_LIST_OF_AVAILABLE_GAMES,String.valueOf(gameId));
+            listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse, entry.getValue()));
             ByteBuffer buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
             client.read(buffer, buffer, new ServerReaderCompletionHandler());
-            //listOfPlayers.entrySet().removeIf((entry) -> entry.getKey().getGameId() == gameId);
         } catch (DeleteGameException | GetPlayersOfGameException e) {
             Response response = new Response(NetCodes.DELETE_GAME_FAILED, "delete game failure");
             for (Player playerOther : list) {
@@ -145,7 +146,6 @@ public class ServerImpl {
                 responseBroadcast(broadcastResponse, listOfPlayers.get(new Credentials(playerOther.getUsername(),
                         gameId)));
             }
-            // TODO: increment players in game in db
             response(response, client);
         } catch (Exception e) {
             Response response = new Response(NetCodes.LEAVE_GAME_FAILED, "YOU CAN'T LEAVE THE GAME !");
