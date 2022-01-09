@@ -276,14 +276,6 @@ public class ClientImpl {
         request(leaveGame);
     }
 
-    public void leaveGameSucceed() {
-        this.controller.backMainMenu();
-    }
-
-    public void leaveGameFailed() {
-        this.controller.commandFailed("Leave Game ERROR", "Sorry, You can't leave this game");
-    }
-
     public void listOfNotStartedGame() {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.IP_ADDRESS, ipAddress);
