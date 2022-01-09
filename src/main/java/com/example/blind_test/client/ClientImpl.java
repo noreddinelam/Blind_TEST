@@ -75,6 +75,9 @@ public class ClientImpl {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                if(this.controller.getClass().equals(GameController.class)){
+                    ((GameController) this.controller).stopWorking();
+                }
                 logger.warn("Player disconnected");
             }
         });
@@ -128,6 +131,8 @@ public class ClientImpl {
     }
 
     private void deleteGameBroadcastSucceeded(String s) {
+        if(this.controller.getClass().equals(GameController.class))
+            ((GameController) this.controller).stopWorking();
         this.controller.backMainMenu();
     }
 

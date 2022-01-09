@@ -39,6 +39,7 @@ public class GameController extends Controller {
     private boolean adminGame = false;
     private int nbQuestions;
     private Clip clip;
+    private Timer timerThread;
 
     @FXML
     private Button responseA;
@@ -146,7 +147,8 @@ public class GameController extends Controller {
             this.responded = false;
             this.round.setText(String.valueOf(questionOrder));
             this.timer.setText(String.valueOf(this.timePerQuestion));
-            new Timer(this.timePerQuestion, this).start();
+            this.timerThread =  new Timer(this.timePerQuestion, this);
+            this.timerThread.start();
             try {
                 String path = question.getResource();
                 if(!this.clientImpl.getPlayer().getGame().isImageGame()) {
@@ -241,5 +243,11 @@ public class GameController extends Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void stopWorking(){
+        if(!this.clientImpl.getPlayer().getGame().isImageGame())
+            this.clip.stop();
+        this.timerThread.setInterrupt(true);
     }
 }
