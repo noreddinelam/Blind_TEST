@@ -113,7 +113,7 @@ public class ClientImpl {
     {
         ((LobbyController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer,this.player.getGame().getTotalPlayers());
     }
-
+    //TODO: There are two types of Broadcast : type one for joinedPlayers and type two for MainMenuPlayers
     private void deleteGameBroadcastSucceeded(String s) {
         this.controller.backMainMenu();
     }
