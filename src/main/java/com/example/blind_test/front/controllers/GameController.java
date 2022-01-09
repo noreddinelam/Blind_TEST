@@ -160,10 +160,10 @@ public class GameController extends Controller {
                 String path = question.getResource();
                 if(!this.clientImpl.getPlayer().getGame().isImageGame()) {
                     clip = AudioSystem.getClip();
-                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(new FileInputStream(path));
+                    AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(path));
                     clip.open(inputStream);
                     clip.start();
-                    path = "src/main/resources/com/example/blind_test/images/music.png";
+                    path = "src/main/resources/com/example/blind_test/images/music.jpg";
                 }
                 FileInputStream questionImage = new FileInputStream(path);
                 Image image1 = new Image(questionImage, 400, 418, false, true);
