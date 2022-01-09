@@ -24,11 +24,12 @@ public abstract class Controller {
         this.clientImpl.initListOfFunctions();
         this.scene = scene;
         this.stage = stage;
+        onCloseFrame();
     }
 
     public void onCloseFrame(){
         this.stage.setOnCloseRequest(event -> {
-
+            this.clientImpl.stopClient();
         });
     }
 
@@ -42,6 +43,7 @@ public abstract class Controller {
             this.clientImpl.setController(controller);
             controller.scene=this.scene;
             controller.stage = this.stage;
+            controller.onCloseFrame();
             this.scene.setRoot(parent);
         } catch (IOException e) {
             e.printStackTrace();

@@ -221,6 +221,13 @@ public class GameController extends Controller {
         });
     }
 
+    public void removePlayerToListOfPlayers(String username){
+        Platform.runLater(() -> {
+            Player player = new Player(username);
+            this.scoreBoard.getItems().remove(player);
+        });
+    }
+
     public void gameFinished(){
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Scoreboard.fxml"));
@@ -228,6 +235,7 @@ public class GameController extends Controller {
             ScoreBoardController controller = loader.getController();
             controller.scene = this.scene;
             controller.stage = this.stage;
+            controller.onCloseFrame();
             controller.initView(scoreBoard.getItems(),this.nbQuestions,this.timePerQuestion);
             this.scene.setRoot(root);
         } catch (IOException e) {

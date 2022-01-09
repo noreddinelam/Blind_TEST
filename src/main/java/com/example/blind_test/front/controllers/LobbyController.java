@@ -58,6 +58,14 @@ public class LobbyController extends Controller {
         }
     }
 
+    @Override
+    public void onCloseFrame() {
+        this.stage.setOnCloseRequest(event -> {
+            this.onQuitGame(null);
+            this.clientImpl.stopClient();
+        });
+    }
+
     @FXML
     private void initialize() {
         this.clientImpl = ClientImpl.getUniqueInstanceClientImpl();

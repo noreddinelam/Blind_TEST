@@ -21,6 +21,7 @@ import com.example.blind_test.shared.gson_configuration.GsonConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.HashMap;
@@ -71,8 +72,10 @@ public class ClientImpl {
                     ClientImpl.getFunctionWithRequestCode(response).accept(response.getResponse());
                     buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
                 }
-            } catch (InterruptedException | ExecutionException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
+            } catch (ExecutionException e) {
+                logger.warn("Player disconnected");
             }
         });
         reader.start();
@@ -117,8 +120,11 @@ public class ClientImpl {
     }
 
     private void leaveGameBroadcast(String usernameOfLeftPlayer) {
-        ((LobbyController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer,
-                this.player.getGame().getTotalPlayers());
+        if (this.controller.getClass().equals(LobbyController.class))
+            ((LobbyController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer,
+                    this.player.getGame().getTotalPlayers());
+        else if(this.controller.getClass().equals(GameController.class))
+            ((GameController) this.controller).removePlayerToListOfPlayers(usernameOfLeftPlayer);
     }
 
     private void deleteGameBroadcastSucceeded(String s) {
@@ -183,8 +189,7 @@ public class ClientImpl {
             if (username.equalsIgnoreCase(this.player.getUsername())) {
                 this.player.setScore(score);
                 ((GameController) this.controller).changeQuestionState("-fx-background-color: #11ec0d");
-            }
-            else{
+            } else {
                 ((GameController) this.controller).changeColorResponseButtons("-fx-background-color: #ec350d");
             }
             ((GameController) this.controller).updateScoreBoard(new Player(username, this.player.getGame(), score));
@@ -332,8 +337,6 @@ public class ClientImpl {
         request(nextRound);
     }
 
-    // Functions that don't do sql requests :
-
     public void gameFinished() {
         Map<String, String> requestData = new HashMap<>();
         requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
@@ -341,6 +344,14 @@ public class ClientImpl {
         Request gameFinished = new Request(NetCodes.GAME_FINISHED, GsonConfiguration.gson.toJson(requestData,
                 CommunicationTypes.mapJsonTypeData));
         request(gameFinished);
+    }
+
+    public void stopClient() {
+        try {
+            this.client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setController(Controller controller) {

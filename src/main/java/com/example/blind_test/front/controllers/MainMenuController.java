@@ -167,6 +167,7 @@ public class MainMenuController extends Controller {
             LobbyController controller = loader.getController();
             controller.scene = this.scene;
             controller.stage = this.stage;
+            controller.onCloseFrame();
             controller.initView(jgt);
             this.scene.setRoot(root);
         } catch (IOException e) {
