@@ -19,9 +19,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 public class ServerImpl {
@@ -197,9 +200,9 @@ public class ServerImpl {
                 if (j == rounds) break;
             }
             Response response = new Response(NetCodes.START_GAME_SUCCEED, GsonConfiguration.gson.toJson(firstQuestion));
-            for (Player playerOther : players) {
-                responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
-            }
+            AsynchronousSocketChannel [] clients  = playersToClients(players,gameId);
+            GameCyclicBarrier gameCyclicBarrier = new GameCyclicBarrier(GsonConfiguration.gson.toJson(response),players.size(),clients);
+            gameCyclicBarrier.runBroadcast();
             Response broadcastResponse = new Response(NetCodes.REMOVE_GAME_FROM_LIST_OF_AVAILABLE_GAMES,String.valueOf(gameId));
             listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse, entry.getValue()));
             ByteBuffer newBuffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
@@ -296,14 +299,14 @@ public class ServerImpl {
         int questionOrder = Integer.parseInt(requestData.get(FieldsRequestName.QUESTION_ORDER));
         AsynchronousSocketChannel client = listOfPlayers.get(new Credentials(username, gameId));
         try {
-            List<Player> list = playerRepository.getPlayersOfGame(gameId);
+            List<Player> players = playerRepository.getPlayersOfGame(gameId);
             Question nextQuestion = questionRepository.getQuestionByOrder(gameId, questionOrder);
-            NextRoundInformation nextRoundInformation = new NextRoundInformation(list, nextQuestion, questionOrder);
+            NextRoundInformation nextRoundInformation = new NextRoundInformation(players, nextQuestion, questionOrder);
             Response response = new Response(NetCodes.NEXT_ROUND_SUCCEEDED,
                     GsonConfiguration.gson.toJson(nextRoundInformation));
-            for (Player player : list) {
-                responseBroadcast(response, listOfPlayers.get(new Credentials(player.getUsername(), gameId)));
-            }
+            AsynchronousSocketChannel [] clients  = playersToClients(players,gameId);
+            GameCyclicBarrier gameCyclicBarrier = new GameCyclicBarrier(GsonConfiguration.gson.toJson(response),players.size(),clients);
+            gameCyclicBarrier.runBroadcast();
             ByteBuffer buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
             client.read(buffer, buffer, new ServerReaderCompletionHandler());
         } catch (GetPlayersOfGameException e) {
@@ -364,6 +367,15 @@ public class ServerImpl {
         ByteBuffer attachment = ByteBuffer.wrap(responseJson.getBytes());
         client.write(attachment, attachment, new ServerWriterCompletionHandler());
         attachment.clear();
+    }
+
+    private static AsynchronousSocketChannel[] playersToClients(List<Player> players,int gameId){
+        int i = 0;
+        AsynchronousSocketChannel[] clients = new AsynchronousSocketChannel[players.size()];
+        for (Player player: players){
+            clients[i++] = listOfPlayers.get(new Credentials(player.getUsername(), gameId));
+        }
+        return clients;
     }
 
     private static void response(Response response, AsynchronousSocketChannel client) {
