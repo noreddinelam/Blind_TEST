@@ -134,7 +134,7 @@ public class ClientImpl {
 
     public void createGameBroadcastSucceeded(String responseData) {
         Game game = GsonConfiguration.gson.fromJson(responseData, Game.class);
-        if (this.controller instanceof MainMenuController)
+        if (this.controller.getClass().equals(MainMenuController.class))
             ((MainMenuController) this.controller).addGameToListGameToJoin(game);
     }
 
@@ -159,8 +159,8 @@ public class ClientImpl {
     public void listOfNotStartedGameSucceeded(String responseData) {
         Map<String, List<Game>> games = GsonConfiguration.gson.fromJson(responseData,
                 CommunicationTypes.mapListGameJsonTypeData);
-        if(this.controller instanceof MainMenuController)
-        ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
+        if (this.controller.getClass().equals(MainMenuController.class))
+            ((MainMenuController) this.controller).setUnStartedGames(games.get(FieldsRequestName.LIST_GAMES));
     }
 
     public void startGameSucceeded(String responseData) {
@@ -244,8 +244,8 @@ public class ClientImpl {
     }
 
     private void removeGameFromListOfAvailableGames(String responseData) {
-        if(this.controller instanceof MainMenuController)
-        ((MainMenuController) this.controller).deleteGameFromList(Integer.parseInt(responseData));
+        if (this.controller.getClass().equals(MainMenuController.class))
+            ((MainMenuController) this.controller).deleteGameFromList(Integer.parseInt(responseData));
     }
 
     // Functions that send the requests :

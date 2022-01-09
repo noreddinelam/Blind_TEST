@@ -24,9 +24,14 @@ public class GameCyclicBarrier {
         this.byteBuffers = new ByteBuffer[nbPlayers];
     }
 
-    synchronized private void addByteBufferToByteBuffers() {
+    private void addByteBufferToByteBuffers() {
         ByteBuffer byteBuffer = ByteBuffer.wrap(response.getBytes());
-        this.byteBuffers[currentByteBufferIndex++] = byteBuffer;
+        int index = pickIndex();
+        this.byteBuffers[index] = byteBuffer;
+    }
+
+    synchronized private int pickIndex(){
+        return currentByteBufferIndex++;
     }
 
     public void runBroadcast() {
