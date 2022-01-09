@@ -2,14 +2,14 @@
 2 src/main/resources/com/example/blind_test/questions/images/alger.jpg ALGER PARIS HONOLULU TOKYO 1
 3 src/main/resources/com/example/blind_test/questions/images/washington.jpg WASHINGTON LONDRE TOKYO PARIS 1
 4 src/main/resources/com/example/blind_test/questions/images/tokyo.jpg TOKYO LONDRE ALGER PARIS 1
-5 src/main/resources/com/example/blind_test/questions/images/londre.jpg LONDRE PARIS ALGER HONOLULU 1
+5 src/main/resources/com/example/blind_test/questions/images/london.jpg LONDRE PARIS ALGER HONOLULU 1
 6 src/main/resources/com/example/blind_test/questions/images/berlin.jpg BERLIN PARIS ALGER WASHINGTON 1
 7 src/main/resources/com/example/blind_test/questions/images/madrid.jpg MADRID BERLIN DOHA WASHINGTON 1
 8 src/main/resources/com/example/blind_test/questions/images/amesterdam.jpg AMESTARDAM PARIS BERLIN WASHINGTON 1
 9 src/main/resources/com/example/blind_test/questions/images/ankara.jpg ANKARA PARIS ALGER WASHINGTON 1
 10 src/main/resources/com/example/blind_test/questions/images/berne.jpg BERNE PARIS ALGER MADRID 1
 11 src/main/resources/com/example/blind_test/questions/images/budapest.jpg BUDAPEST BERLIN ALGER ANKARA 1
-12 src/main/resources/com/example/blind_test/questions/images/doja.jpg DOHA PARIS ALGER MADRID 1
+12 src/main/resources/com/example/blind_test/questions/images/doha.jpg DOHA PARIS ALGER MADRID 1
 13 src/main/resources/com/example/blind_test/questions/images/honolulu.jpg HONOLULU PARIS ALGER ANKARA 1
 14 src/main/resources/com/example/blind_test/questions/images/lecaire.jpg LE-CAIRE PARIS ANKARA WASHINGTON 1
 15 src/main/resources/com/example/blind_test/questions/images/moscou.jpg MOUSCOU MADRID ALGER BERLIN 1
@@ -18,7 +18,7 @@
 18 src/main/resources/com/example/blind_test/questions/images/rabat.jpg RABAT PARIS MADRID WASHINGTON 1
 19 src/main/resources/com/example/blind_test/questions/images/rome.jpg ROME OTTAWA ALGER BERLIN 1
 20 src/main/resources/com/example/blind_test/questions/images/varsovie.jpg VARSOVIE MADRID ALGER BUDAPEST 1
-21 src/main/resources/com/example/blind_test/questions/songs/djSna.wav DJSNAKE JUL LUIS-FONSI EMINEM 0
+21 src/main/resources/com/example/blind_test/questions/songs/djSnake.wav DJSNAKE JUL LUIS-FONSI EMINEM 0
 22 src/main/resources/com/example/blind_test/questions/songs/jul.wav JUL STROMAE STROMAE DJSNAKE 0
 23 src/main/resources/com/example/blind_test/questions/songs/luis-fonsi.wav LUIS-FONSI ADELE STROMAE EMINEM 0
 24 src/main/resources/com/example/blind_test/questions/songs/sheran.wav SHERAN NINHO DJSNAKE STROMAE 0
@@ -27,7 +27,7 @@
 27 src/main/resources/com/example/blind_test/questions/songs/charle-aznavour.wav CHARLE-AZNAVOUR DRAKE JUL DJSNAKE 0
 28 src/main/resources/com/example/blind_test/questions/songs/drake.wav DRAKE SHERAN SOOLKING DJSNAKE 0
 29 src/main/resources/com/example/blind_test/questions/songs/eminem.wav EMINEM SHERAN JUL DJSNAKE 0
-30 src/main/resources/com/example/blind_test/questions/songs/idir.wav  IDRID NEKFEU JUL DJSNAKE 0
+30 src/main/resources/com/example/blind_test/questions/songs/idir.wav IDRID NEKFEU JUL DJSNAKE 0
 31 src/main/resources/com/example/blind_test/questions/songs/lacrim.wav LACRIM SHERAN JUL SOOLKING 0
 32 src/main/resources/com/example/blind_test/questions/songs/morad.wav MORAD LACRIM JUL DJSNAKE 0
 33 src/main/resources/com/example/blind_test/questions/songs/nekfeu.wav NEKFEU SHERAN LACRIM DJSNAKE 0
@@ -37,4 +37,4 @@
 37 src/main/resources/com/example/blind_test/questions/songs/rihanna.wav RIHANNA SHERAN JUL DJSNAKE 0
 38 src/main/resources/com/example/blind_test/questions/songs/shakira.wav SHAKIRA RIHANNA PNL DJSNAKE 0
 39 src/main/resources/com/example/blind_test/questions/songs/sia.wav SIA NEKFEU LACRIM DJSNAKE 0
-40 src/main/resources/com/example/blind_test/questions/songs/soolking.v SOOLKING NEKFEU JUL PNL 0
+40 src/main/resources/com/example/blind_test/questions/songs/soolking.wav SOOLKING NEKFEU JUL PNL 0
