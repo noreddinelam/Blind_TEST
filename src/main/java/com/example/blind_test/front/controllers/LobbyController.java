@@ -120,6 +120,7 @@ public class LobbyController extends Controller {
             Parent root = loader.load();
             GameController controller = loader.getController();
             controller.scene = this.scene;
+            controller.stage = this.stage;
             controller.setTimePerQuestion(Integer.parseInt(this.responseTime.getText()));
             controller.setAdminGame(isAdmin);
             controller.setNbQuestions(Integer.parseInt(this.rounds.getText()));

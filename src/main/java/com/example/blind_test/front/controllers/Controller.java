@@ -41,6 +41,7 @@ public abstract class Controller {
             controller.initializeListOfUnStartedGames();
             this.clientImpl.setController(controller);
             controller.scene=this.scene;
+            controller.stage = this.stage;
             this.scene.setRoot(parent);
         } catch (IOException e) {
             e.printStackTrace();

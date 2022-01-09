@@ -185,7 +185,7 @@ public class ClientImpl {
                 ((GameController) this.controller).changeQuestionState("-fx-background-color: #11ec0d");
             }
             else{
-                //TODO : add something here.
+                ((GameController) this.controller).changeColorResponseButtons("-fx-background-color: #ec350d");
             }
             ((GameController) this.controller).updateScoreBoard(new Player(username, this.player.getGame(), score));
         } else {

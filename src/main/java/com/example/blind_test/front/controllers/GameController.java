@@ -142,8 +142,7 @@ public class GameController extends Controller {
             this.responseB.setText(question.getChoiceByIndex(1));
             this.responseC.setText(question.getChoiceByIndex(2));
             this.responseD.setText(question.getChoiceByIndex(3));
-            if (clickedButton != null)
-                clickedButton.setStyle("-fx-background-color: #343a40");
+            changeColorResponseButtons("-fx-background-color: #343a40");
             this.responded = false;
             this.round.setText(String.valueOf(questionOrder));
             this.timer.setText(String.valueOf(this.timePerQuestion));
@@ -213,12 +212,22 @@ public class GameController extends Controller {
         }
     }
 
+    public void changeColorResponseButtons(String color){
+        Platform.runLater(() ->{
+            this.responseA.setStyle(color);
+            this.responseB.setStyle(color);
+            this.responseC.setStyle(color);
+            this.responseD.setStyle(color);
+        });
+    }
+
     public void gameFinished(){
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("Scoreboard.fxml"));
             Parent root = loader.load();
             ScoreBoardController controller = loader.getController();
             controller.scene = this.scene;
+            controller.stage = this.stage;
             controller.initView(scoreBoard.getItems(),this.nbQuestions,this.timePerQuestion);
             this.scene.setRoot(root);
         } catch (IOException e) {
