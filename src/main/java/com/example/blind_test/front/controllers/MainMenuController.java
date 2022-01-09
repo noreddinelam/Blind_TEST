@@ -102,7 +102,6 @@ public class MainMenuController extends Controller {
 
     @FXML
     void onQuitGame(ActionEvent event) {
-        //TODO : delete game when closing
         Stage stage = (Stage) quitGame.getScene().getWindow();
         stage.close();
     }

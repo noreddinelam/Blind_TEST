@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,12 +41,13 @@ public class ScoreBoardController extends Controller {
 
     @FXML
     void onQuitGame(ActionEvent event) {
-
+        Stage stage = (Stage) quitGame.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
     void onReturnToMainMenu(ActionEvent event) {
-
+        this.backMainMenu();
     }
 
     @FXML
