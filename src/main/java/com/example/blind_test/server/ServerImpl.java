@@ -79,14 +79,14 @@ public class ServerImpl {
             for (Player playerOther : list) {
                 responseBroadcast(response, listOfPlayers.get(new Credentials(playerOther.getUsername(), gameId)));
             }
+            Response broadcastResponse = new Response(NetCodes.REMOVE_GAME_FROM_LIST_OF_AVAILABLE_GAMES,String.valueOf(gameId));
+            listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse, entry.getValue()));
             for (Map.Entry<Credentials, AsynchronousSocketChannel> entryCredential : listOfPlayers.entrySet()) {
                 if (entryCredential.getKey().getGameId() == gameId) {
                     addGuestClients(entryCredential.getValue());
                     listOfPlayers.remove(entryCredential.getKey());
                 }
             }
-            Response broadcastResponse = new Response(NetCodes.REMOVE_GAME_FROM_LIST_OF_AVAILABLE_GAMES,String.valueOf(gameId));
-            listOfGuests.entrySet().stream().forEach((entry) -> responseBroadcast(broadcastResponse, entry.getValue()));
             ByteBuffer buffer = ByteBuffer.allocate(Properties.BUFFER_SIZE);
             client.read(buffer, buffer, new ServerReaderCompletionHandler());
         } catch (DeleteGameException | GetPlayersOfGameException e) {

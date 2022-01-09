@@ -134,7 +134,8 @@ public class ClientImpl {
 
     public void createGameBroadcastSucceeded(String responseData) {
         Game game = GsonConfiguration.gson.fromJson(responseData, Game.class);
-        ((MainMenuController) this.controller).addGameToListGameToJoin(game);
+        if (this.controller instanceof MainMenuController)
+            ((MainMenuController) this.controller).addGameToListGameToJoin(game);
     }
 
     public void createGameBroadcastFailed(String responseData) {
