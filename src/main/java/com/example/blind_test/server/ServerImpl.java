@@ -52,7 +52,6 @@ public class ServerImpl {
         try {
             Player player = gameRepository.createGameDB(type, rounds
                     , players, timeQuestion, state, username);
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+client);
             listOfPlayers.put(new Credentials(username, player.getGame().getId()), client);
             listOfGuests.remove(ipAddress);
             Response response = new Response(NetCodes.CREATE_GAME_SUCCEED, GsonConfiguration.gson.toJson(player));
