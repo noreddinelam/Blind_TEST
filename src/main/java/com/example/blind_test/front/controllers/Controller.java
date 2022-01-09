@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -14,13 +15,21 @@ import java.nio.channels.AsynchronousSocketChannel;
 public abstract class Controller {
     protected ClientImpl clientImpl;
     protected Scene scene;
-    public void setNecessaryInformation(AsynchronousSocketChannel client, String ipAddress ,Scene scene){
+    protected Stage stage;
+    public void setNecessaryInformation(AsynchronousSocketChannel client, String ipAddress , Scene scene, Stage stage){
         this.clientImpl.setController(this);
         this.clientImpl.setClient(client);
         this.clientImpl.setIpAddress(ipAddress);
         this.clientImpl.initThreadReader();
         this.clientImpl.initListOfFunctions();
         this.scene = scene;
+        this.stage = stage;
+    }
+
+    public void onCloseFrame(){
+        this.stage.setOnCloseRequest(event -> {
+
+        });
     }
 
     public void backMainMenu()

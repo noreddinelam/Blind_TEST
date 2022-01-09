@@ -46,15 +46,7 @@ public class SQLStatements {
     public static final String CHANGE_GAME_STATE = "UPDATE " + GAME_TABLE + " SET " + GAME_STATE + "= 1" +
             " WHERE " + GAME_ID + "= ?; ";
 
-    public static final String ID_OF_CURRENT_QUESTION = "UPDATE " + GAME_TABLE + " SET "
-            + GAME_CURRENT_QUESTION + " = ? " +
-            " WHERE " + GAME_ID + "= ?; ";
     //PLAYER
-    public static final String ADD_NEW_PLAYER =
-            "INSERT INTO " + PLAYER_TABLE
-                    + "(" + PLAYER_USERNAME + "," + PLAYER_ID_GAME + "," + PLAYER_SCORE
-                    + ")" +
-                    " VALUES (?,?,0) ;";
     public static final String MODIFY_SCORE =
             "UPDATE " + PLAYER_TABLE
                     + " SET " + PLAYER_SCORE + "=?  WHERE " + PLAYER_USERNAME + "=? AND " + PLAYER_ID_GAME + "=? ;";

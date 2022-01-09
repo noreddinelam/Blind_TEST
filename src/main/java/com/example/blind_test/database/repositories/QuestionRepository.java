@@ -20,7 +20,6 @@ public class QuestionRepository extends Repository {
         return repository;
     }
 
-    //TODO : delete this if not used
     public String getResponseForQuestion(int questionId) {
         try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GET_RESPONSE_FOR_QUESTION)) {
             stmt.setInt(1, questionId);
@@ -101,7 +100,6 @@ public class QuestionRepository extends Repository {
     }
 
     public Integer generateQuestion(int questionId, int gameId, int questionOrder) throws GenerateQuestionException {
-        List<Question> questions;
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.GENERATE_QUESTION);
             stmt.setInt(1, questionId);

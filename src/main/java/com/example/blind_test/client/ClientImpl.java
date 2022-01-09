@@ -121,7 +121,6 @@ public class ClientImpl {
                 this.player.getGame().getTotalPlayers());
     }
 
-    //TODO: There are two types of Broadcast : type one for joinedPlayers and type two for MainMenuPlayers
     private void deleteGameBroadcastSucceeded(String s) {
         this.controller.backMainMenu();
     }
@@ -171,8 +170,6 @@ public class ClientImpl {
 
     public void modifyPlayerScoreSucceeded(String responseData) {
         Map<String, String> data = GsonConfiguration.gson.fromJson(responseData, CommunicationTypes.mapJsonTypeData);
-        int gameId = Integer.parseInt(data.get(FieldsRequestName.GAME_ID));
-        String username = data.get(FieldsRequestName.USERNAME);
         int score = Integer.parseInt(data.get(FieldsRequestName.PLAYER_SCORE));
         this.player.setScore(score);
     }
@@ -186,6 +183,9 @@ public class ClientImpl {
             if (username.equalsIgnoreCase(this.player.getUsername())) {
                 this.player.setScore(score);
                 ((GameController) this.controller).changeQuestionState("-fx-background-color: #11ec0d");
+            }
+            else{
+                //TODO : add something here.
             }
             ((GameController) this.controller).updateScoreBoard(new Player(username, this.player.getGame(), score));
         } else {
@@ -308,16 +308,6 @@ public class ClientImpl {
         Request modifyGameState = new Request(NetCodes.START_GAME, GsonConfiguration.gson.toJson(requestData,
                 CommunicationTypes.mapJsonTypeData));
         request(modifyGameState);
-    }
-
-    public void modifyPlayerScore() {
-        Map<String, String> requestData = new HashMap<>();
-        requestData.put(FieldsRequestName.USERNAME, this.player.getUsername());
-        requestData.put(FieldsRequestName.GAME_ID, String.valueOf(this.player.getGame().getId()));
-        requestData.put(FieldsRequestName.PLAYER_SCORE, String.valueOf(this.player.getScore()));
-        Request modifyPlayerScore = new Request(NetCodes.MODIFY_SCORE, GsonConfiguration.gson.toJson(requestData,
-                CommunicationTypes.mapJsonTypeData));
-        request(modifyPlayerScore);
     }
 
     public void getQuestionResponse(int orderQuestion, String playerResponse) {

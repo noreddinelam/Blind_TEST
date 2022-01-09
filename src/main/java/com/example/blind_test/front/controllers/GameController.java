@@ -41,9 +41,6 @@ public class GameController extends Controller {
     private Clip clip;
 
     @FXML
-    private Button quitGame;
-
-    @FXML
     private Button responseA;
 
     @FXML
@@ -97,11 +94,6 @@ public class GameController extends Controller {
             this.clickedButton = responseD;
             this.clientImpl.getQuestionResponse(Integer.parseInt(round.getText()), responseD.getText());
         }
-    }
-
-    @FXML
-    void onQuitGame(ActionEvent event) {
-
     }
 
     @FXML

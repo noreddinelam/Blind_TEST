@@ -92,12 +92,11 @@ public class MainMenuController extends Controller {
                 this.clientImpl.joinGame(listOfGameToJoin.getSelectionModel().getSelectedItem().getId(),
                         this.usernameText.getText().trim());
             else {
-                this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
+                this.commandFailed(FailureMessages.UNSELECTED_GAME, FailureMessages.UNSELECTED_GAME_MESSAGE);
             }
         } else {
             this.usernameText.setText("");
-            this.commandFailed(FailureMessages.UNSELECTED_GAME, FailureMessages.UNSELECTED_GAME_MESSAGE);
-            ;
+            this.commandFailed(FailureMessages.USERNAME_EMPTY_TITLE, FailureMessages.USERNAME_EMPTY_MESSAGE);
         }
     }
 

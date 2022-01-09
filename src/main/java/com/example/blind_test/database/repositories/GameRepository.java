@@ -111,7 +111,7 @@ public class GameRepository extends Repository {
     }
 
     public List<Game> listOfNotStartedGameDb() throws ListOfNotStartedGameException {
-        List<Game> games = new ArrayList<>();
+        List<Game> games;
         try {
             PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.LIST_OF_GAME_NOT_STARTED);
             games = mapper.resultSetToGames(stmt.executeQuery());
@@ -130,17 +130,6 @@ public class GameRepository extends Repository {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ChangeGameStateException();
-        }
-    }
-
-    public Integer changeCurrentQuestionId(Integer currentQuestion, Integer gameId) throws ChangeCurrentQuestionIdException {
-        try (PreparedStatement stmt = connectionDB.prepareStatement(SQLStatements.CHANGE_GAME_STATE)) {
-            stmt.setInt(1, currentQuestion);
-            stmt.setInt(2, gameId);
-            return stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ChangeCurrentQuestionIdException();
         }
     }
 

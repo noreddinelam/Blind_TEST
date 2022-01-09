@@ -8,11 +8,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
-// The repository to use for using requests on the database.
-// executeQuery : for select statements.
-// execute : return boolean
-
 public abstract class Repository {
     protected static Connection connectionDB;
     protected static Mapper mapper = Mapper.getMapper();

@@ -25,7 +25,6 @@ public class SQLTablesInformation {
     public static final String GAME_TABLE = "Game";
     public static final String GAME_ID = "id";
     public static final String GAME_TYPE = "type";
-    public static final String GAME_CURRENT_QUESTION = "current_question";
     public static final String GAME_ROUNDS = "rounds";
     public static final String GAME_PLAYERS = "remainedPlayers";
     public static final String GAME_TOTAL_PLAYERS = "totalPlayers";

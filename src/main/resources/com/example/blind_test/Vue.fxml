@@ -54,11 +54,6 @@
             <Image url="@images/logo.png" />
          </image>
       </ImageView>
-      <Button fx:id="quitGame" layoutX="850.0" layoutY="11.0" mnemonicParsing="false" onAction="#onQuitGame" prefHeight="25.0" prefWidth="29.0" styleClass="button_1" stylesheets="@stylesheet.css">
-         <graphic>
-            <FontAwesomeIconView glyphName="CLOSE" size="20" text="" />
-         </graphic>
-      </Button>
       <Text fx:id="currentPlayerName" fill="WHITE" layoutX="87.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USERNAME">
          <font>
             <Font name="System Bold" size="36.0" />

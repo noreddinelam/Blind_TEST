@@ -4,11 +4,11 @@ import com.example.blind_test.HelloApplication;
 import com.example.blind_test.front.controllers.MainMenuController;
 import com.example.blind_test.shared.Properties;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,15 +39,12 @@ public class GUIClient extends Application {
         Parent parent = fxmlLoader.load();
         MainMenuController controller = fxmlLoader.getController();
         Scene scene = new Scene(parent);
-        controller.setNecessaryInformation(client,clientIpAddress,scene);
+        controller.setNecessaryInformation(client, clientIpAddress, scene,stage);
         controller.initializeListOfUnStartedGames();
         stage.setTitle("Blind Test!");
         stage.setResizable(false);
         stage.setScene(scene);
         // TODO : detect all the closing methods.
-        stage.setOnCloseRequest(event -> {
-            System.out.println("Stage is closing");
-        });
         stage.show();
     }
 }
