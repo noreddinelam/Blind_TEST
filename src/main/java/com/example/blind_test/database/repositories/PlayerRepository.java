@@ -70,7 +70,7 @@ public class PlayerRepository extends Repository {
         try
         {
             PreparedStatement deletePlayer = connectionDB.prepareStatement(SQLStatements.DELETE_PLAYER_FROM_GAME);
-            PreparedStatement incrPlayersGame=connectionDB.prepareStatement(SQLStatements.DEC_PLAYERS_IN_GAME);
+            PreparedStatement incrPlayersGame=connectionDB.prepareStatement(SQLStatements.INC_PLAYERS_IN_GAME);
             incrPlayersGame.setInt(1,gameId);
             deletePlayer.setInt(1,gameId);
             deletePlayer.setString(2,username);
