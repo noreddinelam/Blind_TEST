@@ -1,4 +1,4 @@
-# Blind_TEST
+#Blind_TEST
 Blind_Test is a Multiplayer/Solo Quizz Game.
 #IDE:
 - Use IntelliJ
