@@ -1,12 +1,12 @@
-#Blind_TEST
+# Blind_TEST
 Blind_Test is a Multiplayer/Solo Quizz Game.
-#IDE:
+# IDE:
 - Use IntelliJ
 #Requirement:
 - Data Base : You have to create a local data base and create a new shema named slack-clone-db and execute the file Database.sql
 jAVAFX
 - java 17 preferred
-#How to run:
+# How to run:
 - Run the server first
 - Then run GUIClient for each player
 #Features:
